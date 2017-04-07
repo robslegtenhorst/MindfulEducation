@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "AF173F2C993665A3AD07F665D9FA7212E3AB0A77",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "C3D71035A96924D900556ABAF7AF12CFE47E2A44" : 9223372036854775807,
+    "AF173F2C993665A3AD07F665D9FA7212E3AB0A77" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "CAB58081-E00A-4808-9419-9360BECD1F3B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "C3D71035A96924D900556ABAF7AF12CFE47E2A44" : "VimeoNetworking\/",
+    "AF173F2C993665A3AD07F665D9FA7212E3AB0A77" : "MindfulEducation\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "vimeoTest_2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "vimeoTest_2\/vimeoTest_2.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/robslegtenhorst\/MindfulEducation.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AF173F2C993665A3AD07F665D9FA7212E3AB0A77"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/vimeo\/VimeoNetworking.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C3D71035A96924D900556ABAF7AF12CFE47E2A44"
+    }
+  ]
+}

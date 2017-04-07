@@ -1,0 +1,6 @@
+framework module VIMNetworking {
+  umbrella header "VIMNetworking-umbrella.h"
+
+  export *
+  module * { export * }
+}

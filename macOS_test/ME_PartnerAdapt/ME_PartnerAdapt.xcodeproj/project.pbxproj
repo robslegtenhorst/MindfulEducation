@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		334F2A1B1E97983B004A428B /* ScriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334F2A1A1E97983B004A428B /* ScriptViewController.swift */; };
+		335DEBB11E536D7100866B8C /* FolderViewCTRL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DEBB01E536D7100866B8C /* FolderViewCTRL.swift */; };
+		335DEBB31E536FF800866B8C /* urls.xml in Resources */ = {isa = PBXBuildFile; fileRef = 335DEBB21E536FF800866B8C /* urls.xml */; };
+		335DEBB71E538A8800866B8C /* youtube-dl in Resources */ = {isa = PBXBuildFile; fileRef = 335DEBB61E538A8800866B8C /* youtube-dl */; };
+		335DEBB91E571B7300866B8C /* PHPController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DEBB81E571B7300866B8C /* PHPController.swift */; };
+		335DEBBB1E572E7400866B8C /* VimeoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DEBBA1E572E7400866B8C /* VimeoData.swift */; };
+		335DEBBD1E5C6C1A00866B8C /* VimeoAlbumData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DEBBC1E5C6C1A00866B8C /* VimeoAlbumData.swift */; };
 		33DA2FE91E4CC7B10086C816 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DA2FE81E4CC7B10086C816 /* AppDelegate.swift */; };
 		33DA2FEB1E4CC7B10086C816 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DA2FEA1E4CC7B10086C816 /* ViewController.swift */; };
 		33DA2FED1E4CC7B10086C816 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DA2FEC1E4CC7B10086C816 /* Assets.xcassets */; };
@@ -16,6 +23,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		334F2A1A1E97983B004A428B /* ScriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptViewController.swift; sourceTree = "<group>"; };
+		335DEBB01E536D7100866B8C /* FolderViewCTRL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderViewCTRL.swift; sourceTree = "<group>"; };
+		335DEBB21E536FF800866B8C /* urls.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = urls.xml; sourceTree = "<group>"; };
+		335DEBB61E538A8800866B8C /* youtube-dl */ = {isa = PBXFileReference; lastKnownFileType = file; name = "youtube-dl"; path = "../../../../../Downloads/youtube-dl/youtube-dl"; sourceTree = "<group>"; };
+		335DEBB81E571B7300866B8C /* PHPController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PHPController.swift; sourceTree = "<group>"; };
+		335DEBBA1E572E7400866B8C /* VimeoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VimeoData.swift; path = ../VimeoData.swift; sourceTree = "<group>"; };
+		335DEBBC1E5C6C1A00866B8C /* VimeoAlbumData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoAlbumData.swift; sourceTree = "<group>"; };
 		33DA2FE51E4CC7B10086C816 /* ME_PartnerAdapt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ME_PartnerAdapt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33DA2FE81E4CC7B10086C816 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33DA2FEA1E4CC7B10086C816 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +70,10 @@
 		33DA2FE71E4CC7B10086C816 /* ME_PartnerAdapt */ = {
 			isa = PBXGroup;
 			children = (
+				335DEBBA1E572E7400866B8C /* VimeoData.swift */,
+				335DEBBC1E5C6C1A00866B8C /* VimeoAlbumData.swift */,
+				335DEBB61E538A8800866B8C /* youtube-dl */,
+				335DEBB21E536FF800866B8C /* urls.xml */,
 				33DA2FF71E4CCD3A0086C816 /* ffmpeg */,
 				33DA2FE81E4CC7B10086C816 /* AppDelegate.swift */,
 				33DA2FEA1E4CC7B10086C816 /* ViewController.swift */,
@@ -63,6 +81,9 @@
 				33DA2FEE1E4CC7B10086C816 /* Main.storyboard */,
 				33DA2FF11E4CC7B10086C816 /* Info.plist */,
 				33DA2FF91E4CCF0B0086C816 /* FileViewController.swift */,
+				335DEBB01E536D7100866B8C /* FolderViewCTRL.swift */,
+				335DEBB81E571B7300866B8C /* PHPController.swift */,
+				334F2A1A1E97983B004A428B /* ScriptViewController.swift */,
 			);
 			path = ME_PartnerAdapt;
 			sourceTree = "<group>";
@@ -128,7 +149,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				33DA2FED1E4CC7B10086C816 /* Assets.xcassets in Resources */,
+				335DEBB31E536FF800866B8C /* urls.xml in Resources */,
 				33DA2FF81E4CCD3A0086C816 /* ffmpeg in Resources */,
+				335DEBB71E538A8800866B8C /* youtube-dl in Resources */,
 				33DA2FF01E4CC7B10086C816 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,9 +163,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				335DEBBD1E5C6C1A00866B8C /* VimeoAlbumData.swift in Sources */,
+				334F2A1B1E97983B004A428B /* ScriptViewController.swift in Sources */,
 				33DA2FFA1E4CCF0B0086C816 /* FileViewController.swift in Sources */,
+				335DEBB91E571B7300866B8C /* PHPController.swift in Sources */,
 				33DA2FEB1E4CC7B10086C816 /* ViewController.swift in Sources */,
 				33DA2FE91E4CC7B10086C816 /* AppDelegate.swift in Sources */,
+				335DEBBB1E572E7400866B8C /* VimeoData.swift in Sources */,
+				335DEBB11E536D7100866B8C /* FolderViewCTRL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +325,7 @@
 				33DA2FF61E4CC7B10086C816 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

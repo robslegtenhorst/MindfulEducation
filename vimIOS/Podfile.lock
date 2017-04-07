@@ -1,0 +1,52 @@
+PODS:
+  - AFNetworking (2.6.3):
+    - AFNetworking/NSURLConnection (= 2.6.3)
+    - AFNetworking/NSURLSession (= 2.6.3)
+    - AFNetworking/Reachability (= 2.6.3)
+    - AFNetworking/Security (= 2.6.3)
+    - AFNetworking/Serialization (= 2.6.3)
+    - AFNetworking/UIKit (= 2.6.3)
+  - AFNetworking/NSURLConnection (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.6.3)
+  - AFNetworking/Security (2.6.3)
+  - AFNetworking/Serialization (2.6.3)
+  - AFNetworking/UIKit (2.6.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - VIMNetworking (6.0.4):
+    - AFNetworking (= 2.6.3)
+    - VIMNetworking/Cache (= 6.0.4)
+    - VIMNetworking/Keychain (= 6.0.4)
+    - VIMNetworking/Model (= 6.0.4)
+    - VIMNetworking/ObjectMapper (= 6.0.4)
+    - VIMNetworking/Private (= 6.0.4)
+  - VIMNetworking/Cache (6.0.4):
+    - AFNetworking (= 2.6.3)
+  - VIMNetworking/Keychain (6.0.4):
+    - AFNetworking (= 2.6.3)
+  - VIMNetworking/Model (6.0.4):
+    - AFNetworking (= 2.6.3)
+    - VIMNetworking/ObjectMapper
+  - VIMNetworking/ObjectMapper (6.0.4):
+    - AFNetworking (= 2.6.3)
+  - VIMNetworking/Private (6.0.4):
+    - AFNetworking (= 2.6.3)
+    - VIMNetworking/Model
+
+DEPENDENCIES:
+  - VIMNetworking (~> 6.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  VIMNetworking: 0f21c1cee2d8feb91150362f659a5e819b1c2a8e
+
+PODFILE CHECKSUM: a886b2a47b03b1d2de6fb8657adac32b4206417e
+
+COCOAPODS: 1.2.0

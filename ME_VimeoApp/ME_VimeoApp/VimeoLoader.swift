@@ -21,13 +21,13 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
 	
 	public init() {
 		let oauth = OAuth2CodeGrant(settings: [
-			"client_id": "69c02b9db167089acfdd426f54a95aea59abafbd",
-			"client_secret": "L7AhuXemGMEUAcQbWqcNVb0LBFL+MFjw1qPonz669aVQGxpKMCDH/0fU+UkLbeHp8n+RjOHcQM+F6M/CDp7J8hpqpQr84KCbjL+72y6AqqSDQW8+Uu/BAoKZ11gLrxMY",
-            "access_token": "e6e0acc1b5572eb15ee046427888b18d",
+			"client_id": "5edd0b79c52ad78769253e99e5746b67ef588f1a",
+			"client_secret": "2Pc8yAiga276XlOczyeg8Sb345QmfUs+p4NQLJoiKtMtE16uOR88A/aXkcWPZJ5WYLGJFLrg/g/ZZcRxA6tS4rZk2zPnCuWngCaou8NEP59ToOA4ZiXPu9u1T7kjQgTQ",
+            "access_token": "c3f85018752dda44fb6db6704d6f9bcb",
 			"authorize_uri": "https://api.vimeo.com/oauth/authorize",
 			"token_uri": "https://api.vimeo.com/oauth/access_token",
-			"scope": "private",
-			"redirect_uris": ["mevimeoapp2://oauth/callback"],
+			"scope": "public private purchased create edit delete interact upload",
+			"redirect_uris": ["mevimeoapp://oauth/callback"],
 			"secret_in_body": true,
 			"verbose": true,
 		])
@@ -37,8 +37,8 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
 	
 	/** Perform a request against the Vimeo API and return decoded JSON or an NSError. */
     func request(path: String, query: String, callback: @escaping ((OAuth2JSON?, Error?) -> Void)) {
-		oauth2.logger = OAuth2DebugLogger(.trace)
-//        oauth2.authConfig.authorizeEmbedded = true
+//		oauth2.logger = OAuth2DebugLogger(.trace)
+//      oauth2.authConfig.authorizeEmbedded = true
         
         var urlComponents = URLComponents(string: baseURL)
         urlComponents?.path = path
@@ -63,13 +63,11 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
     }
     
     func requestInit(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        oauth2.logger = OAuth2DebugLogger(.trace)
-        print("req init")
+//        oauth2.logger = OAuth2DebugLogger(.trace)
         request(path: "/me", query: "", callback: callback)
     }
     
     func requestUserdata(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        print("req user 2")
         request(path: "/me", query: "fields=link,name,pictures", callback: callback)
     }
     

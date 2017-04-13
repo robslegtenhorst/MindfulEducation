@@ -20,8 +20,6 @@ class LoginController: NSViewController {
     var parentView : ViewController!
     
     func handleRedirect(_ notification: Notification) {
-        print("handleRedirect")
-        
         if let url = notification.object as? URL {
             dismissViewController(self)
             parentView.logoutBtn.isEnabled = true
@@ -54,22 +52,20 @@ class LoginController: NSViewController {
 
     @IBAction func loginAction(_ sender: NSButton) {
         
-        let button = sender
+        // config OAuth2
+        NotificationCenter.default.removeObserver(self, name: OAuth2AppDidReceiveCallbackNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginController.handleRedirect(_:)), name: OAuth2AppDidReceiveCallbackNotification, object: nil)
         
-        print("clicked")
+        print(NotificationCenter.default.description)
+        
+        let button = sender
         
         // show what is happening
         button.title = "Authorizing..."
         button.isEnabled = false
         
-        // config OAuth2
-        NotificationCenter.default.removeObserver(self, name: OAuth2AppDidReceiveCallbackNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginController.handleRedirect(_:)), name: OAuth2AppDidReceiveCallbackNotification, object: nil)
-        
         // load user data
         loader.requestInit() { dict, error in
-            print("req user")
-            NSLog("Fetched: \(dict)")
             if let error = error {
                 switch error {
                 case OAuth2Error.requestCancelled:
@@ -80,7 +76,7 @@ class LoginController: NSViewController {
                 }
             }
             else {
-                NSLog("Fetched: \(dict)")
+//                NSLog("Fetched: \(dict)")
             }
             button.isEnabled = true
         }

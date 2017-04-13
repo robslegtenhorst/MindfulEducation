@@ -98,9 +98,9 @@ class LoadingOverlay: NSViewController {
                         
                         self.checkLoadAmount()
                     }
-                    NSLog("dict: \(dict)")
-                    NSLog("Fetched album total: \(self.vimeoData.albumTotal)")
-                    NSLog("Album total - Pages: \(self.vimeoData.albumPages)")
+//                    NSLog("dict: \(dict)")
+//                    NSLog("Fetched album total: \(self.vimeoData.albumTotal)")
+//                    NSLog("Album total - Pages: \(self.vimeoData.albumPages)")
                 }
             }
         } else if (albumAmountLoaded && !videoAmountLoaded)
@@ -127,8 +127,8 @@ class LoadingOverlay: NSViewController {
                         
                         self.loadData()
                     }
-                    NSLog("Fetched video total: \(self.vimeoData.videoTotal)")
-                    NSLog("Video total - Pages: \(self.vimeoData.videoPages)")
+//                    NSLog("Fetched video total: \(self.vimeoData.videoTotal)")
+//                    NSLog("Video total - Pages: \(self.vimeoData.videoPages)")
                 }
             }
         }
@@ -183,7 +183,7 @@ class LoadingOverlay: NSViewController {
                     
                     self.loadData()
                 }
-                NSLog("Fetched user data: \(vimeoUserData?.name, vimeoUserData?.link, vimeoUserData?.picture_30)")
+//                NSLog("Fetched user data: \(vimeoUserData?.name, vimeoUserData?.link, vimeoUserData?.picture_30)")
             }
         }
     }
@@ -193,33 +193,50 @@ class LoadingOverlay: NSViewController {
         if (albumPagination == 0)
         {
             albumPagination = 1
+            
+            NSLog("Fetched album page: \(self.albumPagination)")
+            
+            loader.requestUserAlbumData(page: albumPagination) { dict, error in
+                if let error = error {
+                    switch error {
+                    case OAuth2Error.requestCancelled:
+                        self.statusLabel.insertText("Cancelled. Try Again.")
+                    default:
+                        self.statusLabel.insertText("Failed. Try Again.")
+                        self.show(error)
+                    }
+                }
+                else {
+                    self.setPercentage()
+                    self.loadAlbumsData()
+                }
+            }
+            
         } else {
             if (albumPagination != self.vimeoData.albumPages)
             {
                 albumPagination = albumPagination + 1
+                
+                NSLog("Fetched album page: \(self.albumPagination)")
+                
+                loader.requestUserAlbumData(page: albumPagination) { dict, error in
+                    if let error = error {
+                        switch error {
+                        case OAuth2Error.requestCancelled:
+                            self.statusLabel.insertText("Cancelled. Try Again.")
+                        default:
+                            self.statusLabel.insertText("Failed. Try Again.")
+                            self.show(error)
+                        }
+                    }
+                    else {
+                        self.setPercentage()
+                        self.loadAlbumsData()
+                    }
+                }
             } else {
                 self.albumsLoaded = true
                 self.loadData()
-            }
-        }
-        
-        loader.requestUserAlbumData(page: albumPagination) { dict, error in
-            if let error = error {
-                switch error {
-                case OAuth2Error.requestCancelled:
-                    self.statusLabel.insertText("Cancelled. Try Again.")
-                default:
-                    self.statusLabel.insertText("Failed. Try Again.")
-                    self.show(error)
-                }
-            }
-            else {
-                self.setPercentage()
-                self.loadAlbumsData()
-                
-                NSLog("Fetched album data: \(self.albumPagination)")
-                NSLog("-- Fetched album data: \(self.vimeoData.albumPages)")
-                
             }
         }
     }

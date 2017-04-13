@@ -1,0 +1,44 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "AF173F2C993665A3AD07F665D9FA7212E3AB0A77",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "10B73D0B7CE5B1CD363428FDF4A01A2A9E2F0357" : 9223372036854775807,
+    "AF173F2C993665A3AD07F665D9FA7212E3AB0A77" : 9223372036854775807,
+    "4B621E13C935B7EBD42812B8FAFFF473D823F944" : 9223372036854775807,
+    "2045D86BC5D391C299DCC498309E722E037BFF4E" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "536E7643-9A5A-490B-9F75-8245C1E1D91A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "10B73D0B7CE5B1CD363428FDF4A01A2A9E2F0357" : "OAuth2\/SwiftKeychain\/",
+    "AF173F2C993665A3AD07F665D9FA7212E3AB0A77" : "MindfulEducation\/",
+    "4B621E13C935B7EBD42812B8FAFFF473D823F944" : "ProgressKit\/",
+    "2045D86BC5D391C299DCC498309E722E037BFF4E" : "OAuth2\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ME_VimeoApp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ME_VimeoApp\/ME_VimeoApp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/p2\/SwiftKeychain",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "10B73D0B7CE5B1CD363428FDF4A01A2A9E2F0357"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/p2\/OAuth2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2045D86BC5D391C299DCC498309E722E037BFF4E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kaunteya\/ProgressKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4B621E13C935B7EBD42812B8FAFFF473D823F944"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/robslegtenhorst\/MindfulEducation.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AF173F2C993665A3AD07F665D9FA7212E3AB0A77"
+    }
+  ]
+}

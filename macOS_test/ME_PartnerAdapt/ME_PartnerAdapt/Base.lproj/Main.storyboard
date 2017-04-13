@@ -360,23 +360,46 @@
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                     </window>
                     <connections>
-                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
+                        <segue destination="f8F-Sj-Tbc" kind="relationship" relationship="window.shadowedContentViewController" id="GAo-Mp-1Zr"/>
                     </connections>
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
         </scene>
-        <!--Script View Controller-->
-        <scene sceneID="xaK-zq-e9V">
+        <!--Tab View Controller-->
+        <scene sceneID="gcJ-S2-icc">
             <objects>
-                <viewController id="YFI-6G-eXj" customClass="ScriptViewController" customModule="ME_PartnerAdapt" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="Y3l-kI-WlX">
+                <tabViewController selectedTabViewItemIndex="0" id="f8F-Sj-Tbc" sceneMemberID="viewController">
+                    <tabViewItems>
+                        <tabViewItem identifier="" id="Obk-3y-iHI"/>
+                        <tabViewItem identifier="" id="Gu3-wf-U9C"/>
+                    </tabViewItems>
+                    <tabView key="tabView" type="noTabsNoBorder" id="96u-lD-39H">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <font key="font" metaFont="message"/>
+                        <tabViewItems/>
+                    </tabView>
+                    <connections>
+                        <segue destination="xnc-sc-8k1" kind="relationship" relationship="tabItems" id="KXn-hz-wCD"/>
+                        <segue destination="g6W-tC-9RJ" kind="relationship" relationship="tabItems" id="cvL-Cj-PPf"/>
+                    </connections>
+                </tabViewController>
+                <customObject id="f0x-Cq-zn2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="643" y="172"/>
+        </scene>
+        <!--Script View Controller-->
+        <scene sceneID="l7k-g1-MLL">
+            <objects>
+                <viewController id="xnc-sc-8k1" customClass="ScriptViewController" customModule="ME_PartnerAdapt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="85z-qZ-aCF">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="egO-lX-FuN">
-                                <rect key="frame" x="20" y="49" width="410" height="231"/>
+                                <rect key="frame" x="20" y="58" width="410" height="231"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="asI-va-Erg">
                                     <font key="font" metaFont="system"/>
@@ -385,98 +408,86 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AXY-eC-nRK">
-                                <rect key="frame" x="364" y="13" width="64" height="32"/>
+                                <rect key="frame" x="322" y="13" width="114" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Run" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2ZI-JC-ATi">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="runBtn:" target="YFI-6G-eXj" id="D7k-fm-6xr"/>
+                                    <action selector="runBtn:" target="xnc-sc-8k1" id="uJ0-eT-mYI"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kSM-le-zlI">
-                                <rect key="frame" x="276" y="13" width="82" height="32"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4s3-7M-hij">
+                                <rect key="frame" x="14" y="13" width="93" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mZE-Pm-MVI">
+                                <buttonCell key="cell" type="push" title="Sign Out" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jmR-Aw-T6y">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="dismissController:" target="YFI-6G-eXj" id="pi0-uf-mck"/>
+                                    <action selector="forgetTokens:" target="xnc-sc-8k1" id="dpn-8l-mTE"/>
                                 </connections>
                             </button>
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="contentField" destination="egO-lX-FuN" id="pTY-Vj-fc4"/>
+                        <outlet property="button" destination="AXY-eC-nRK" id="rPY-hs-H0T"/>
+                        <outlet property="contentField" destination="egO-lX-FuN" id="FLj-Zl-Gq7"/>
+                        <outlet property="signoutBtn" destination="4s3-7M-hij" id="HoS-ap-TFV"/>
                     </connections>
                 </viewController>
-                <customObject id="cRj-hN-RUt" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="MSe-WI-vb0" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-434" y="1081"/>
+            <point key="canvasLocation" x="1226" y="185"/>
         </scene>
         <!--View Controller-->
-        <scene sceneID="hIz-AP-VOD">
+        <scene sceneID="2WP-nd-pgX">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="ME_PartnerAdapt" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="187" height="95"/>
+                <viewController id="g6W-tC-9RJ" sceneMemberID="viewController">
+                    <view key="view" id="y7t-nF-vR8">
+                        <rect key="frame" x="0.0" y="0.0" width="298" height="107"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eMV-P9-17f">
-                                <rect key="frame" x="14" y="47" width="68" height="32"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CzM-xY-lQc">
+                                <rect key="frame" x="125" y="59" width="68" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Files" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Dfm-sn-DgL">
+                                <buttonCell key="cell" type="push" title="Files" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PdQ-4O-WOn">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <segue destination="lgC-9t-vBL" kind="sheet" id="QOA-lz-c5t"/>
+                                    <segue destination="lgC-9t-vBL" kind="sheet" id="ajv-yf-o2K"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e5F-N9-t9D">
-                                <rect key="frame" x="88" y="47" width="85" height="32"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tV4-i4-NK2">
+                                <rect key="frame" x="199" y="59" width="85" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Folders" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QNr-kk-Cbi">
+                                <buttonCell key="cell" type="push" title="Folders" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ULB-EE-90I">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <segue destination="qRv-r6-NTb" kind="sheet" id="ioW-3L-A3G"/>
+                                    <segue destination="qRv-r6-NTb" kind="sheet" id="ONK-6I-ufo"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HGm-yk-nhw">
-                                <rect key="frame" x="15" y="7" width="66" height="32"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="787-9R-Knr">
+                                <rect key="frame" x="126" y="19" width="66" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="PHP" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjd-f3-LXp">
+                                <buttonCell key="cell" type="push" title="PHP" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qoe-S3-xe6">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <segue destination="WZa-9Y-E4D" kind="sheet" id="c8X-Tp-gVs"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mZK-oU-zAp">
-                                <rect key="frame" x="91" y="7" width="83" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="url test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fIF-a1-x3t">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <segue destination="YFI-6G-eXj" kind="sheet" id="xTY-Ow-xzU"/>
+                                    <segue destination="WZa-9Y-E4D" kind="sheet" id="uwR-90-Oc2"/>
                                 </connections>
                             </button>
                         </subviews>
                     </view>
                 </viewController>
-                <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="KAQ-A4-RwN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="76" y="683"/>
+            <point key="canvasLocation" x="1134" y="585"/>
         </scene>
         <!--Folder Controller-->
         <scene sceneID="QTc-F1-pV8">
@@ -528,7 +539,7 @@ Gw
                 </viewController>
                 <customObject id="72h-fA-Lue" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="541" y="694"/>
+            <point key="canvasLocation" x="1183" y="1110"/>
         </scene>
         <!--File Controller-->
         <scene sceneID="f6c-sE-4X0">

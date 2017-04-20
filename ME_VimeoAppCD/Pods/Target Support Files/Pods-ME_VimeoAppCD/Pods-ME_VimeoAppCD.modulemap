@@ -1,0 +1,6 @@
+framework module Pods_ME_VimeoAppCD {
+  umbrella header "Pods-ME_VimeoAppCD-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,15 @@
+PODS:
+  - Alamofire (4.4.0)
+  - ProgressKit (0.6.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.4)
+  - ProgressKit
+
+SPEC CHECKSUMS:
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  ProgressKit: c6c640344bb7512db1c9c7e33dee63c8f663b98f
+
+PODFILE CHECKSUM: 4c4174d9f36dfa0e74efb0719dc44f662fc02e51
+
+COCOAPODS: 1.2.0

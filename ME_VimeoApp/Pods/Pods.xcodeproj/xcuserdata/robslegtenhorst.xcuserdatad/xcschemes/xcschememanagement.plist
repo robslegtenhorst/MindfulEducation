@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-ME_VimeoApp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>327C7214E051ADEDDB60BFDB5657DEC4</key>
+		<key>279E4E1C90C00135216BCA6326C5EC9C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9409DB6BB92B1B6F7FB1408D9E995B6D</key>
+		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>975C2BDE294867F9611D42B02D53B2E2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

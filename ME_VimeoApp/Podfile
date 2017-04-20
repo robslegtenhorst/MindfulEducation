@@ -7,5 +7,6 @@ target 'ME_VimeoApp' do
 
   # Pods for ME_VimeoApp
   pod 'ProgressKit'
+  pod 'Alamofire', '~> 4.4'
 
 end

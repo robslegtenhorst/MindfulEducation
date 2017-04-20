@@ -19,6 +19,8 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
     
     let baseURL : String = "https://api.vimeo.com/"
 	
+	var enableHeaders : Bool = true
+	
 	public init() {
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "5edd0b79c52ad78769253e99e5746b67ef588f1a",
@@ -27,7 +29,7 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
 			"authorize_uri": "https://api.vimeo.com/oauth/authorize",
 			"token_uri": "https://api.vimeo.com/oauth/access_token",
 			"scope": "public private purchased create edit delete interact upload",
-			"redirect_uris": ["mevimeoapp://oauth/callback"],
+			"redirect_uris": ["mevimeoapp2://oauth/callback"],
 			"secret_in_body": true,
 			"verbose": true,
 		])
@@ -49,6 +51,20 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
 		
 		perform(request: req) { response in
 			do {
+				let stringNumber = response.response.allHeaderFields["X-RateLimit-Remaining"] as! String
+				let numberFromString = Int(stringNumber)
+				
+				if(numberFromString! <= 40) {
+					print("X-RateLimit-Remaining :: " + (response.response.allHeaderFields["X-RateLimit-Remaining"] as! String))
+				}
+				if(self.enableHeaders){
+					print("*********")
+					print("X-RateLimit-Limit :: " + (response.response.allHeaderFields["X-RateLimit-Limit"] as! String))
+					print("X-RateLimit-Remaining :: " + (response.response.allHeaderFields["X-RateLimit-Remaining"] as! String))
+					print("X-RateLimit-Reset :: " + (response.response.allHeaderFields["X-RateLimit-Reset"] as! String))
+					print("Status Code :: " + (response.response.statusCode.description))
+				}
+				
 				let dict = try response.responseJSON()
 				DispatchQueue.main.async() {
 					callback(dict, nil)
@@ -68,7 +84,7 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
     }
     
     func requestUserdata(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        request(path: "/me", query: "fields=link,name,pictures", callback: callback)
+        request(path: "/me", query: "fields=link,name,pictures,uri,resource_key", callback: callback)
     }
     
     func requestAlbumTotal(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
@@ -80,7 +96,16 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
     }
     
     func requestUserAlbumData(page: CGFloat, callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        request(path: "/me/albums", query: "page="+page.description+"&per_page="+VimeoData().maxItems.description+"&sort=alphabetical&fields=uri,name,link,duration,created_time,modified_time", callback: callback)
+        request(path: "/me/albums", query: "page="+page.description+"&per_page="+VimeoData().maxItems.description+"&sort=alphabetical&fields=uri,name,link,duration,created_time,modified_time&sort=modified_time", callback: callback)
     }
+    
+    func requestVideoData(page: CGFloat, callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
+        let queryStr = "page="+page.description+"&per_page="+VimeoData().tempMaxItems.description+"&fields=uri,name,link,duration,width,height,created_time,modified_time,release_time,metadata,pictures,status,stats,download&sort=modified_time"
+        request(path: "/me/videos", query: queryStr, callback: callback)
+	}
+	
+	func requestSub(uri: NSString, callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
+		request(path: uri as String, query: "", callback: callback)
+	}
 }
 

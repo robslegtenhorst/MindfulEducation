@@ -3,6 +3,21 @@
     <entity name="TestObject" representedClassName="TestObject" syncable="YES" codeGenerationType="class">
         <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="VimeoAlbumDataMO" representedClassName="VimeoAlbumDataMO" syncable="YES">
+        <attribute name="changed" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="created_time" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="duration" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="link" attributeType="String" syncable="YES"/>
+        <attribute name="modified_time" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="uri" attributeType="String" syncable="YES"/>
+        <attribute name="user_resource_key" optional="YES" attributeType="String" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uri"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="VimeoDataMO" representedClassName="VimeoDataMO" syncable="YES" codeGenerationType="class"/>
     <entity name="VimeoUserDataMO" representedClassName="VimeoUserDataMO" syncable="YES">
         <attribute name="currentUser" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
@@ -21,35 +36,45 @@
         </uniquenessConstraints>
     </entity>
     <entity name="VimeoVideoDataMO" representedClassName="VimeoVideoDataMO" syncable="YES">
-        <attribute name="created_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="duration" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="height" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="modified_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="plays" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="release_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="resource_key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="changed" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="created_time" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="duration" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="height" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="link" attributeType="String" syncable="YES"/>
+        <attribute name="modified_time" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="plays" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="release_time" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="resource_key" attributeType="String" syncable="YES"/>
         <attribute name="subtitle_url" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="texttracks_total" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="texttracks_uri" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumb_url_100x75" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumb_url_200x150" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumb_url_295x166" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumb_url_640x360" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumb_url_960x540" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumb_url_1280x720" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="texttracks_total" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="texttracks_uri" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_url_100x75" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_url_200x150" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_url_295x166" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_url_640x360" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_url_960x540" attributeType="String" syncable="YES"/>
+        <attribute name="thumb_url_1280x720" attributeType="String" syncable="YES"/>
+        <attribute name="uri" attributeType="String" syncable="YES"/>
+        <attribute name="user_resource_key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="video_src_url_HD" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="video_src_url_HD_created" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="video_src_url_HD_created" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="video_src_url_HD_expires" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="video_src_url_Source" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="video_src_url_Source_created" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="width" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="video_src_url_Source_created" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="video_src_url_Source_expires" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="width" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="resource_key"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="TestObject" positionX="-36" positionY="72" width="128" height="60"/>
         <element name="VimeoDataMO" positionX="-18" positionY="81" width="128" height="45"/>
         <element name="VimeoUserDataMO" positionX="-54" positionY="-9" width="128" height="180"/>
-        <element name="VimeoVideoDataMO" positionX="-36" positionY="54" width="128" height="30"/>
+        <element name="VimeoVideoDataMO" positionX="-36" positionY="54" width="128" height="465"/>
+        <element name="VimeoAlbumDataMO" positionX="-27" positionY="72" width="128" height="165"/>
     </elements>
 </model>

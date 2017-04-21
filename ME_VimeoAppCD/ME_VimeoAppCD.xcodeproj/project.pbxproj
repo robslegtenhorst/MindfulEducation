@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		333D363B1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D36391EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataClass.swift */; };
+		333D363C1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D363A1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataProperties.swift */; };
+		333D36441EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D36421EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataClass.swift */; };
+		333D36451EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D36431EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataProperties.swift */; };
 		339DEF421EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339DEF401EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift */; };
 		339DEF431EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339DEF411EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift */; };
 		33D106F01EA7C1A50078CCEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D106EF1EA7C1A50078CCEE /* AppDelegate.swift */; };
@@ -86,6 +90,10 @@
 		028C8A127465604E6B906A0B /* Pods-ME_VimeoAppCD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ME_VimeoAppCD.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ME_VimeoAppCD/Pods-ME_VimeoAppCD.debug.xcconfig"; sourceTree = "<group>"; };
 		29F2491CE5BA6C4D8A8F17C1 /* Pods-ME_VimeoAppCD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ME_VimeoAppCD.release.xcconfig"; path = "Pods/Target Support Files/Pods-ME_VimeoAppCD/Pods-ME_VimeoAppCD.release.xcconfig"; sourceTree = "<group>"; };
 		32EEB931765EF37408A27C4B /* Pods_ME_VimeoAppCD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ME_VimeoAppCD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		333D36391EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoVideoDataMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		333D363A1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoVideoDataMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		333D36421EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoAlbumDataMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		333D36431EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoAlbumDataMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		339DEF401EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoUserDataMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		339DEF411EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoUserDataMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33D106EC1EA7C1A50078CCEE /* ME_VimeoAppCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ME_VimeoAppCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -205,6 +213,10 @@
 		33D1073E1EA8C30E0078CCEE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				333D36421EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataClass.swift */,
+				333D36431EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataProperties.swift */,
+				333D36391EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataClass.swift */,
+				333D363A1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataProperties.swift */,
 				339DEF401EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift */,
 				339DEF411EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift */,
 				33D1073F1EA8C3150078CCEE /* VimeoAlbumData.swift */,
@@ -412,12 +424,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				333D363C1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataProperties.swift in Sources */,
+				333D363B1EAA2C0F00F13F5E /* VimeoVideoDataMO+CoreDataClass.swift in Sources */,
 				33D107311EA7C3FC0078CCEE /* DataLoader.swift in Sources */,
 				33D107321EA7C3FC0078CCEE /* VimeoLoader.swift in Sources */,
 				33D106F21EA7C1A50078CCEE /* MainViewController.swift in Sources */,
 				33D107451EA8C3150078CCEE /* VimeoAlbums.swift in Sources */,
 				33D1073B1EA8C3030078CCEE /* tableViewController.swift in Sources */,
 				33D106F51EA7C1A50078CCEE /* ME_VimeoAppCD.xcdatamodeld in Sources */,
+				333D36451EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataProperties.swift in Sources */,
 				33D107471EA8C3150078CCEE /* VimeoUserData.swift in Sources */,
 				33D107441EA8C3150078CCEE /* VimeoAlbumData.swift in Sources */,
 				33D107481EA8C3150078CCEE /* VimeoVideoData.swift in Sources */,
@@ -428,6 +443,7 @@
 				33D1073A1EA8C3030078CCEE /* LoginController.swift in Sources */,
 				33D1074A1EA8C3300078CCEE /* MyCustomSwiftAnimator.swift in Sources */,
 				339DEF421EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift in Sources */,
+				333D36441EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataClass.swift in Sources */,
 				339DEF431EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

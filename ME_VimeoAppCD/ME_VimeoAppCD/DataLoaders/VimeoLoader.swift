@@ -84,23 +84,15 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
     }
     
     func requestUserdata(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        request(path: "/me", query: "fields=link,name,pictures,uri,resource_key", callback: callback)
-    }
-    
-    func requestAlbumTotal(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        request(path: "/me/albums", query: "per_page=1&fields=uri", callback: callback)
-    }
-    
-    func requestVideoTotal(callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        request(path: "/me/videos", query: "per_page=1&fields=uri", callback: callback)
+        request(path: "/me", query: "fields=link,name,pictures,uri,resource_key,metadata", callback: callback)
     }
     
     func requestUserAlbumData(page: CGFloat, callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        request(path: "/me/albums", query: "page="+page.description+"&per_page="+VimeoData().maxItems.description+"&sort=alphabetical&fields=uri,name,link,duration,created_time,modified_time&sort=modified_time", callback: callback)
+        request(path: "/me/albums", query: "page="+page.description+"&per_page="+VimeoData().maxItems.description+"&sort=alphabetical&fields=user,uri,name,link,duration,created_time,modified_time&sort=date", callback: callback)
     }
     
     func requestVideoData(page: CGFloat, callback: @escaping ((_ dict: OAuth2JSON?, _ error: Error?) -> Void)) {
-        let queryStr = "page="+page.description+"&per_page="+VimeoData().tempMaxItems.description+"&fields=uri,name,link,duration,width,height,created_time,modified_time,release_time,metadata,pictures,status,stats,download&sort=modified_time"
+        let queryStr = "page="+page.description+"&per_page="+VimeoData().tempMaxItems.description+"&fields=uri,name,link,duration,width,height,created_time,modified_time,release_time,metadata,pictures,status,stats,download,user,resource_key&sort=modified_time"
         request(path: "/me/videos", query: queryStr, callback: callback)
 	}
 	

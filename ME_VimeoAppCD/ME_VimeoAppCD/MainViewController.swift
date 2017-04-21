@@ -12,6 +12,8 @@ import Quartz
 import CoreData
 
 class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+    
+    var container: NSPersistentContainer!
 
     var loader: VimeoLoader = VimeoLoader();
     
@@ -81,6 +83,16 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        container = NSPersistentContainer(name: "ME_VimeoAppCD")
+        
+        container.loadPersistentStores { storeDescription, error in
+            self.container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            
+            if let error = error {
+                print("Unresolved error \(error)")
+            }
+        }
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -153,7 +165,7 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
         
         let table = notification.object as! NSTableView
         
-        print(table.selectedRow, self.vimeoData.videoArray.count)
+//        print(table.selectedRow, self.vimeoData.videoArray.count)
         
         guard (table.selectedRow != -1) else {
             print("selected an empty cell")
@@ -167,8 +179,6 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
-        //		var image: NSImage!
-        //		var imageURL : URL!
         var text: String = ""
         var cellIdentifier: String = ""
         
@@ -177,20 +187,33 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
         dateFormatter.timeStyle = .long
         
         // 1
-        let item = vimeoData.videoArray[row] as VimeoVideoData
+        let item : VimeoVideoDataMO!
         
-        // 2
-        if tableColumn == tableView.tableColumns[0] {
-            //			imageURL = URL(string: item.thumb_url_100x75 as String)
-            //			image = NSImage(byReferencing: imageURL)
-            text = item.name as String
-            cellIdentifier = CellIdentifiers.NameCell
-        } else if tableColumn == tableView.tableColumns[1] {
-            text = item.link as String
-            cellIdentifier = CellIdentifiers.URLCell
-        } else if tableColumn == tableView.tableColumns[2] {
-            text = item.duration.description
-            cellIdentifier = CellIdentifiers.DurationCell
+        let request = VimeoVideoDataMO.createFetchRequest()
+        do {
+            let vimeoVideoDataMO_Array = try self.container.viewContext.fetch(request)
+            
+            if (vimeoVideoDataMO_Array.count != 0) {
+                item = vimeoVideoDataMO_Array[row]
+                
+                // 2
+                if tableColumn == tableView.tableColumns[0] {
+                    text = item.changed.description
+                    cellIdentifier = CellIdentifiers.NameCell
+                } else if tableColumn == tableView.tableColumns[1] {
+                    text = item.name!
+                    cellIdentifier = CellIdentifiers.NameCell
+                } else if tableColumn == tableView.tableColumns[2] {
+                    text = item.link!
+                    cellIdentifier = CellIdentifiers.URLCell
+                } else if tableColumn == tableView.tableColumns[3] {
+                    text = item.duration.description
+                    cellIdentifier = CellIdentifiers.DurationCell
+                }
+            }
+            
+        } catch {
+            print("Fetch failed")
         }
         
         // 3

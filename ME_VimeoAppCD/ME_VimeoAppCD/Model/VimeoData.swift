@@ -29,6 +29,8 @@ struct VimeoData {
     
     var vimeoUserData : VimeoUserData!
     
+    var vimeoUserResource_key : String!
+    
     var albumArray = Array<VimeoAlbumData>()
     var videoArray = Array<VimeoVideoData>()
     

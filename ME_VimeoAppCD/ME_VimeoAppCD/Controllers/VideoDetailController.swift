@@ -45,6 +45,7 @@ class VideoDetailController: NSViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		nameField.resignFirstResponder()
+        
 		print("view loaded")
 	}
 	
@@ -123,7 +124,7 @@ class VideoDetailController: NSViewController {
 		
 		let subArray = subData["data"] as! NSArray
 		
-		let dataDic = subArray[0] as! NSMutableDictionary;
+		let dataDic = subArray[0] as! NSDictionary;
 		
 		let subtitle_url = dataDic["link"] as! NSString
         

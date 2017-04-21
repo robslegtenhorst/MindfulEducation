@@ -12,11 +12,12 @@ import CoreData
 class ViewController: NSViewController {
     
     var container: NSPersistentContainer!
+    var commits = [Commit]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        container = NSPersistentContainer(name: "Project38")
+        container = NSPersistentContainer(name: "CoreDataTest")
         
         container.loadPersistentStores { storeDescription, error in
             if let error = error {
@@ -24,7 +25,11 @@ class ViewController: NSViewController {
             }
         }
 
-        // Do any additional setup after loading the view.
+//        fakeLoad()
+        
+        print(commits.count)
+        
+        loadSavedData()
     }
 
     override var representedObject: Any? {
@@ -33,34 +38,32 @@ class ViewController: NSViewController {
         }
     }
     
-    func save(name: String) {
-        
-        guard let appDelegate =
-            NSApplication.shared().delegate as? AppDelegate else {
-                return
+    func saveContext() {
+        if container.viewContext.hasChanges {
+            do {
+                try container.viewContext.save()
+            } catch {
+                print("An error occurred while saving: \(error)")
+            }
         }
+    }
+    
+    func loadSavedData() {
+        let request = Commit.createFetchRequest()
+        let sort = NSSortDescriptor(key: "date", ascending: false)
+        request.sortDescriptors = [sort]
         
-        // 1
-        let managedContext =
-            appDelegate.persistentStoreContainer.viewContext
-        
-        // 2
-        let entity =
-            NSEntityDescription.entity(forEntityName: "Person",
-                                       in: managedContext)!
-        
-        let person = NSManagedObject(entity: entity,
-                                     insertInto: managedContext)
-        
-        // 3
-        person.setValue(name, forKeyPath: "name")
-        
-        // 4
         do {
-            try managedContext.save()
-            people.append(person)
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            commits = try container.viewContext.fetch(request)
+            
+            for commit in commits {
+                print(commit.message)
+            }
+            
+            print("Got \(commits.count) commits")
+//            tableView.reloadData()
+        } catch {
+            print("Fetch failed")
         }
     }
 

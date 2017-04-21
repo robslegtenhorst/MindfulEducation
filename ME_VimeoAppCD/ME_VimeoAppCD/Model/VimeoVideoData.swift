@@ -9,7 +9,7 @@
 import Foundation
 
 struct VimeoVideoData {
-    var dataDic : NSMutableDictionary!
+    var dataDic : NSDictionary!
     var uri : NSString = ""
     var name : NSString = ""
     var link : NSString = ""

@@ -14,6 +14,9 @@ import CoreData
 
 class LoadingOverlay: NSViewController {
     
+    var container: NSPersistentContainer!
+    var vimeoUserDataMO_A = [VimeoUserDataMO]()
+    
     // TODO: error handling during load
     
     @IBOutlet weak var statusLabel: NSTextField!
@@ -29,7 +32,7 @@ class LoadingOverlay: NSViewController {
     
     var usrLoaded = Bool(false)
     var albumsLoaded : Bool = false
-    var videosLoaded = (Bool:false)
+    var videosLoaded : Bool = false
     var checkedLoadAmount : Bool = false
     
     var albumAmountLoaded : Bool = false
@@ -43,6 +46,20 @@ class LoadingOverlay: NSViewController {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return formatter
     }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        container = NSPersistentContainer(name: "ME_VimeoAppCD")
+        
+        container.loadPersistentStores { storeDescription, error in
+            self.container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            
+            if let error = error {
+                print("Unresolved error \(error)")
+            }
+        }
+    }
     
     func setPercentage()
     {
@@ -144,6 +161,84 @@ class LoadingOverlay: NSViewController {
     }
     
     func loadUserData() {
+        let request = VimeoUserDataMO.createFetchRequest()
+        
+        do {
+            vimeoUserDataMO_A = try self.container.viewContext.fetch(request)
+            
+            print(vimeoUserDataMO_A.count)
+            
+        } catch {
+            print("Fetch failed")
+        }
+        
+        
+        func processUserData (userData:OAuth2JSON) {
+            let vimeoUserDataMO_addUser = VimeoUserDataMO(context: self.container.viewContext)
+            
+            vimeoUserDataMO_addUser.uri = userData["uri"] as? String
+            vimeoUserDataMO_addUser.resource_key = userData["resource_key"] as? String
+            
+            vimeoUserDataMO_addUser.name = userData["name"] as? String
+            vimeoUserDataMO_addUser.link = userData["link"] as? String
+            
+            if let pictures = userData["pictures"] as? NSDictionary {
+                
+                let imgArray = pictures["sizes"] as! NSArray;
+                
+                for i in 0 ..< imgArray.count
+                {
+                    let dataDic = imgArray[i] as! NSDictionary;
+                    let width = dataDic["width"] as! NSNumber;
+                    let link = dataDic["link"] as! NSString;
+                    
+                    switch width{
+                    case 30:
+                        vimeoUserDataMO_addUser.picture_30 = link as String
+                    case 75:
+                        vimeoUserDataMO_addUser.picture_75 = link as String
+                    case 100:
+                        vimeoUserDataMO_addUser.picture_100 = link as String
+                    case 300:
+                        vimeoUserDataMO_addUser.picture_300 = link as String
+                    default:
+                        return;
+                    }
+                }
+            }
+            
+            self.saveContext()
+            
+            // check Core Data for stored users
+            checkCurrentUser(userData:userData)
+        }
+        
+        func checkCurrentUser (userData:OAuth2JSON) {
+            
+            let currentResourceKey = userData["resource_key"] as? String
+            
+            let request = VimeoUserDataMO.createFetchRequest()
+            
+            do {
+                let vimeoUserDataMO_Array = try self.container.viewContext.fetch(request)
+                
+                if (vimeoUserDataMO_Array.count != 0) {
+                    for vimeoUserDataMO in vimeoUserDataMO_Array {
+                        if (currentResourceKey == vimeoUserDataMO.resource_key) {
+                            vimeoUserDataMO.currentUser = true;
+                        } else {
+                            vimeoUserDataMO.currentUser = false;
+                        }
+                    }
+                }
+                
+            } catch {
+                print("Fetch failed")
+            }
+            
+        }
+        
+        
         loader.requestUserdata() { dict, error in
             if let error = error {
                 switch error {
@@ -153,8 +248,9 @@ class LoadingOverlay: NSViewController {
                     self.statusLabel.insertText("Failed. Try Again.")
                     self.show(error)
                 }
-            }
-            else {
+            } else {
+                processUserData(userData:dict!)
+                
                 self.vimeoData.userDict = dict
                 self.vimeoData.vimeoUserData = VimeoUserData()
                 
@@ -165,32 +261,14 @@ class LoadingOverlay: NSViewController {
 				
 				vimeoUserData?.name = dict?["name"] as? NSString
 				vimeoUserData?.link = dict?["link"] as? NSString
-				
-//				let appDelegate = NSApplication.shared().delegate as! AppDelegate
-				
-				guard let appDelegate = NSApplication.shared().delegate as? AppDelegate else {
-						return
-				}
-				
-				let managedContext = appDelegate.managedObjectContext
-                let entity = NSEntityDescription.entity(forEntityName: "TestObject", in: managedContext)!
-                let vimeoUserDataMO = NSManagedObject(entity: entity, insertInto: managedContext)
                 
-                print("MO Test 1")
-                print(vimeoUserDataMO.value(forKey: "link"))
-                
-                vimeoUserDataMO.setValue(vimeoUserData?.link, forKeyPath: "link")
-                
-                print("MO Test 2")
-                print(vimeoUserDataMO.value(forKey: "link"))
-				
-                if let pictures = dict?["pictures"] as? NSMutableDictionary {
+                if let pictures = dict?["pictures"] as? NSDictionary {
                     
                     let imgArray = pictures["sizes"] as! NSArray;
                     
                     for i in 0 ..< imgArray.count
                     {
-                        let dataDic = imgArray[i] as! NSMutableDictionary;
+                        let dataDic = imgArray[i] as! NSDictionary;
                         let width = dataDic["width"] as! NSNumber;
                         let link = dataDic["link"] as! NSString;
                         
@@ -207,14 +285,14 @@ class LoadingOverlay: NSViewController {
                             return;
                         }
                     }
-                    
-                    self.usrLoaded = true
-                    
-                    self.setPercentage()
-                    
-                    self.loadData()
                 }
-//                NSLog("Fetched user data: \(vimeoUserData?.name, vimeoUserData?.link, vimeoUserData?.picture_30)")
+                
+                self.usrLoaded = true
+                
+                self.setPercentage()
+                
+                self.loadData()
+                NSLog("Fetched user data: \(vimeoUserData?.name, vimeoUserData?.link, vimeoUserData?.picture_30)")
             }
         }
     }
@@ -230,7 +308,7 @@ class LoadingOverlay: NSViewController {
         for i in 0 ..< albumArray.count
         {
             var vimeoAlbumData = VimeoAlbumData()
-            vimeoAlbumData.dataDic = albumArray[i] as! NSMutableDictionary;
+            vimeoAlbumData.dataDic = albumArray[i] as! NSDictionary;
             vimeoAlbumData.uri = vimeoAlbumData.dataDic["uri"] as! NSString;
             vimeoAlbumData.name = vimeoAlbumData.dataDic["name"] as! NSString;
             vimeoAlbumData.link = vimeoAlbumData.dataDic["link"] as! NSString;
@@ -262,6 +340,8 @@ class LoadingOverlay: NSViewController {
     }
     
     func loadAlbumsData() {
+        
+        print("load album")
         
         if (albumPagination == 0)
         {
@@ -297,7 +377,7 @@ class LoadingOverlay: NSViewController {
         {
             // TODO: add in all items from returned data
             var vimeoVideoData = VimeoVideoData()
-            vimeoVideoData.dataDic = videoArray[i] as! NSMutableDictionary;
+            vimeoVideoData.dataDic = videoArray[i] as! NSDictionary;
 			
 			let status = vimeoVideoData.dataDic["status"] as! NSString
 			
@@ -319,9 +399,9 @@ class LoadingOverlay: NSViewController {
 				vimeoVideoData.release_time = df.date(from: vimeoVideoData.dataDic["release_time"] as! String) as NSDate!
 				
 				// Subs
-				let tempMetadataDict = vimeoVideoData.dataDic["metadata"] as! NSMutableDictionary;
-				let tempConnectionsDict = tempMetadataDict["connections"] as! NSMutableDictionary;
-				let tempTexttracksDict = tempConnectionsDict["texttracks"] as! NSMutableDictionary;
+				let tempMetadataDict = vimeoVideoData.dataDic["metadata"] as! NSDictionary;
+				let tempConnectionsDict = tempMetadataDict["connections"] as! NSDictionary;
+				let tempTexttracksDict = tempConnectionsDict["texttracks"] as! NSDictionary;
 				
 				vimeoVideoData.texttracks_uri = tempTexttracksDict["uri"] as! NSString
 				vimeoVideoData.texttracks_total = tempTexttracksDict["total"] as! NSNumber
@@ -330,13 +410,13 @@ class LoadingOverlay: NSViewController {
 				
 				
 				// Pictures
-				let tempPictDict = vimeoVideoData.dataDic["pictures"] as! NSMutableDictionary;
+				let tempPictDict = vimeoVideoData.dataDic["pictures"] as! NSDictionary;
 					
 				let pictureSizeArray = tempPictDict["sizes"] as! NSArray;
 				
 				for j in 0 ..< pictureSizeArray.count
 				{
-					let tempPictSizeDict = pictureSizeArray[j] as! NSMutableDictionary;
+					let tempPictSizeDict = pictureSizeArray[j] as! NSDictionary;
 					let tempWidth = tempPictSizeDict["width"] as! NSNumber
 					let tempUrl = tempPictSizeDict["link"] as! NSString
 					
@@ -407,7 +487,34 @@ class LoadingOverlay: NSViewController {
     
     override func viewDidAppear() {
         loadingIndicator.progress = 0;
+        
+        percentagePerCall = 0
+        callStep = 0
+        
+        usrLoaded = false
+        albumsLoaded = false
+        videosLoaded = false
+        checkedLoadAmount = false
+        
+        albumAmountLoaded = false
+        videoAmountLoaded = false
+        
+        albumPagination = 0
+        videoPagination = 0
+        
+        
+        
         loadData()
+    }
+    
+    func saveContext() {
+        if container.viewContext.hasChanges {
+            do {
+                try container.viewContext.save()
+            } catch {
+                print("An error occurred while saving: \(error)")
+            }
+        }
     }
     
     /** Forwards to `display(error:)`. */

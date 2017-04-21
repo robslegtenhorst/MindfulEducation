@@ -9,7 +9,7 @@
 import Foundation
 
 struct VimeoAlbumData {
-    var dataDic : NSMutableDictionary!
+    var dataDic : NSDictionary!
     var uri : NSString!
     var name : NSString!
     var duration : NSNumber!

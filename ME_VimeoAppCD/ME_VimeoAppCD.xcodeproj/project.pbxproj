@@ -15,6 +15,9 @@
 		3349AB6F1EAE13DA00D47D7F /* SidebarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3349AB6E1EAE13DA00D47D7F /* SidebarController.swift */; };
 		3349AB711EAF4E7F00D47D7F /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3349AB701EAF4E7F00D47D7F /* MainSplitViewController.swift */; };
 		3349AB731EAF523100D47D7F /* MainSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3349AB721EAF523100D47D7F /* MainSplitView.swift */; };
+		3349AB751EAF66A700D47D7F /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3349AB741EAF66A700D47D7F /* AppNotifications.swift */; };
+		3349AB7A1EAF68CA00D47D7F /* LoadingDataOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3349AB781EAF68CA00D47D7F /* LoadingDataOverlay.swift */; };
+		3349AB7D1EAF739D00D47D7F /* SideBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3349AB7C1EAF739D00D47D7F /* SideBarCell.swift */; };
 		339DEF421EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339DEF401EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift */; };
 		339DEF431EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339DEF411EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift */; };
 		33D106F01EA7C1A50078CCEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D106EF1EA7C1A50078CCEE /* AppDelegate.swift */; };
@@ -102,6 +105,9 @@
 		3349AB6E1EAE13DA00D47D7F /* SidebarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SidebarController.swift; path = Controllers/SidebarController.swift; sourceTree = "<group>"; };
 		3349AB701EAF4E7F00D47D7F /* MainSplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainSplitViewController.swift; path = Controllers/MainSplitViewController.swift; sourceTree = "<group>"; };
 		3349AB721EAF523100D47D7F /* MainSplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainSplitView.swift; sourceTree = "<group>"; };
+		3349AB741EAF66A700D47D7F /* AppNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppNotifications.swift; path = Model/AppNotifications.swift; sourceTree = "<group>"; };
+		3349AB781EAF68CA00D47D7F /* LoadingDataOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingDataOverlay.swift; path = Controllers/LoadingDataOverlay.swift; sourceTree = "<group>"; };
+		3349AB7C1EAF739D00D47D7F /* SideBarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBarCell.swift; path = Controllers/SideBarCell.swift; sourceTree = "<group>"; };
 		339DEF401EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoUserDataMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		339DEF411EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VimeoUserDataMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33D106EC1EA7C1A50078CCEE /* ME_VimeoAppCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ME_VimeoAppCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,8 +205,8 @@
 		33D107281EA7C3B00078CCEE /* DataLoaders */ = {
 			isa = PBXGroup;
 			children = (
-				33D1072F1EA7C3FC0078CCEE /* DataLoader.swift */,
 				33D107301EA7C3FC0078CCEE /* VimeoLoader.swift */,
+				33D1072F1EA7C3FC0078CCEE /* DataLoader.swift */,
 			);
 			name = DataLoaders;
 			path = ../../ME_VimeoApp/ME_VimeoApp;
@@ -218,6 +224,8 @@
 				33D107361EA8C3030078CCEE /* tableViewController.swift */,
 				33D107371EA8C3030078CCEE /* VideoDetailController.swift */,
 				3349AB701EAF4E7F00D47D7F /* MainSplitViewController.swift */,
+				3349AB781EAF68CA00D47D7F /* LoadingDataOverlay.swift */,
+				3349AB7C1EAF739D00D47D7F /* SideBarCell.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -236,6 +244,7 @@
 				33D107411EA8C3150078CCEE /* VimeoData.swift */,
 				33D107421EA8C3150078CCEE /* VimeoUserData.swift */,
 				33D107431EA8C3150078CCEE /* VimeoVideoData.swift */,
+				3349AB741EAF66A700D47D7F /* AppNotifications.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -442,6 +451,7 @@
 				33D107321EA7C3FC0078CCEE /* VimeoLoader.swift in Sources */,
 				33D106F21EA7C1A50078CCEE /* MainViewController.swift in Sources */,
 				33D107451EA8C3150078CCEE /* VimeoAlbums.swift in Sources */,
+				3349AB7D1EAF739D00D47D7F /* SideBarCell.swift in Sources */,
 				33D1073B1EA8C3030078CCEE /* tableViewController.swift in Sources */,
 				33D106F51EA7C1A50078CCEE /* ME_VimeoAppCD.xcdatamodeld in Sources */,
 				3349AB661EAE076300D47D7F /* FirstWindowController.swift in Sources */,
@@ -460,7 +470,9 @@
 				339DEF421EA91BC800466114 /* VimeoUserDataMO+CoreDataClass.swift in Sources */,
 				333D36441EAA2CAA00F13F5E /* VimeoAlbumDataMO+CoreDataClass.swift in Sources */,
 				339DEF431EA91BC800466114 /* VimeoUserDataMO+CoreDataProperties.swift in Sources */,
+				3349AB751EAF66A700D47D7F /* AppNotifications.swift in Sources */,
 				3349AB731EAF523100D47D7F /* MainSplitView.swift in Sources */,
+				3349AB7A1EAF68CA00D47D7F /* LoadingDataOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

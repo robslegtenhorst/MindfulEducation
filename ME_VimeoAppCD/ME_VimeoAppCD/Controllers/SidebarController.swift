@@ -10,11 +10,13 @@ import Foundation
 import Cocoa
 import CoreData
 
-class SidebarController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+class SidebarController: NSViewController {
     
     var container: NSPersistentContainer!
     
     @IBOutlet weak var menuSidebarView: NSTableView!
+    
+    @IBOutlet weak var tempTable: NSTableView!
     
     func testCall() {
         print("called function")
@@ -64,42 +66,37 @@ class SidebarController: NSViewController, NSTableViewDelegate, NSTableViewDataS
         menuSidebarView.reloadData()
     }
     
+}
+
+extension SidebarController: NSTableViewDataSource {
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        let request = VimeoVideoDataMO.createFetchRequest()
+        let request = VimeoAlbumDataMO.createFetchRequest()
         do {
-            let vimeoVideoDataMO_Array = try self.container.viewContext.fetch(request)
+            let vimeoAlbumDataMO_Array = try self.container.viewContext.fetch(request)
             
-            if (vimeoVideoDataMO_Array.count != 0) {
-                return vimeoVideoDataMO_Array.count
+            if (vimeoAlbumDataMO_Array.count != 0) {
+                return vimeoAlbumDataMO_Array.count
             } else {
                 return 0
             }
             
         } catch {
             print("Fetch failed")
+            return 0
         }
-        
-        return 0
     }
-    
+}
+
+extension SidebarController: NSTableViewDelegate {
     fileprivate enum CellIdentifiers {
         static let NameCell = "NameCellID"
     }
     
-    func tableViewSelectionDidChange(_ notification: Notification) {
-        
-        let table = notification.object as! NSTableView
-        
-        //        print(table.selectedRow, self.vimeoData.videoArray.count)
-        
-        guard (table.selectedRow != -1) else {
-            print("selected an empty cell")
-            return
-        }
-    }
-    
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        
+        tableView.backgroundColor = .clear
+        //        tableView.selectionHighlightStyle = .none
         
         var text: String = ""
         var cellIdentifier: String = ""
@@ -109,14 +106,14 @@ class SidebarController: NSViewController, NSTableViewDelegate, NSTableViewDataS
         dateFormatter.timeStyle = .long
         
         // 1
-        let item : VimeoVideoDataMO!
+        let item : VimeoAlbumDataMO!
         
-        let request = VimeoVideoDataMO.createFetchRequest()
+        let request = VimeoAlbumDataMO.createFetchRequest()
         do {
-            let vimeoVideoDataMO_Array = try self.container.viewContext.fetch(request)
+            let vimeoAlbumDataMO_Array = try self.container.viewContext.fetch(request)
             
-            if (vimeoVideoDataMO_Array.count != 0) {
-                item = vimeoVideoDataMO_Array[row]
+            if (vimeoAlbumDataMO_Array.count != 0) {
+                item = vimeoAlbumDataMO_Array[row]
                 
                 // 2
                 if tableColumn == tableView.tableColumns[0] {
@@ -130,12 +127,27 @@ class SidebarController: NSViewController, NSTableViewDelegate, NSTableViewDataS
         }
         
         // 3
-        if let cell = tableView.make(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView {
-            print("text :: "+text)
+        if let cell = tableView.make(withIdentifier: cellIdentifier, owner: nil) as? SideBarCell {
+            //            print("text :: "+text)
+            
             cell.textField?.stringValue = text
             //			cell.imageView?.image = image ?? nil
             return cell
         }
         return nil
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        
+        let table = notification.object as! NSTableView
+        
+        guard (table.selectedRow != -1) else {
+            print("selected an empty cell")
+            return
+        }
+        
+        let cell = table.view(atColumn: 0, row:table.selectedRow, makeIfNecessary:true) as? SideBarCell
+        
+        cell?.setSelected()
     }
 }

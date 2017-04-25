@@ -13,6 +13,10 @@ import Quartz
 let OAuth2AppDidReceiveCallbackNotification = NSNotification.Name(rawValue: "OAuth2AppDidReceiveCallback")
 
 class LoginController: NSViewController {
+    
+    let center = NotificationCenter.default
+    
+    // TODO: remove logic from view
 
     @IBOutlet weak var loginBtn: NSButton!
     
@@ -24,7 +28,9 @@ class LoginController: NSViewController {
             dismissViewController(self)
             parentView.logoutBtn.isEnabled = true
             parentView.logoutBtn.title = "Sign Out"
-            parentView.startLoading()
+            
+            center.post(name: NSNotification.Name(rawValue: Notifications.AppUserLogIn), object: nil)
+//            parentView.startLoading()
             
             do {
                 try loader.oauth2.handleRedirectURL(url)

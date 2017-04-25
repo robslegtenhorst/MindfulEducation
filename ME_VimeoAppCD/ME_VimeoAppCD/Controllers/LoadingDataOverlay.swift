@@ -1,5 +1,5 @@
 //
-//  LoadingOverlay.swift
+//  LoadingDataOverlay.swift
 //  ME_VimeoApp
 //
 //  Created by Rob Slegtenhorst on 12/04/2017.
@@ -12,7 +12,7 @@ import OAuth2
 import ProgressKit
 import CoreData
 
-class LoadingOverlay: NSViewController {
+class LoadingDataOverlay: NSViewController {
     
     let center = NotificationCenter.default
     
@@ -24,12 +24,10 @@ class LoadingOverlay: NSViewController {
     @IBOutlet var loadingIndicator: CircularProgressView!
     
     var loader : VimeoLoader!
-    var parentView : MainViewController!
     
     var percentagePerCall : CGFloat = 0;
     var callStep : CGFloat = 0;
     
-    // TODO: change VimeoData to CoreData? 
     var vimeoData: VimeoData!;
     
     var usrLoaded = Bool(false)
@@ -100,8 +98,6 @@ class LoadingOverlay: NSViewController {
         {
             center.post(name: NSNotification.Name(rawValue: Notifications.VimeoLoadComplete), object: nil)
             dismissViewController(self)
-//			parentView.vimeoData = self.vimeoData
-			parentView.reloadFileList()
         }
     }
     
@@ -110,7 +106,6 @@ class LoadingOverlay: NSViewController {
         
         vimeoUserDataMO_addUser.uri = userData["uri"] as? String
         vimeoUserDataMO_addUser.resource_key = userData["resource_key"] as? String
-        vimeoData.vimeoUserResource_key = vimeoUserDataMO_addUser.resource_key
         
         vimeoUserDataMO_addUser.name = userData["name"] as? String
         vimeoUserDataMO_addUser.link = userData["link"] as? String
@@ -214,9 +209,9 @@ class LoadingOverlay: NSViewController {
     }
     
     func processAlbumData (albumData:OAuth2JSON) {
-		guard (albumData["data"] != nil) else {
-			print("Processing Album Data Failed :: ")
-			return
+        guard (albumData["data"] != nil) else {
+            print("Processing Album Data Failed :: ")
+            return
         }
         
         let albumArray = albumData["data"] as! NSArray;
@@ -337,16 +332,15 @@ class LoadingOverlay: NSViewController {
     }
     
     func processvideoData (videoData:OAuth2JSON) {
-		guard (videoData["data"] != nil) else {
-			print("Processing Video Data Failed :: ")
-			return
-		}
-		
+        guard (videoData["data"] != nil) else {
+            print("Processing Video Data Failed :: ")
+            return
+        }
+        
         let videoArray = videoData["data"] as! NSArray
         
         for i in 0 ..< videoArray.count
         {
-            // TODO: Remove all old Model references
             // TODO: check items exist > if changes > stop loading
             var vimeoVideoData = VimeoVideoData()
             vimeoVideoData.dataDic = videoArray[i] as! NSDictionary;
@@ -359,11 +353,11 @@ class LoadingOverlay: NSViewController {
                 print("weird status error :: ", vimeoVideoData.dataDic["status"]!)
                 status = ""
             }
-			
-			
-			
-			if (status == "uploading"){
-				return
+            
+            
+            
+            if (status == "uploading"){
+                return
             } else {
                 
                 let vimeoVideoDataMO_addVideo = VimeoVideoDataMO(context: self.container.viewContext)
@@ -387,7 +381,7 @@ class LoadingOverlay: NSViewController {
                     vimeoVideoDataMO_addVideo.user_resource_key = user_resource_key
                 }
                 
-//                vimeoVideoDataMO_addVideo.changed
+                //                vimeoVideoDataMO_addVideo.changed
                 
                 vimeoVideoDataMO_addVideo.uri = vimeoVideoData.dataDic["uri"] as? String
                 vimeoVideoDataMO_addVideo.name = vimeoVideoData.dataDic["name"] as? String
@@ -409,7 +403,7 @@ class LoadingOverlay: NSViewController {
                 
                 vimeoVideoDataMO_addVideo.texttracks_uri = tempTexttracksDict["uri"] as? String
                 vimeoVideoDataMO_addVideo.texttracks_total = tempTexttracksDict["total"] as! Float
-//                vimeoVideoDataMO_addVideo.subtitle_url = ""
+                //                vimeoVideoDataMO_addVideo.subtitle_url = ""
                 
                 // Pictures
                 let tempPictDict = vimeoVideoData.dataDic["pictures"] as! NSDictionary;
@@ -471,58 +465,7 @@ class LoadingOverlay: NSViewController {
                 
                 self.saveContext()
                 
-                //////////
-            
-				vimeoVideoData.uri = vimeoVideoData.dataDic["uri"] as! NSString;
-				vimeoVideoData.name = vimeoVideoData.dataDic["name"] as! NSString;
-				vimeoVideoData.link = vimeoVideoData.dataDic["link"] as! NSString;
-				
-				vimeoVideoData.duration = vimeoVideoData.dataDic["duration"] as! NSNumber;
-				
-				vimeoVideoData.width = vimeoVideoData.dataDic["width"] as! NSNumber;
-				vimeoVideoData.height = vimeoVideoData.dataDic["height"] as! NSNumber;
-				
-				vimeoVideoData.created_time = df.date(from: vimeoVideoData.dataDic["created_time"] as! String) as NSDate!
-				vimeoVideoData.modified_time = df.date(from: vimeoVideoData.dataDic["modified_time"] as! String) as NSDate!
-				vimeoVideoData.release_time = df.date(from: vimeoVideoData.dataDic["release_time"] as! String) as NSDate!
-				
-				// Subs
-				
-				vimeoVideoData.texttracks_uri = tempTexttracksDict["uri"] as! NSString
-				vimeoVideoData.texttracks_total = tempTexttracksDict["total"] as! NSNumber
-				
-//				print(vimeoVideoData.texttracks_uri)
-				
-				
-				// Pictures
-				
-				for l in 0 ..< pictureSizeArray.count
-				{
-					let tempPictSizeDict2 = pictureSizeArray[l] as! NSDictionary;
-					let tempWidth3 = tempPictSizeDict2["width"] as! NSNumber
-					let tempUrl3 = tempPictSizeDict2["link"] as! NSString
-					
-					switch tempWidth3 {
-					case 100:
-						vimeoVideoData.thumb_url_100x75 = tempUrl3
-					case 200:
-						vimeoVideoData.thumb_url_200x150 = tempUrl3
-					case 295:
-						vimeoVideoData.thumb_url_295x166 = tempUrl3
-					case 640:
-						vimeoVideoData.thumb_url_640x360 = tempUrl3
-					case 960:
-						vimeoVideoData.thumb_url_960x540 = tempUrl3
-					case 1280:
-						vimeoVideoData.thumb_url_1280x720 = tempUrl3
-					default:
-						return
-					}
-				}
-				
-				self.vimeoData.videoArray.append(vimeoVideoData)
-//				print("array length :: "+self.vimeoData.videoArray.count.description)
-			}
+            }
         }
     }
     
@@ -584,7 +527,10 @@ class LoadingOverlay: NSViewController {
         albumPagination = 0
         videoPagination = 0
         
+        loader = VimeoLoader()
+        loader.enableHeaders = false;
         
+        vimeoData = VimeoData()
         
         loadData()
     }

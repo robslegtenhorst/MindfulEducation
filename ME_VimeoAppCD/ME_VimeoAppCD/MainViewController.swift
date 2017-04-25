@@ -13,13 +13,12 @@ import CoreData
 
 class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
+    let center = NotificationCenter.default
+    
     var container: NSPersistentContainer!
     
-    //TODO: figure out how to talk to other views
-
-    var loader: VimeoLoader = VimeoLoader();
-    
-    var vimeoData: VimeoData = VimeoData();
+    // TODO: change VimeoData to CoreData?
+//    var vimeoData: VimeoData = VimeoData();
     
     @IBOutlet weak var tableView: NSTableView!
     
@@ -43,7 +42,9 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     //    var loginScreen : NSWindow;
     
     @IBAction func LogoutAction(_ sender: NSButton) {
+        center.post(name: NSNotification.Name(rawValue: Notifications.AppUserLogOut), object: nil)
         sender.title = "Forgetting..."
+        let loader = VimeoLoader()
         loader.oauth2.forgetTokens()
         sender.title = "Signed Out"
         sender.isEnabled = false;
@@ -60,27 +61,9 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
         
     }
     
-    func startLoading() {
-        loader.enableHeaders = false
-        loadingScreenController.loader = loader;
-        loadingScreenController.parentView = self;
-        loadingScreenController.vimeoData = vimeoData;
-        self.presentViewControllerAsSheet(loadingScreenController)
-    }
-    
     override func viewDidAppear() {
+        super.viewDidAppear()
         
-        //        loader.oauth2.forgetTokens()
-        
-        if (loader.oauth2.hasUnexpiredAccessToken() == true){
-            print("signed in")
-            startLoading()
-        } else {
-            print("need to sign in")
-            self.presentViewControllerAsSheet(loginViewController)
-            loginViewController.loader = loader;
-            loginViewController.parentView = self;
-        }
     }
     
     override func viewDidLoad() {
@@ -101,6 +84,10 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
         
         tableView.doubleAction = #selector(MainViewController.doubleClickOnResultRow)
         
+        center.addObserver(forName: NSNotification.Name(rawValue: Notifications.VimeoLoadComplete), object: nil, queue: nil) { notification in
+            self.reloadFileList()
+        }
+        
         // Do any additional setup after loading the view.
     }
     
@@ -111,14 +98,16 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
             return
         }
         
-        let rowData = self.vimeoData.videoArray[tableView.clickedRow]
+        // TODO: set as event > set to core data
         
-        videoDetailController.vimeoVideoindex = tableView.clickedRow
-        videoDetailController.vimeoVideoData = rowData
-        videoDetailController.loader = loader
-        self.presentViewControllerAsSheet(videoDetailController)
+//        let rowData = self.vimeoData.videoArray[tableView.clickedRow]
+//        
+//        videoDetailController.vimeoVideoindex = tableView.clickedRow
+//        videoDetailController.vimeoVideoData = rowData
+//        videoDetailController.loader = loader
+//        self.presentViewControllerAsSheet(videoDetailController)
         
-        print(rowData.name)
+//        print(rowData.name)
     }
     
     override var representedObject: Any? {
@@ -128,6 +117,7 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     }
     
     func reloadFileList(){
+        print("should reload")
         
         tableView.reloadData()
     }
@@ -155,7 +145,16 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return vimeoData.videoArray.count
+        let request = VimeoVideoDataMO.createFetchRequest()
+        do {
+            let vimeoVideoDataMO_Array = try self.container.viewContext.fetch(request)
+            
+            return vimeoVideoDataMO_Array.count
+            
+        } catch {
+            print("Fetch failed")
+            return 0
+        }
     }
     
     fileprivate enum CellIdentifiers {
@@ -175,7 +174,7 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
             return
         }
         
-        let rowData = self.vimeoData.videoArray[table.selectedRow]
+//        let rowData = self.vimeoData.videoArray[table.selectedRow]
         
         //		print(rowData.name)
     }

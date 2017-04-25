@@ -14,6 +14,8 @@ import CoreData
 class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
     var container: NSPersistentContainer!
+    
+    //TODO: figure out how to talk to other views
 
     var loader: VimeoLoader = VimeoLoader();
     
@@ -126,6 +128,7 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
     }
     
     func reloadFileList(){
+        
         tableView.reloadData()
     }
     

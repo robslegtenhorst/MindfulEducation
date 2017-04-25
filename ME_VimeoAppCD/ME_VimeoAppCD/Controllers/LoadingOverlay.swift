@@ -339,7 +339,8 @@ class LoadingOverlay: NSViewController {
         
         for i in 0 ..< videoArray.count
         {
-            // TODO: add in all items from returned data
+            // TODO: Remove all old Model references
+            // TODO: check items exist > if changes > stop loading
             var vimeoVideoData = VimeoVideoData()
             vimeoVideoData.dataDic = videoArray[i] as! NSDictionary;
             

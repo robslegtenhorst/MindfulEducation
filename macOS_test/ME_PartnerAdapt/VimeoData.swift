@@ -9,7 +9,7 @@
 import Foundation
 
 struct VimeoData {
-    var dataDic : NSMutableDictionary;
+    var dataDic : NSDictionary;
     var name : NSString;
     var link : NSString;
     var texttracks_total : NSNumber;

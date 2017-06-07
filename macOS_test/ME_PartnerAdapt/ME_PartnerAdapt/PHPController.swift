@@ -180,10 +180,11 @@ class PHPController: NSViewController {
                                 
                                 if let dataArr = bodyDictionary["data"] as? NSArray
                                 {
+                                    print(dataArr)
                                     
                                     for i in 0 ..< dataArr.count
                                     {
-                                        let dataDic = dataArr[i] as! NSMutableDictionary;
+                                        let dataDic = dataArr[i] as! NSDictionary;
                                         let name = dataDic["name"] as! NSString;
                                         let link = dataDic["link"] as! NSString;
                                         
@@ -192,9 +193,9 @@ class PHPController: NSViewController {
                                         let modified_time = dataDic["modified_time"] as! NSString;
                                         let release_time = dataDic["release_time"] as! NSString;
                                         
-                                        let metadata = dataDic["metadata"] as! NSMutableDictionary;
-                                        let connections = metadata["connections"] as! NSMutableDictionary;
-                                        let texttracks = connections["texttracks"] as! NSMutableDictionary;
+                                        let metadata = dataDic["metadata"] as! NSDictionary;
+                                        let connections = metadata["connections"] as! NSDictionary;
+                                        let texttracks = connections["texttracks"] as! NSDictionary;
                                         let texttracks_total = texttracks["total"] as! NSNumber;
                                         
                                         let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", complete:false);

@@ -29,7 +29,7 @@ class LoadingOverlay: NSViewController {
     
     var usrLoaded = Bool(false)
     var albumsLoaded : Bool = false
-    var videosLoaded = (Bool:false)
+	var videosLoaded : Bool = false
     var checkedLoadAmount : Bool = false
     
     var albumAmountLoaded : Bool = false

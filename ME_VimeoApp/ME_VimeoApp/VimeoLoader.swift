@@ -29,7 +29,7 @@ class VimeoLoader: OAuth2DataLoader, DataLoader {
 			"authorize_uri": "https://api.vimeo.com/oauth/authorize",
 			"token_uri": "https://api.vimeo.com/oauth/access_token",
 			"scope": "public private purchased create edit delete interact upload",
-			"redirect_uris": ["mevimeoapp2://oauth/callback"],
+			"redirect_uris": ["mevimeoapp://oauth/callback"],
 			"secret_in_body": true,
 			"verbose": true,
 		])

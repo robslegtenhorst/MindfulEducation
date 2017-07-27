@@ -67,7 +67,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     override func viewDidAppear() {
         
 //        loader.oauth2.forgetTokens()
-        
+		
         if (loader.oauth2.hasUnexpiredAccessToken() == true){
             print("signed in")
             startLoading()

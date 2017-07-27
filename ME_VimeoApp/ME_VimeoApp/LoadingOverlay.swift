@@ -175,14 +175,14 @@ class LoadingOverlay: NSViewController {
 				let managedContext = appDelegate.managedObjectContext
                 let entity = NSEntityDescription.entity(forEntityName: "TestObject", in: managedContext)!
                 let vimeoUserDataMO = NSManagedObject(entity: entity, insertInto: managedContext)
-                
+				
                 print("MO Test 1")
-                print(vimeoUserDataMO.value(forKey: "link"))
+                print(vimeoUserDataMO.value(forKey: "link")!)
                 
                 vimeoUserDataMO.setValue(vimeoUserData?.link, forKeyPath: "link")
                 
                 print("MO Test 2")
-                print(vimeoUserDataMO.value(forKey: "link"))
+                print(vimeoUserDataMO.value(forKey: "link")!)
 				
                 if let pictures = dict?["pictures"] as? NSMutableDictionary {
                     

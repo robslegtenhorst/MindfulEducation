@@ -61,6 +61,22 @@ class LoadingOverlay: NSViewController {
                 print("Unresolved error \(error)")
             }
         }
+        deleteCoreData()
+    }
+    
+    func deleteCoreData() {
+        
+        //TODO Empty out current coredata set
+        // create the delete request for the specified entity
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "VimeoVideoDataMO")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        // perform the delete
+        do {
+            try container.viewContext.execute(deleteRequest)
+        } catch let error as NSError {
+            print(error)
+        }
     }
     
     func setPercentage()

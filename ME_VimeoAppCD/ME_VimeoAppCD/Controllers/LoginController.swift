@@ -82,7 +82,7 @@ class LoginController: NSViewController {
                 }
             }
             else {
-                NSLog("Fetched: \(dict)")
+                NSLog("Fetched: \(String(describing: dict))")
             }
             button.isEnabled = true
         }

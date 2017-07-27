@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func handleURLEvent(_ event: NSAppleEventDescriptor, withReply reply: NSAppleEventDescriptor) {
         print("handleURLEvent")
         if let urlString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue {
-            if let url = URL(string: urlString), "mevimeoapp2" == url.scheme && "oauth" == url.host {
+            if let url = URL(string: urlString), "mevimeoapp" == url.scheme && "oauth" == url.host {
                 NotificationCenter.default.post(name: OAuth2AppDidReceiveCallbackNotification, object: url)
             }
         }

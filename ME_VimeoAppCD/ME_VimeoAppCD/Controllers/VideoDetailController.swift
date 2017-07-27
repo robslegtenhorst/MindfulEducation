@@ -13,7 +13,7 @@ import Alamofire
 
 class VideoDetailController: NSViewController {
 	
-	var vimeoVideoData : VimeoVideoData!
+	var vimeoVideoData : VimeoVideoDataMO!
 	var vimeoVideoindex : Int!
 	var loader : VimeoLoader!
 	
@@ -49,23 +49,23 @@ class VideoDetailController: NSViewController {
 		print("view loaded")
 	}
 	
-	func reloadData (data: VimeoVideoData) {
+	func reloadData (data: VimeoVideoDataMO) {
 		imgBtnCell.image = NSImage()
-		nameField.placeholderString = data.name as String
+		nameField.placeholderString = data.name!
 		
-		urlField.stringValue = data.link as String
+		urlField.stringValue = data.link!
 		durationField.stringValue = data.duration.description as String
 		widthField.stringValue = data.width.description as String
 		heightField.stringValue = data.height.description as String
-		createdField.stringValue = data.created_time.description as String
-		modifiedField.stringValue = data.modified_time.description as String
-		releasedField.stringValue = data.release_time.description as String
+		createdField.stringValue = (data.created_time?.description)!
+		modifiedField.stringValue = (data.modified_time?.description)!
+		releasedField.stringValue = (data.release_time?.description)!
 		playsField.stringValue = data.plays.description as String
 		
-		print ("texttracks_total :: " + data.texttracks_total.description)
-		print ("subtitle_url :: " + data.subtitle_url.description)
+//		print ("texttracks_total :: " + data.texttracks_total.description)
+//		print ("subtitle_url :: " + (data.subtitle_url?.description)!)
 		
-		if(data.texttracks_total != 0 && data.subtitle_url != "") {
+		if(data.texttracks_total != 0 && data.subtitle_url != "" && data.subtitle_url != nil) {
 			getSubs.isEnabled = true
 			getSubs.isHidden = false
 			getSubs.title = "Download"
@@ -80,15 +80,17 @@ class VideoDetailController: NSViewController {
 		}
 		
 		// TODO: set preloader for large images
-		let imageURL = URL(string: data.thumb_url_1280x720 as String)
+		let imageURL = URL(string: data.thumb_url_1280x720!)
 		imgBtn.image = NSImage(byReferencing: imageURL!)
 	}
 	
 	@IBAction func getSubsReq(_ sender: NSButton) {
         
+        //TODO Issues showing subs, possibly due to missing urls
+        
         if (getSubs.title == "Get")
         {
-            loader.requestSub(uri: vimeoVideoData.texttracks_uri) { dict, error in
+            loader.requestSub(uri: vimeoVideoData.texttracks_uri! as NSString) { dict, error in
                 if let error = error {
                     switch error {
                     case OAuth2Error.requestCancelled:
@@ -104,13 +106,13 @@ class VideoDetailController: NSViewController {
                 }
             }
         } else {
-            print("download subs :: "+(self.vimeoVideoData.subtitle_url as String))
+//            print("download subs :: "+(vimeoVideoData.subtitle_url!))
 			
 			// TODO: let user decide where to save file
 			// TODO: "open file"
 			
 			let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
-			Alamofire.download(self.vimeoVideoData.subtitle_url as String, to: destination).response { response in
+			Alamofire.download(self.vimeoVideoData.subtitle_url!, to: destination).response { response in
 				print(response)
 			}
         }
@@ -128,7 +130,7 @@ class VideoDetailController: NSViewController {
 		
 		let subtitle_url = dataDic["link"] as! NSString
         
-        self.vimeoVideoData.subtitle_url = subtitle_url
+        self.vimeoVideoData.subtitle_url = subtitle_url as String
 		
 		getSubs.isEnabled = true
 		getSubs.isHidden = false

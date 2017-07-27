@@ -100,6 +100,29 @@ class MainViewController: NSViewController, NSTableViewDelegate, NSTableViewData
         
         // TODO: set as event > set to core data
         
+        
+        let item : VimeoVideoDataMO!
+        
+        let request = VimeoVideoDataMO.createFetchRequest()
+        do {
+            let vimeoVideoDataMO_Array = try self.container.viewContext.fetch(request)
+            
+            if (vimeoVideoDataMO_Array.count != 0) {
+                item = vimeoVideoDataMO_Array[tableView.clickedRow]
+                
+                videoDetailController.vimeoVideoindex = tableView.clickedRow
+                videoDetailController.vimeoVideoData = item
+                
+                self.presentViewControllerAsSheet(videoDetailController)
+            }
+            
+        } catch {
+            print("Fetch failed")
+        }
+        
+        
+        
+        
 //        let rowData = self.vimeoData.videoArray[tableView.clickedRow]
 //        
 //        videoDetailController.vimeoVideoindex = tableView.clickedRow

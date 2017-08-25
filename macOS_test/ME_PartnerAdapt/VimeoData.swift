@@ -22,5 +22,10 @@ struct VimeoData {
     
     var subtitle_url : NSString;
     
+    var downloadLink : NSString;
+    
+    var albumID:NSString;
+    var videoType:String;
+    
     var complete : Bool;
 }

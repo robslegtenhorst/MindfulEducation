@@ -27,6 +27,7 @@ class ScriptViewController: NSViewController {
         sender?.title = "Forgetting..."
         contentField?.stringValue = "Signing out..."
         loader.oauth2.forgetTokens()
+        loader.oauth2.forgetClient()
         sender?.title = "Signed Out"
         button?.title = "Sign In"
         contentField?.stringValue = "Signed Out"

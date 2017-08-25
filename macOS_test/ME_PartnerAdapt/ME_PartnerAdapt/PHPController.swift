@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Alamofire
 
 class PHPController: NSViewController {
     
@@ -15,6 +16,8 @@ class PHPController: NSViewController {
     var totalItems:Double = 0.0;
     var repeatPages:Double = 0.0
     var albumNR:String = ""
+    
+    var tempReturnedItemArray:Array<VimeoData> = [];
     
     var returnedAlbumArray : Array<VimeoAlbumData> = [];
     var returnedItemArray : Array<VimeoData> = [];
@@ -32,7 +35,7 @@ class PHPController: NSViewController {
     }
     
     func allAlbumPHPCall(PageNR:Double, perPage:Double, getSubs:Bool) {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/vimeo_album.php?page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=uri,name")!
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/vimeo_album.php?page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=uri,name")!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
         let session = URLSession.shared
         
@@ -126,12 +129,137 @@ class PHPController: NSViewController {
         task.resume();
     }
     
-    func albumPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time")!
+    func subTextPHPCall(VideoID:String, AlbumID:String, VideoName:String) {
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/sub.php?video="+VideoID.description)!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
         let session = URLSession.shared
         
-        var tempReturnedItemArray:Array<VimeoData> = [];
+        var tempReturnedItemArray:Array<VimeoSubData> = [];
+        
+        let task = session.dataTask(with: request as URLRequest)
+        {
+            (data, response, error) -> Void in
+            
+            let httpResponse = response as! HTTPURLResponse
+            let statusCode = httpResponse.statusCode
+            
+            if (statusCode == 200)
+            {
+                do
+                {
+                    
+                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+                    
+                    if let dictionary = json as? [String: Any]
+                    {
+                        
+                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+                        
+                        if (status == 200)
+                        {
+                            if (dictionary["headers"] as? [String: Any]) != nil
+                            {
+                                //print(headersDictionary)
+                            }
+                            
+                            if let bodyDictionary = dictionary["body"] as? [String: Any]
+                            {
+                                if (self.totalItems == 0)
+                                {
+                                    self.totalItems = (bodyDictionary["total"] as? Double)!; //332
+                                    let perPage:Double = (bodyDictionary["per_page"] as? Double)!; //50
+                                    
+                                    if (perPage < self.totalItems)
+                                    {
+                                        //ENABLE FOR PAGING
+                                        //                                        self.repeatPages = ceil(self.totalItems / perPage);
+                                        print(self.repeatPages);
+                                    }
+                                }
+                                
+                                // contains total, per page & page nr
+                                
+                                if let dataArr = bodyDictionary["data"] as? NSArray
+                                {
+                                    
+                                    for i in 0 ..< dataArr.count
+                                    {
+                                        
+                                        let dataDic = dataArr[i] as! NSDictionary;
+                                        let name = dataDic["name"] as! NSString;
+                                        let link = dataDic["link"] as! String;
+                                        let hls_link = dataDic["hls_link"] as! String;
+                                        let language = dataDic["language"] as! NSString;
+                                        
+                                        let url = link
+                                        
+                                        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                                        let data1Path = documentsDirectory.appendingPathComponent(AlbumID as String)
+                                        let dataPath = data1Path.appendingPathComponent((VideoName as String))
+//                                        dataPath = data1Path.appendingPathComponent((VideoName as String)+"/VTT/")
+                                        
+                                        var filePath:URL
+                                        
+                                        if name.lowercased.contains(".vtt") {
+                                            print("found")
+                                            filePath = dataPath.appendingPathComponent(name as String)
+                                        } else {
+                                            print("not found")
+                                            filePath = dataPath.appendingPathComponent((name as String)+".vtt")
+                                        }
+                                        
+                                        print(url)
+                                        print("--------------")
+                                        
+                                        do {
+                                            try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+                                        } catch let error as NSError {
+                                            print("Error creating directory: \(error.localizedDescription)")
+                                        }
+                                        
+                                        Alamofire.download(url, method: .get, to: { (url, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+                                            return (filePath, [.removePreviousFile, .createIntermediateDirectories])
+                                        })
+                                            .downloadProgress { progress in
+                                                print("Download Progress: \(progress.fractionCompleted)")
+                                            }
+                                            .responseData { response in
+                                                print(response)
+                                        }
+                                        
+                                        
+                                        let itemData = VimeoSubData(dataDic:dataDic, name:name, link:link, language:language, hls_link:hls_link);
+                                        
+                                        tempReturnedItemArray.append(itemData);
+                                        
+                                    }
+                                    
+                                }
+                            }
+                            
+                            
+                        } else {
+                            print("Content returned error :: "+status.description);
+                        }
+                    }
+                    
+                }catch {
+                    print("Error with Json: \(error)")
+                }
+                
+            }
+        }
+        
+        task.resume();
+    }
+    
+    func albumPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
+//        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album=4595765&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
+        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+        let session = URLSession.shared
+        
+        self.tempReturnedItemArray = [];
         
         print (PageNR);
         
@@ -180,7 +308,7 @@ class PHPController: NSViewController {
                                 
                                 if let dataArr = bodyDictionary["data"] as? NSArray
                                 {
-                                    print(dataArr)
+//                                    print(dataArr)
                                     
                                     for i in 0 ..< dataArr.count
                                     {
@@ -197,13 +325,39 @@ class PHPController: NSViewController {
                                         let connections = metadata["connections"] as! NSDictionary;
                                         let texttracks = connections["texttracks"] as! NSDictionary;
                                         let texttracks_total = texttracks["total"] as! NSNumber;
+                                        let texttracks_uri = texttracks["uri"] as! NSString;
                                         
-                                        let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", complete:false);
+                                        var downloadLink = "";
+                                        var videoType = "";
+                                        
+                                        let downloadArray = dataDic["download"] as! NSArray;
+                                        
+                                        for j in 0 ..< downloadArray.count
+                                        {
+                                            let downloadDataDic = downloadArray[j] as! NSDictionary;
+                                            let quality = downloadDataDic["quality"] as! NSString;
+                                            let height = downloadDataDic["height"] as! NSNumber;
+                                            
+                                            if(quality == "source") {
+                                                downloadLink = (downloadDataDic["link"] as! NSString) as String;
+                                                videoType = "SRC"
+                                            } else if(quality == "hd" && height == 1080 && downloadLink == "") {
+                                                downloadLink = (downloadDataDic["link"] as! NSString) as String;
+                                                videoType = "HD"
+                                            }
+                                            
+                                        }
+                                        
+//                                        self.downloadFile(url:downloadLink, folderName:AlbumID,subFolder:"SRC", fileName:name as String, fileExtension:".mp4")
+                                        
+                                        self.subTextPHPCall(VideoID:texttracks_uri as String, AlbumID: AlbumID, VideoName: name as String)
+                                        
+                                        let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", downloadLink: downloadLink as NSString, albumID: AlbumID as NSString, videoType: videoType, complete:false);
                                         
                                         //ENABLE FOR PAGING
 //                                        self.returnedItemArray.append(itemData);
                                         
-                                        tempReturnedItemArray.append(itemData);
+                                        self.tempReturnedItemArray.append(itemData);
                                         
                                     }
                                     
@@ -212,12 +366,13 @@ class PHPController: NSViewController {
                             
                             if (PageNR >= self.repeatPages)
                             {
+                                self.startDownload()
                                 if (getSubs){
-                                    self.getSubs(contentArray: tempReturnedItemArray)
+                                    self.getSubs(contentArray: self.tempReturnedItemArray)
                                 } else {
                                     //ENABLE FOR PAGING
 //                                    self.createCSV(AlbumID:AlbumID, contentArray: self.returnedItemArray);
-                                    self.createCSV(AlbumID:AlbumID, albumName:albumName as String, contentArray: tempReturnedItemArray);
+                                    self.createCSV(AlbumID:AlbumID, albumName:albumName as String, contentArray: self.tempReturnedItemArray);
                                 }
                                 
                             } else {
@@ -239,8 +394,56 @@ class PHPController: NSViewController {
         task.resume();
     }
     
+    func startDownload() -> Void {
+        let itemData: VimeoData = self.tempReturnedItemArray[0]
+        self.downloadFile(url:itemData.downloadLink as String, folderName:itemData.albumID as String, subFolder:itemData.videoType, fileName:itemData.name as String, fileExtension:".mp4")
+    }
+    
+    func downloadFile(url:String, folderName:String, subFolder:String, fileName:String, fileExtension:String) -> Void {
+        
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let data1Path = documentsDirectory.appendingPathComponent(folderName as String)
+        let dataPath = data1Path.appendingPathComponent((fileName as String)+"/"+subFolder+"/")
+        
+        var filePath:URL
+        
+        if fileName.lowercased().contains(fileExtension) {
+            print("found")
+            filePath = dataPath.appendingPathComponent(fileName as String)
+        } else {
+            print("not found")
+            filePath = dataPath.appendingPathComponent((fileName as String)+fileExtension)
+        }
+        
+        do {
+            try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+        } catch let error as NSError {
+            print("Error creating directory: \(error.localizedDescription)")
+        }
+        
+        Alamofire.download(url, method: .get, to: { (url, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+            return (filePath, [.removePreviousFile, .createIntermediateDirectories])
+        })
+            .downloadProgress { progress in
+                print("Download Progress: \(progress.fractionCompleted)")
+            }
+            .responseData { response in
+                print(response)
+            }.response(completionHandler: { (DefaultDownloadResponse) in
+                
+                self.tempReturnedItemArray.removeFirst()
+                if DefaultDownloadResponse.response?.statusCode == 200 {
+                    
+                    if !self.tempReturnedItemArray.isEmpty{
+                        self.startDownload()
+                    }
+                }
+                
+            })
+    }
+    
     func getSubtitle(videoID:String, currentIndex : NSInteger) {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/vimeo_subtitle.php?video="+videoID)!
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/vimeo_subtitle.php?video="+videoID)!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
         let session = URLSession.shared
         

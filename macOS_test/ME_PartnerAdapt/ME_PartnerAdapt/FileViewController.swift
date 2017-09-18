@@ -20,7 +20,6 @@ class FileController: NSViewController {
     @IBOutlet weak var GroupID: NSTextField!
     
     @IBOutlet weak var sendBTN: NSButton!
-    
     var logoFile : NSString = "";
     var contentFiles : Array<[URL]> = [];
     
@@ -30,6 +29,8 @@ class FileController: NSViewController {
     var totalItems:Double = 0.0;
     var repeatPages:Double = 0.0
     var albumNR:String = ""
+    
+    var uploadBool:Bool = true
     
     var tempReturnedItemArray:Array<VimeoData> = [];
     var returnedItemArray : Array<VimeoData> = [];
@@ -209,7 +210,7 @@ class FileController: NSViewController {
                 
                 //filename_field.stringValue += "Completed "+outputLoc+"/output.mp4";
                 
-                addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);
+                if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
                 
                 do {
                     try fileManager.removeItem(atPath: url.path!)
@@ -308,7 +309,7 @@ class FileController: NSViewController {
                     self.group_uri = "/users/42291155/albums/"+GroupID.stringValue
                 } else {
                     // create group on vimeo
-                    createGroupPHPCall(albumName: groupName.stringValue)
+                    if (self.uploadBool == true) {createGroupPHPCall(albumName: groupName.stringValue)}
                 }
                 
     //            print("received self.group_uri :: "+self.group_uri)
@@ -331,7 +332,7 @@ class FileController: NSViewController {
                     // create csv from group
                     
                     let AlbumID = NSURL(fileURLWithPath: self.group_uri).lastPathComponent
-                    self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false);
+                    if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false);}
                 }
             } else {
                 var message = ""
@@ -374,6 +375,16 @@ class FileController: NSViewController {
         alert.alertStyle = .warning
         alert.addButton(withTitle: "OK")
         return alert.runModal() == NSAlertFirstButtonReturn
+    }
+    
+    @IBAction func UploadCheckbox(_ sender: Any) {
+        if (self.uploadBool == true) {
+            self.uploadBool = false
+        } else {
+            self.uploadBool = true
+        }
+        
+        print("uploadBool :: "+uploadBool.description)
     }
     
     func albumCSVPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {

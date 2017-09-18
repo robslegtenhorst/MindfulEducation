@@ -686,6 +686,17 @@ Gw
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nft-Tb-i9p">
+                                <rect key="frame" x="256" y="321" width="128" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Upload to vimeo?" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5u7-uR-jmI">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="UploadCheckbox:" target="lgC-9t-vBL" id="c73-4d-wwF"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>

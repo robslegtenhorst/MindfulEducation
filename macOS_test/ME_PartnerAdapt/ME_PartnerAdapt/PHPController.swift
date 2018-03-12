@@ -253,6 +253,82 @@ class PHPController: NSViewController {
         task.resume();
     }
     
+    func posterCall(PageNR:Double, AlbumID:String, perPage:Double) {
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=uri")!
+        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: request as URLRequest)
+        {
+            (data, response, error) -> Void in
+            
+            let httpResponse = response as! HTTPURLResponse
+            let statusCode = httpResponse.statusCode
+            
+            if (statusCode == 200)
+            {
+                do
+                {
+                    
+                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+                    
+                    if let dictionary = json as? [String: Any]
+                    {
+                        
+                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+                        
+                        if (status == 200)
+                        {
+                            if (dictionary["headers"] as? [String: Any]) != nil
+                            {
+//                                print(dictionary["headers"])
+                            }
+                            if let bodyDictionary = dictionary["body"] as? [String: Any]
+                            {
+                                if let dataArr = bodyDictionary["data"] as? NSArray
+                                {
+                                    //                                    print(dataArr)
+                                    
+                                    for i in 0 ..< dataArr.count
+                                    {
+                                        let dataDic = dataArr[i] as! NSDictionary;
+                                        let videoURI = dataDic["uri"] as! String;
+                                        let pictURI = videoURI+"/pictures";
+                                        
+                                        print(pictURI);
+                                        
+                                        let filePath = "/usr/bin/php";
+                                        let path = filePath;
+
+                                        let arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/setPosterFrame.php", pictURI];
+
+                                        let task = Process.launchedProcess(launchPath: path, arguments: arguments );
+                                        task.waitUntilExit();
+                                    }
+                                }
+                                
+                                
+                                
+                                
+                                
+//                                print("button clicked, fingers crossed")
+                                
+                            }
+                        } else {
+                            print("Content returned error :: "+status.description);
+                        }
+                    }
+                    
+                }catch {
+                    print("Error with Json: \(error)")
+                }
+                
+            }
+        }
+        
+        task.resume();
+    }
+    
     func albumPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
         let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
         //        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album=4595765&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
@@ -730,6 +806,12 @@ class PHPController: NSViewController {
         
         albumPHPCall(PageNR: 1, AlbumID: AlbumIDStr, perPage: 50, getSubs:true);
         
+    }
+    @IBAction func setPosterFrame(_ sender: NSButton) {
+        let AlbumIDStr = AlbumID.stringValue;
+        albumNR = AlbumIDStr;
+        
+        posterCall(PageNR: 1, AlbumID: AlbumIDStr, perPage: 50);
     }
     
     @IBAction func runWOutSubs(_ sender: NSButton) {

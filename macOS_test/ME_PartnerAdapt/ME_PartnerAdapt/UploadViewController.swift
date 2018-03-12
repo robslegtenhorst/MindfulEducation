@@ -1,25 +1,28 @@
 //
-//  FileViewController.swift
+//  UploadViewController.swift
 //  ME_PartnerAdapt
 //
-//  Created by Rob Slegtenhorst on 09/02/2017.
-//  Copyright © 2017 Rob Slegtenhorst. All rights reserved.
+//  Created by Rob Slegtenhorst on 12/03/2018.
+//  Copyright © 2018 Rob Slegtenhorst. All rights reserved.
 //
 
+import Foundation
 import Cocoa
 
-class FileController: NSViewController {
-    @IBOutlet weak var LogoText: NSTextField!
+class UploadViewController: NSViewController {
     
     @IBOutlet weak var ContentText: NSTextField!
     
     @IBOutlet weak var groupName: NSTextField!
-    @IBOutlet weak var collegeName: NSTextField!
     
     @IBOutlet weak var GroupID: NSTextField!
     
     @IBOutlet weak var sendBTN: NSButton!
-    var logoFile : NSString = "";
+    
+    @IBOutlet weak var CreateGroupBtn: NSButton!
+    
+    @IBOutlet weak var createGroupCheck: NSTextField!
+    
     var contentFiles : Array<[URL]> = [];
     
     var group_uri:String = "";
@@ -29,13 +32,13 @@ class FileController: NSViewController {
     var repeatPages:Double = 0.0
     var albumNR:String = ""
     
-    var uploadBool:Bool = true
-    
     var tempReturnedItemArray:Array<VimeoData> = [];
     var returnedItemArray : Array<VimeoData> = [];
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        createGroupCheck.isHidden = true;
         
         // Do any additional setup after loading the view.
     }
@@ -98,9 +101,9 @@ class FileController: NSViewController {
         dialog.allowedFileTypes        = ["mp4"];
         
         if (dialog.runModal() == NSModalResponseOK) {
-//            for i in 0 ..< dialog.urls.count  {
-//                print(dialog.urls[i]);
-//            }
+            //            for i in 0 ..< dialog.urls.count  {
+            //                print(dialog.urls[i]);
+            //            }
             
             let result = dialog.urls // Pathname of the file
             
@@ -140,11 +143,10 @@ class FileController: NSViewController {
         return "Cancel"
     }
     
-    func runCMD(contentfileSingleUrl:NSString, filename:NSString, outputLoc:String) -> Void {
+    func runCMD(contentfileSingleUrl:NSString, filename:NSString) -> Void {
         
         var subArray : Array<VTTData> = [];
         
-        let fileManager = FileManager.default;
         let encodingFile = URL(fileURLWithPath: contentfileSingleUrl as String)
         let encodingFileName = encodingFile.deletingPathExtension().lastPathComponent
         let encodingFilePath = encodingFile.deletingLastPathComponent()
@@ -154,8 +156,6 @@ class FileController: NSViewController {
         let vttFilePaths = filePaths.filter{$0.contains(".vtt")}
         
         for vttFileName in vttFilePaths{
-//            print("VTT Name :: "+vttFileName)
-//            print("original filename :: "+encodingFileName)
             
             let vttFileNameArr = vttFileName.components(separatedBy: ".")
             
@@ -169,60 +169,14 @@ class FileController: NSViewController {
                 
                 let vttData = VTTData(vttURL: vttFile, vttLang: vttFileLang);
                 
-                // TODO this search works, but if there's subs that contain a wrong file name (e.g. LOGO_aat-l2_u01_l.en-GB.vtt > missing lesson and part) they will be matched to everything. avaid by using correct filenames :)
+                // TODO this search works, but if there's subs that contain a wrong file name (e.g. LOGO_aat-l2_u01_l.en-GB.vtt > missing lesson and part) they will be matched to everything. avoid by using correct filenames :)
                 
                 subArray.append(vttData)
             }
         }
         
-        let text = "file '"+(logoFile as String)+"'\nfile '"+(contentfileSingleUrl as String)+"'\n" //just a text
-        
-        let template = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("file_"+randomString(length: 6)+".txt") as NSURL
-        
-        var buffer = [Int8](repeating: 0, count: Int(PATH_MAX))
-        template.getFileSystemRepresentation(&buffer, maxLength: buffer.count)
-        
-        let fd = mkstemp(&buffer)
-        if fd != -1 {
-            
-            // Create URL from file system string:
-            let url = NSURL(fileURLWithFileSystemRepresentation: buffer, isDirectory: false, relativeTo: nil)
-//            print(url.path!)
-            
-            do {
-                try text.write(to: url as URL, atomically: false, encoding: String.Encoding.utf8);
-                
-                let filePath = Bundle.main.path(forResource: "ffmpeg", ofType: "");
-                
-                let path = filePath;
-                let newFilename = filename.replacingOccurrences(of: "LOGO_", with: "")
-                let outputFile = outputLoc+"/"+(collegeName.stringValue)+"_"+(newFilename as String)
-                
-                let file_name = NSURL(fileURLWithPath: outputFile).deletingPathExtension?.lastPathComponent
-                
-//                print("file_name :: "+file_name!)
-                
-                let arguments = ["-loglevel", "error", "-auto_convert", "1", "-f", "concat", "-safe", "0", "-i", url.path, "-y", "-codec", "copy", outputFile];
-                
-                let task = Process.launchedProcess(launchPath: path!, arguments: arguments as! [String]);
-                task.waitUntilExit();
-                
-                //filename_field.stringValue += "Completed "+outputLoc+"/output.mp4";
-                
-                if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
-                
-                do {
-                    try fileManager.removeItem(atPath: url.path!)
-                }
-                catch let error as NSError {
-                    print("Ooops! Something went wrong: \(error)")
-                }
-                
-            }
-            catch {/* error handling here */}
-            
-        } else {
-            print("Error: " + String(cString: strerror(errno)))
+        do {
+            addVideoToVimeo(outputFile:contentfileSingleUrl as String, file_name:encodingFileName, vttDataArray:subArray);
         }
         
         return;
@@ -230,18 +184,18 @@ class FileController: NSViewController {
     
     func addVideoToVimeo(outputFile:String, file_name:String, vttDataArray:Array<VTTData>) -> Void {
         print("Video converted succesfully, attempting to upload to Vimeo")
-//        print("group_uri :: "+self.group_uri)
+        print("group_uri :: "+self.group_uri)
         
         let filePath = "/usr/bin/php";
         
         let path = filePath;
         
-//        print(vttDataArray.count)
+        //        print(vttDataArray.count)
         
         // TODO Add php file to package
         // TODO add php exec to package?
         
-//        var arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/upload_vidText.php", self.group_uri, outputFile, file_name, "2", "/Users/robslegtenhorst/RENDER/temp_logo/subs/CAR_AAT-L2_U01/car_aat-l2_u01_l01_p01_v007_MASTERED/car_aat-l2_u01_l01_p01_v007_MASTERED.en-GB_Welsh.vtt", "cy", "/Users/robslegtenhorst/RENDER/temp_logo/subs/CAR_AAT-L2_U01/car_aat-l2_u01_l01_p01_v007_MASTERED/English (United Kingdom).vtt", "en-GB"];
+        //        var arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/upload_vidText.php", self.group_uri, outputFile, file_name, "2", "/Users/robslegtenhorst/RENDER/temp_logo/subs/CAR_AAT-L2_U01/car_aat-l2_u01_l01_p01_v007_MASTERED/car_aat-l2_u01_l01_p01_v007_MASTERED.en-GB_Welsh.vtt", "cy", "/Users/robslegtenhorst/RENDER/temp_logo/subs/CAR_AAT-L2_U01/car_aat-l2_u01_l01_p01_v007_MASTERED/English (United Kingdom).vtt", "en-GB"];
         
         var arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/upload_vidText.php", self.group_uri, outputFile, file_name];
         
@@ -252,23 +206,15 @@ class FileController: NSViewController {
             arguments.append(vttDataArray[i].vttLang)
         }
         
-//        for j in 0 ..< arguments.count{
-//            print(arguments[j])
-//        }
+        //        for j in 0 ..< arguments.count{
+        //            print(arguments[j])
+        //        }
         
         let task = Process.launchedProcess(launchPath: path, arguments: arguments );
         task.waitUntilExit();
         
-//        print("COMPLETED")
+        //        print("COMPLETED")
         
-    }
-    
-    @IBAction func SelectLogoBtn(_ sender: NSButton) {
-        logoFile = openFileDialog();
-        
-        let filename : NSString = logoFile.lastPathComponent as NSString;
-        
-        LogoText.stringValue = filename as String;
     }
     
     
@@ -285,7 +231,7 @@ class FileController: NSViewController {
                 
                 contentFileNames += (filename as String) + "\n";
             }
-           
+            
         }
         
         ContentText.stringValue = contentFileNames;
@@ -294,9 +240,9 @@ class FileController: NSViewController {
     
     @IBAction func RunBtn(_ sender: NSButton) {
         
-        if (logoFile != "Cancel" && contentFiles.count != 0 && collegeName.stringValue != "")
+        if (contentFiles.count != 0)
         {
-            if (groupName.stringValue != "" || GroupID.stringValue != "")
+            if (GroupID.stringValue != "")
             {
                 sendBTN.acceptsTouchEvents = false;
                 sendBTN.isEnabled = false;
@@ -304,24 +250,17 @@ class FileController: NSViewController {
                 let myGroup = DispatchGroup()
                 myGroup.enter()
                 
-                if (GroupID.stringValue != "") {
-                    self.group_uri = "/users/42291155/albums/"+GroupID.stringValue
-                } else {
-                    // create group on vimeo
-                    if (self.uploadBool == true) {createGroupPHPCall(albumName: groupName.stringValue)}
-                }
+                self.group_uri = "/users/42291155/albums/"+GroupID.stringValue
                 
-    //            print("received self.group_uri :: "+self.group_uri)
                 myGroup.leave()
                 myGroup.notify(queue: DispatchQueue.main) {
-                    let outputLoc = self.openFolderDialog();
                     
                     for i in 0 ..< self.contentFiles.count  {
                         let contentfileURL : [URL] = self.contentFiles[i];
                         for j in 0 ..< contentfileURL.count  {
                             let contentfileSingleUrl = contentfileURL[j].absoluteString as NSString;
                             let filename : NSString = contentfileSingleUrl.lastPathComponent as NSString;
-                            self.runCMD(contentfileSingleUrl: contentfileSingleUrl, filename: filename, outputLoc : outputLoc);
+                            self.runCMD(contentfileSingleUrl: contentfileSingleUrl, filename: filename);
                         }
                     }
                     
@@ -331,17 +270,13 @@ class FileController: NSViewController {
                     // create csv from group
                     
                     let AlbumID = NSURL(fileURLWithPath: self.group_uri).lastPathComponent
-                    if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false);}
+                    self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false);
                 }
             } else {
                 var message = ""
                 
-                if (logoFile == "") {message += "Select a Logo File\n"}
                 if (contentFiles.count == 0) {message += "Select Some content files\n"}
-                if (groupName.stringValue == "" && GroupID.stringValue == "") {message += "Add a name or group ID for the group on Vimeo\n"}
-                if (collegeName.stringValue == "") {message += "Add a name for the College\n"}
-                
-                
+                if (GroupID.stringValue == "") {message += "Add a group ID, or create a new group for the group on Vimeo\n"}
                 
                 let answer = dialogOKCancel(question: "Ok", text: message)
                 if (answer){
@@ -352,12 +287,8 @@ class FileController: NSViewController {
             
             var message = ""
             
-            if (logoFile == "") {message += "Select a Logo File\n"}
             if (contentFiles.count == 0) {message += "Select Some content files\n"}
-            if (groupName.stringValue == "" && GroupID.stringValue == "") {message += "Add a name or group ID for the group on Vimeo\n"}
-            if (collegeName.stringValue == "") {message += "Add a name for the College\n"}
-            
-            
+            if (GroupID.stringValue == "") {message += "Add a group ID, or create a new group for the group on Vimeo\n"}
             
             let answer = dialogOKCancel(question: "Ok", text: message)
             if (answer){
@@ -374,16 +305,6 @@ class FileController: NSViewController {
         alert.alertStyle = .warning
         alert.addButton(withTitle: "OK")
         return alert.runModal() == NSAlertFirstButtonReturn
-    }
-    
-    @IBAction func UploadCheckbox(_ sender: Any) {
-        if (self.uploadBool == true) {
-            self.uploadBool = false
-        } else {
-            self.uploadBool = true
-        }
-        
-        print("uploadBool :: "+uploadBool.description)
     }
     
     func albumCSVPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
@@ -439,7 +360,7 @@ class FileController: NSViewController {
                                 
                                 if let dataArr = bodyDictionary["data"] as? NSArray
                                 {
-//                                    print(dataArr)
+                                    //                                    print(dataArr)
                                     
                                     for i in 0 ..< dataArr.count
                                     {
@@ -462,7 +383,7 @@ class FileController: NSViewController {
                                         let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", downloadLink: "" as NSString, albumID: AlbumID as NSString, videoType: "", complete:false);
                                         
                                         self.tempReturnedItemArray.append(itemData)
-//                                        print("filled array with :: "+self.tempReturnedItemArray.count.description)
+                                        //                                        print("filled array with :: "+self.tempReturnedItemArray.count.description)
                                         
                                     }
                                     
@@ -499,7 +420,7 @@ class FileController: NSViewController {
     }
     
     func createCSV(AlbumID:String, albumName:String, contentArray:Array<VimeoData>) {
-//        print("creating csv for "+contentArray.count.description+" items");
+        //        print("creating csv for "+contentArray.count.description+" items");
         
         let AlbumID = NSURL(fileURLWithPath: self.group_uri).lastPathComponent
         
@@ -512,9 +433,9 @@ class FileController: NSViewController {
             let tempVimeoData : VimeoData = contentArray[i];
             let tempVideoID : String = (tempVimeoData.link as NSString).lastPathComponent;
             
-//            print("looping")
+            //            print("looping")
             
-//            print(tempVimeoData.link)
+            //            print(tempVimeoData.link)
             
             text.append(tempVideoID);
             text.append(",");
@@ -546,11 +467,31 @@ class FileController: NSViewController {
             catch {/* error handling here */}
         }
     }
+    @IBAction func CreateGroupFnc(_ sender: NSButton) {
+        if (groupName.stringValue != "")
+        {
+            createGroupPHPCall(albumName: groupName.stringValue)
+        } else {
+            var message = ""
+            
+            if (groupName.stringValue == "") {message += "Add a name for the group on Vimeo\n"}
+            
+            let answer = dialogOKCancel(question: "Ok", text: message)
+            if (answer){
+                print("ok")
+            }
+        }
+    }
     
     func createGroupPHPCall(albumName:String) -> Void {
+        self.sendBTN.isEnabled = false;
+        self.CreateGroupBtn.isEnabled = false;
+        
         let url: NSURL = NSURL(string: "http://localhost/vimeo/example/createGroup.php?albumName="+albumName)!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
         let session = URLSession.shared
+        
+        var groupID = ""
         
         let task = session.dataTask(with: request as URLRequest)
         {
@@ -582,7 +523,10 @@ class FileController: NSViewController {
                             {
                                 self.group_uri = bodyDictionary["uri"] as! String
                                 self.group_link = bodyDictionary["link"] as! String
-//                                print("received album_uri :: "+self.group_uri)
+                                let groupUriArray = self.group_uri.components(separatedBy: "/")
+                                groupID = groupUriArray[groupUriArray.count-1]
+                                self.changeGroupField(groupIdToFill: groupID)
+                                //                                print("received album_uri :: "+self.group_uri)
                             }
                             
                         } else {
@@ -598,16 +542,17 @@ class FileController: NSViewController {
         }
         
         task.resume();
+        
+        
+        
+        self.createGroupCheck.isHidden = false;
+        
+        
+        self.sendBTN.isEnabled = true;
+        self.CreateGroupBtn.isEnabled = true;
     }
     
-    @IBAction func TestBtn(_ sender: NSButton) {
-        print("button clicked, fingers crossed")
-        let filePath = "/usr/bin/php";
-        let path = filePath;
-        
-        let arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/quota.php"];
-        
-        let task = Process.launchedProcess(launchPath: path, arguments: arguments );
-        task.waitUntilExit();
+    func changeGroupField(groupIdToFill:String) -> Void {
+        self.GroupID.stringValue = groupIdToFill
     }
 }

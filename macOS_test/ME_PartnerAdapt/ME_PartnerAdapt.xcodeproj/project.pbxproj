@@ -17,6 +17,7 @@
 		338E37061E9D1B3700BAABB4 /* VimeoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338E37051E9D1B3700BAABB4 /* VimeoLoader.swift */; };
 		33A812B21F4C47CF008C1EBD /* youtube-dl in Resources */ = {isa = PBXBuildFile; fileRef = 33A812B11F4C47CF008C1EBD /* youtube-dl */; };
 		33A8C6501F5D769B006230E1 /* VTTData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A8C64F1F5D769B006230E1 /* VTTData.swift */; };
+		33C8AB272056926D00AAB5CC /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C8AB262056926D00AAB5CC /* UploadViewController.swift */; };
 		33DA2FE91E4CC7B10086C816 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DA2FE81E4CC7B10086C816 /* AppDelegate.swift */; };
 		33DA2FEB1E4CC7B10086C816 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DA2FEA1E4CC7B10086C816 /* ViewController.swift */; };
 		33DA2FED1E4CC7B10086C816 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DA2FEC1E4CC7B10086C816 /* Assets.xcassets */; };
@@ -157,6 +158,7 @@
 		338E37051E9D1B3700BAABB4 /* VimeoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoLoader.swift; sourceTree = "<group>"; };
 		33A812B11F4C47CF008C1EBD /* youtube-dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "youtube-dl"; sourceTree = "<group>"; };
 		33A8C64F1F5D769B006230E1 /* VTTData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTTData.swift; sourceTree = "<group>"; };
+		33C8AB262056926D00AAB5CC /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
 		33DA2FE51E4CC7B10086C816 /* ME_PartnerAdapt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ME_PartnerAdapt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33DA2FE81E4CC7B10086C816 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33DA2FEA1E4CC7B10086C816 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				335DEBB81E571B7300866B8C /* PHPController.swift */,
 				334F2A1A1E97983B004A428B /* ScriptViewController.swift */,
 				33E615AC1E97F1B0003C0374 /* DataLoader.swift */,
+				33C8AB262056926D00AAB5CC /* UploadViewController.swift */,
 			);
 			path = ME_PartnerAdapt;
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33E615AD1E97F1B0003C0374 /* DataLoader.swift in Sources */,
+				33C8AB272056926D00AAB5CC /* UploadViewController.swift in Sources */,
 				335DEBBD1E5C6C1A00866B8C /* VimeoAlbumData.swift in Sources */,
 				338E37061E9D1B3700BAABB4 /* VimeoLoader.swift in Sources */,
 				334F2A1B1E97983B004A428B /* ScriptViewController.swift in Sources */,
@@ -594,7 +598,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -643,7 +647,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

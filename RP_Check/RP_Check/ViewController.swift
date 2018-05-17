@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Witness
 
 public enum FileOrder: String {
 	case Priority
@@ -54,11 +55,12 @@ class NetjobObj: NSObject {
 class ViewController: NSViewController, XMLParserDelegate {
 	
 	//TODO :: add config screen with server ip, user name and password
-	//TODO :: show frame numbers
+	//DONE :: show frame numbers
 	//TODO :: show elapsed time (in real time)
 	//TODO :: show log file
-	//TODO :: read log and show current percentage done
+	//DONE :: read log and show current percentage done
 	//TODO :: fix sorting
+	//TODO :: add in file change events
 
 	@IBOutlet weak var ComputerName: NSTextField!
 	@IBOutlet weak var LastJobTimeText: NSTextField!
@@ -73,6 +75,8 @@ class ViewController: NSViewController, XMLParserDelegate {
 	@IBOutlet weak var Name: NSTextField!
 	@IBOutlet weak var FinishDateText: NSTextField!
 	@IBOutlet weak var StatusText: NSTextField!
+	
+	var witness: Witness?
 	
 	
 	struct Netjob {
@@ -296,7 +300,16 @@ class ViewController: NSViewController, XMLParserDelegate {
 				let filePath = "/Volumes/mindful_rack/_WIN_RENDER/RP_Log/"+newDate+"."+netjob.NetJobID+".1-01.output.log"
 				let fileURL:URL = URL(fileURLWithPath: filePath)
 				
-				print("netjob date :: "+netjob.CreationDateText)
+				//TODO add in file change events
+				
+				if ( netjob.StatusText == "Rendering")
+				{
+					self.witness = Witness(paths: [filePath], flags: .FileEvents, latency: 0.3) { events in
+						print("file system events received: \(events)")
+					}
+				}
+				
+//				print("netjob date :: "+netjob.CreationDateText)
 				
 				//reading
 				do {
@@ -318,7 +331,7 @@ class ViewController: NSViewController, XMLParserDelegate {
 					currentFrames = currentProgress.components(separatedBy: " (")
 					currentFrame = Int(String(currentFrames[1]).components(separatedBy: ")")[0])
 					
-					print(currentFrame)
+//					print(currentFrame)
 					
 				}
 				catch {
@@ -424,14 +437,14 @@ class ViewController: NSViewController, XMLParserDelegate {
 					let fixedXML = brokenXML[0]+"</RenderSet>"
 					netjobObj.RenderSet = fixedXML
 					
-					print("test::"+netjobObj.RenderSet)
+//					print("test::"+netjobObj.RenderSet)
 					
 					let xmlData = netjobObj.RenderSet.data(using: String.Encoding.utf8)!
 					let parser = XMLParser(data: xmlData)
 					let frameDelegate = FrameRangeXMLParser()
 					parser.delegate = frameDelegate
 					if parser.parse() {
-						print("2::"+netjobObj.StatusText)
+//						print("2::"+netjobObj.StatusText)
 						netjobObj.FrameRange = frameDelegate.items[0]
 						
 						var frameRange = netjobObj.FrameRange.Value.components(separatedBy: "-")
@@ -439,7 +452,7 @@ class ViewController: NSViewController, XMLParserDelegate {
 						netjobObj.FrameRange.endFrame = Int(frameRange[1])!
 						netjobObj.FrameRange.currentFrame = getAllLatestFrames(netjobObj: netjobObj, startFrame: netjobObj.FrameRange.startFrame, endFrame: netjobObj.FrameRange.endFrame)
 						
-						print("Result \(netjobObj.FrameRange.currentFrame)")
+//						print("Result \(netjobObj.FrameRange.currentFrame)")
 					} else {
 						print("error?")
 					}
@@ -630,7 +643,7 @@ class ViewController: NSViewController, XMLParserDelegate {
 			if elementName == "frames" {
 				let tempItem = FrameRange();
 //				print("self.foundCharacters::"+self.foundCharacters)
-				print("self.item.Value::"+self.item.Value)
+//				print("self.item.Value::"+self.item.Value)
 				tempItem.Value = self.item.Value;
 				self.items.append(tempItem);
 			}

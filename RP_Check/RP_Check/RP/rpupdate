@@ -1,0 +1,16 @@
+#!/bin/sh
+
+APPDIR=$0
+
+if [ ! -e "$APPDIR" ]; then
+	case $APPDIR in
+		(*/*) exit 1;;
+		(*) APPDIR=$(command -v -- "$APPDIR") || exit;;
+	esac
+fi
+
+APPDIR=$(
+	cd -P -- "$(dirname -- "$APPDIR")" && pwd -P
+) || exit
+
+exec $APPDIR/rpupdate.bin "$@"

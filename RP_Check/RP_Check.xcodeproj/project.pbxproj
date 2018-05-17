@@ -1,0 +1,404 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3309F8DB20AAF8DC00921012 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3309F8DA20AAF8DC00921012 /* AppDelegate.swift */; };
+		3309F8DD20AAF8DC00921012 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3309F8DC20AAF8DC00921012 /* ViewController.swift */; };
+		3309F8DF20AAF8DD00921012 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8DE20AAF8DD00921012 /* Assets.xcassets */; };
+		3309F8E220AAF8DD00921012 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8E020AAF8DD00921012 /* Main.storyboard */; };
+		3309F8FB20AAFB4200921012 /* RenderPal.env in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8EE20AAFB4100921012 /* RenderPal.env */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F8FC20AAFB4200921012 /* rprccmd.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8EF20AAFB4100921012 /* rprccmd.bin */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F8FD20AAFB4200921012 /* Updates in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F020AAFB4100921012 /* Updates */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F8FE20AAFB4200921012 /* Temp in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F120AAFB4100921012 /* Temp */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F8FF20AAFB4200921012 /* Python in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F220AAFB4100921012 /* Python */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90020AAFB4200921012 /* Presets in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F320AAFB4100921012 /* Presets */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90120AAFB4200921012 /* rpupdate.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F420AAFB4100921012 /* rpupdate.bin */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90220AAFB4200921012 /* rprccmd in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F520AAFB4100921012 /* rprccmd */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90320AAFB4200921012 /* RpRcCmd.conf in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F620AAFB4200921012 /* RpRcCmd.conf */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90420AAFB4200921012 /* RpRcDefaults.conf in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F720AAFB4200921012 /* RpRcDefaults.conf */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90520AAFB4200921012 /* rpupdate in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F820AAFB4200921012 /* rpupdate */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90620AAFB4200921012 /* RpRcCmd.log in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8F920AAFB4200921012 /* RpRcCmd.log */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90720AAFB4200921012 /* Renderers in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8FA20AAFB4200921012 /* Renderers */; settings = {ASSET_TAGS = (New, ); }; };
+		3309F90A20AB1EE400921012 /* ClientView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3309F90920AB1EE400921012 /* ClientView.xib */; };
+		3309F90C20AB1F5800921012 /* ClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3309F90B20AB1F5800921012 /* ClientView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3309F8D720AAF8DC00921012 /* RP_Check.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RP_Check.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3309F8DA20AAF8DC00921012 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3309F8DC20AAF8DC00921012 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3309F8DE20AAF8DD00921012 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3309F8E120AAF8DD00921012 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3309F8E320AAF8DD00921012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3309F8E420AAF8DD00921012 /* RP_Check.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RP_Check.entitlements; sourceTree = "<group>"; };
+		3309F8EE20AAFB4100921012 /* RenderPal.env */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RenderPal.env; sourceTree = "<group>"; };
+		3309F8EF20AAFB4100921012 /* rprccmd.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = rprccmd.bin; sourceTree = "<group>"; };
+		3309F8F020AAFB4100921012 /* Updates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Updates; sourceTree = "<group>"; };
+		3309F8F120AAFB4100921012 /* Temp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Temp; sourceTree = "<group>"; };
+		3309F8F220AAFB4100921012 /* Python */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Python; sourceTree = "<group>"; };
+		3309F8F320AAFB4100921012 /* Presets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Presets; sourceTree = "<group>"; };
+		3309F8F420AAFB4100921012 /* rpupdate.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = rpupdate.bin; sourceTree = "<group>"; };
+		3309F8F520AAFB4100921012 /* rprccmd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = rprccmd; sourceTree = "<group>"; };
+		3309F8F620AAFB4200921012 /* RpRcCmd.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RpRcCmd.conf; sourceTree = "<group>"; };
+		3309F8F720AAFB4200921012 /* RpRcDefaults.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RpRcDefaults.conf; sourceTree = "<group>"; };
+		3309F8F820AAFB4200921012 /* rpupdate */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = rpupdate; sourceTree = "<group>"; };
+		3309F8F920AAFB4200921012 /* RpRcCmd.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RpRcCmd.log; sourceTree = "<group>"; };
+		3309F8FA20AAFB4200921012 /* Renderers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Renderers; sourceTree = "<group>"; };
+		3309F90920AB1EE400921012 /* ClientView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ClientView.xib; sourceTree = "<group>"; };
+		3309F90B20AB1F5800921012 /* ClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3309F8D420AAF8DC00921012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3309F8CE20AAF8DC00921012 = {
+			isa = PBXGroup;
+			children = (
+				3309F8D920AAF8DC00921012 /* RP_Check */,
+				3309F8D820AAF8DC00921012 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3309F8D820AAF8DC00921012 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3309F8D720AAF8DC00921012 /* RP_Check.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3309F8D920AAF8DC00921012 /* RP_Check */ = {
+			isa = PBXGroup;
+			children = (
+				3309F90820AAFB4D00921012 /* RP */,
+				3309F8DA20AAF8DC00921012 /* AppDelegate.swift */,
+				3309F8DC20AAF8DC00921012 /* ViewController.swift */,
+				3309F8DE20AAF8DD00921012 /* Assets.xcassets */,
+				3309F8E020AAF8DD00921012 /* Main.storyboard */,
+				3309F90920AB1EE400921012 /* ClientView.xib */,
+				3309F90B20AB1F5800921012 /* ClientView.swift */,
+				3309F8E320AAF8DD00921012 /* Info.plist */,
+				3309F8E420AAF8DD00921012 /* RP_Check.entitlements */,
+			);
+			path = RP_Check;
+			sourceTree = "<group>";
+		};
+		3309F90820AAFB4D00921012 /* RP */ = {
+			isa = PBXGroup;
+			children = (
+				3309F8FA20AAFB4200921012 /* Renderers */,
+				3309F8EE20AAFB4100921012 /* RenderPal.env */,
+				3309F8F520AAFB4100921012 /* rprccmd */,
+				3309F8F320AAFB4100921012 /* Presets */,
+				3309F8F220AAFB4100921012 /* Python */,
+				3309F8EF20AAFB4100921012 /* rprccmd.bin */,
+				3309F8F620AAFB4200921012 /* RpRcCmd.conf */,
+				3309F8F920AAFB4200921012 /* RpRcCmd.log */,
+				3309F8F720AAFB4200921012 /* RpRcDefaults.conf */,
+				3309F8F820AAFB4200921012 /* rpupdate */,
+				3309F8F420AAFB4100921012 /* rpupdate.bin */,
+				3309F8F120AAFB4100921012 /* Temp */,
+				3309F8F020AAFB4100921012 /* Updates */,
+			);
+			path = RP;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3309F8D620AAF8DC00921012 /* RP_Check */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3309F8E720AAF8DD00921012 /* Build configuration list for PBXNativeTarget "RP_Check" */;
+			buildPhases = (
+				3309F8D320AAF8DC00921012 /* Sources */,
+				3309F8D420AAF8DC00921012 /* Frameworks */,
+				3309F8D520AAF8DC00921012 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RP_Check;
+			productName = RP_Check;
+			productReference = 3309F8D720AAF8DC00921012 /* RP_Check.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3309F8CF20AAF8DC00921012 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				KnownAssetTags = (
+					New,
+				);
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Rob Slegtenhorst";
+				TargetAttributes = {
+					3309F8D620AAF8DC00921012 = {
+						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 3309F8D220AAF8DC00921012 /* Build configuration list for PBXProject "RP_Check" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3309F8CE20AAF8DC00921012;
+			productRefGroup = 3309F8D820AAF8DC00921012 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3309F8D620AAF8DC00921012 /* RP_Check */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3309F8D520AAF8DC00921012 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3309F90120AAFB4200921012 /* rpupdate.bin in Resources */,
+				3309F8FF20AAFB4200921012 /* Python in Resources */,
+				3309F90620AAFB4200921012 /* RpRcCmd.log in Resources */,
+				3309F90720AAFB4200921012 /* Renderers in Resources */,
+				3309F8FC20AAFB4200921012 /* rprccmd.bin in Resources */,
+				3309F90320AAFB4200921012 /* RpRcCmd.conf in Resources */,
+				3309F90020AAFB4200921012 /* Presets in Resources */,
+				3309F8FE20AAFB4200921012 /* Temp in Resources */,
+				3309F8FB20AAFB4200921012 /* RenderPal.env in Resources */,
+				3309F90A20AB1EE400921012 /* ClientView.xib in Resources */,
+				3309F8FD20AAFB4200921012 /* Updates in Resources */,
+				3309F90420AAFB4200921012 /* RpRcDefaults.conf in Resources */,
+				3309F8DF20AAF8DD00921012 /* Assets.xcassets in Resources */,
+				3309F90520AAFB4200921012 /* rpupdate in Resources */,
+				3309F90220AAFB4200921012 /* rprccmd in Resources */,
+				3309F8E220AAF8DD00921012 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3309F8D320AAF8DC00921012 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3309F8DD20AAF8DC00921012 /* ViewController.swift in Sources */,
+				3309F8DB20AAF8DC00921012 /* AppDelegate.swift in Sources */,
+				3309F90C20AB1F5800921012 /* ClientView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3309F8E020AAF8DD00921012 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3309F8E120AAF8DD00921012 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3309F8E520AAF8DD00921012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3309F8E620AAF8DD00921012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		3309F8E820AAF8DD00921012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = R5L8TUBKC2;
+				INFOPLIST_FILE = RP_Check/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MindfulEd.RP-Check";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		3309F8E920AAF8DD00921012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = R5L8TUBKC2;
+				INFOPLIST_FILE = RP_Check/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MindfulEd.RP-Check";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3309F8D220AAF8DC00921012 /* Build configuration list for PBXProject "RP_Check" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3309F8E520AAF8DD00921012 /* Debug */,
+				3309F8E620AAF8DD00921012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3309F8E720AAF8DD00921012 /* Build configuration list for PBXNativeTarget "RP_Check" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3309F8E820AAF8DD00921012 /* Debug */,
+				3309F8E920AAF8DD00921012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3309F8CF20AAF8DC00921012 /* Project object */;
+}

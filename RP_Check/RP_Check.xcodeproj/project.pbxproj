@@ -26,7 +26,34 @@
 		3309F90720AAFB4200921012 /* Renderers in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8FA20AAFB4200921012 /* Renderers */; settings = {ASSET_TAGS = (New, ); }; };
 		3309F90A20AB1EE400921012 /* ClientView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3309F90920AB1EE400921012 /* ClientView.xib */; };
 		3309F90C20AB1F5800921012 /* ClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3309F90B20AB1F5800921012 /* ClientView.swift */; };
+		33CC547E20ADF07300579221 /* Witness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CC547D20ADF07300579221 /* Witness.framework */; };
+		33CC547F20ADF07300579221 /* Witness.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 33CC547D20ADF07300579221 /* Witness.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		33CC548320ADF0AC00579221 /* Witness.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 33CC548220ADF0AC00579221 /* Witness.framework.dSYM */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		33CC548020ADF07300579221 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				33CC547F20ADF07300579221 /* Witness.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33CC548120ADF09400579221 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				33CC548320ADF0AC00579221 /* Witness.framework.dSYM in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3309F8D720AAF8DC00921012 /* RP_Check.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RP_Check.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +78,8 @@
 		3309F8FA20AAFB4200921012 /* Renderers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Renderers; sourceTree = "<group>"; };
 		3309F90920AB1EE400921012 /* ClientView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ClientView.xib; sourceTree = "<group>"; };
 		3309F90B20AB1F5800921012 /* ClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientView.swift; sourceTree = "<group>"; };
+		33CC547D20ADF07300579221 /* Witness.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Witness.framework; path = Carthage/Build/Mac/Witness.framework; sourceTree = "<group>"; };
+		33CC548220ADF0AC00579221 /* Witness.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Witness.framework.dSYM; path = Carthage/Build/Mac/Witness.framework.dSYM; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33CC547E20ADF07300579221 /* Witness.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +97,8 @@
 		3309F8CE20AAF8DC00921012 = {
 			isa = PBXGroup;
 			children = (
+				33CC548220ADF0AC00579221 /* Witness.framework.dSYM */,
+				33CC547D20ADF07300579221 /* Witness.framework */,
 				3309F8D920AAF8DC00921012 /* RP_Check */,
 				3309F8D820AAF8DC00921012 /* Products */,
 			);
@@ -126,6 +158,8 @@
 				3309F8D320AAF8DC00921012 /* Sources */,
 				3309F8D420AAF8DC00921012 /* Frameworks */,
 				3309F8D520AAF8DC00921012 /* Resources */,
+				33CC548020ADF07300579221 /* Embed Frameworks */,
+				33CC548120ADF09400579221 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -348,6 +382,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = R5L8TUBKC2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = RP_Check/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -366,6 +404,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = R5L8TUBKC2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = RP_Check/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

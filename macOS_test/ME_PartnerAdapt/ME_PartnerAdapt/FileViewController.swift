@@ -169,7 +169,7 @@ class FileController: NSViewController {
                 
                 let vttData = VTTData(vttURL: vttFile, vttLang: vttFileLang);
                 
-                // TODO this search works, but if there's subs that contain a wrong file name (e.g. LOGO_aat-l2_u01_l.en-GB.vtt > missing lesson and part) they will be matched to everything. avaid by using correct filenames :)
+                // TODO this search works, but if there's subs that contain a wrong file name (e.g. LOGO_aat-l2_u01_l.en-GB.vtt > missing lesson and part) they will be matched to everything. avoid by using correct filenames :)
                 
                 subArray.append(vttData)
             }

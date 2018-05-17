@@ -14,4 +14,5 @@ struct VimeoSubData {
     var link : String;
     var language : NSString;
     var hls_link : String;
+    var videoName : String;
 }

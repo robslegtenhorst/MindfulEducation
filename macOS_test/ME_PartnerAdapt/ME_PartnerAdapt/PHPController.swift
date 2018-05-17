@@ -191,6 +191,8 @@ class PHPController: NSViewController {
                                         let hls_link = dataDic["hls_link"] as! String;
                                         let language = dataDic["language"] as! NSString;
                                         
+                                        let lowercaseVideoName = (VideoName as String).lowercased()
+                                        
                                         let url = link
                                         
                                         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -202,10 +204,16 @@ class PHPController: NSViewController {
                                         
                                         if name.lowercased.contains(".vtt") {
                                             print("found")
-                                            filePath = dataPath.appendingPathComponent(name as String)
+                                            // Enable to download with filename as stored on Vimeo
+                                            // filePath = dataPath.appendingPathComponent(name as String)
+                                            // Enable to download with same filename as video
+                                            filePath = dataPath.appendingPathComponent(lowercaseVideoName+"."+(language as String)+".vtt")
                                         } else {
                                             print("not found")
-                                            filePath = dataPath.appendingPathComponent((name as String)+".vtt")
+                                            // Enable to download with filename as stored on Vimeo
+                                            // filePath = dataPath.appendingPathComponent((name as String)+".vtt")
+                                            // Enable to download with same filename as video
+                                            filePath = dataPath.appendingPathComponent(lowercaseVideoName+"."+(language as String)+".vtt")
                                         }
                                         
                                         print(url)
@@ -228,7 +236,7 @@ class PHPController: NSViewController {
                                         }
                                         
                                         
-                                        let itemData = VimeoSubData(dataDic:dataDic, name:name, link:link, language:language, hls_link:hls_link);
+                                        let itemData = VimeoSubData(dataDic:dataDic, name:name, link:link, language:language, hls_link:hls_link, videoName:VideoName);
                                         
                                         tempReturnedItemArray.append(itemData);
                                         
@@ -329,7 +337,7 @@ class PHPController: NSViewController {
         task.resume();
     }
     
-    func albumPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
+    func albumPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "", getVids:Bool = true) {
         let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
         //        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album=4595765&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
@@ -442,7 +450,7 @@ class PHPController: NSViewController {
                             
                             if (PageNR >= self.repeatPages)
                             {
-                                self.startDownload()
+                                if (getVids){ self.startDownload() }
                                 if (getSubs){
                                     self.getSubs(contentArray: self.tempReturnedItemArray)
                                 } else {
@@ -807,6 +815,24 @@ class PHPController: NSViewController {
         albumPHPCall(PageNR: 1, AlbumID: AlbumIDStr, perPage: 50, getSubs:true);
         
     }
+    
+    
+    @IBAction func DownloadSubs(_ sender: NSButton) {
+        if (self.returnedItemArray.count > 0)
+        {
+            self.returnedItemArray.removeAll()
+        }
+        if (self.totalItems > 0)
+        {
+            self.totalItems = 0.0
+        }
+        
+        let AlbumIDStr = AlbumID.stringValue;
+        albumNR = AlbumIDStr;
+        
+        albumPHPCall(PageNR: 1, AlbumID: AlbumIDStr, perPage: 50, getSubs:true, albumName: "", getVids: false);
+    }
+    
     @IBAction func setPosterFrame(_ sender: NSButton) {
         let AlbumIDStr = AlbumID.stringValue;
         albumNR = AlbumIDStr;

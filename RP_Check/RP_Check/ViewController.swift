@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import Witness
+import EonilFileSystemEvents
 
 public enum FileOrder: String {
 	case Priority
@@ -41,6 +41,11 @@ class NetjobObj: NSObject {
 	
 	var FrameRange: FrameRange!
 	
+	var fileMonitor: DAFileMonitor!
+	
+	var remainingTimeInt: Int!
+	var remainingTimeString: String!
+	
 	
 	override init() {
 		//
@@ -54,17 +59,22 @@ class NetjobObj: NSObject {
 
 class ViewController: NSViewController, XMLParserDelegate {
 	
-	//TODO :: add config screen with server ip, user name and password
-	//DONE :: show frame numbers
+	//TODO :: add config screen with server ip, user name and password, log location
 	//TODO :: show elapsed time (in real time)
 	//TODO :: show log file
-	//DONE :: read log and show current percentage done
+	//DONE :: show current percentage done
 	//TODO :: fix sorting
-	//TODO :: add in file change events
-
-	@IBOutlet weak var ComputerName: NSTextField!
-	@IBOutlet weak var LastJobTimeText: NSTextField!
-	@IBOutlet weak var ElapsedTimeText: NSTextField!
+	//TODO :: periodic poll to the server to check for new renders
+	//TODO :: make priority editable
+	//TODO :: show other render settings per part
+	//TODO :: pickup warnings and render errors from log
+	//TODO :: there's a path issue. app doesn't work running from network
+	//TODO :: calculate time remaining when timeline is set to seconds instead of frames
+	
+//
+//	@IBOutlet weak var ComputerName: NSTextField!
+//	@IBOutlet weak var LastJobTimeText: NSTextField!
+//	@IBOutlet weak var ElapsedTimeText: NSTextField!
 	
 	@IBOutlet weak var NetJobID: NSTextField!
 	@IBOutlet weak var TimeElapsedText: NSTextField!
@@ -75,9 +85,6 @@ class ViewController: NSViewController, XMLParserDelegate {
 	@IBOutlet weak var Name: NSTextField!
 	@IBOutlet weak var FinishDateText: NSTextField!
 	@IBOutlet weak var StatusText: NSTextField!
-	
-	var witness: Witness?
-	
 	
 	struct Netjob {
 		var NetJobID = " "
@@ -142,6 +149,10 @@ class ViewController: NSViewController, XMLParserDelegate {
 	var netjobArray: [NetjobObj] = []
 	
 	var currentSelectedItem: [NetjobObj] = []
+	
+	var logFolderMonitor : FileSystemEventMonitor?
+	
+	var logFolderPath = "/Volumes/mindful_rack/_WIN_RENDER/RP_Log/"
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -282,6 +293,10 @@ class ViewController: NSViewController, XMLParserDelegate {
 		getLatestFrame()
 	}
 	
+	private func fileExists(filePath:String) -> Bool {
+		return FileManager.default.fileExists(atPath: filePath)
+	}
+	
 	func getLatestFrame() {
 		
 		if (currentSelectedItem.count > 1)
@@ -304,8 +319,9 @@ class ViewController: NSViewController, XMLParserDelegate {
 				
 				if ( netjob.StatusText == "Rendering")
 				{
-					self.witness = Witness(paths: [filePath], flags: .FileEvents, latency: 0.3) { events in
-						print("file system events received: \(events)")
+					netjob.fileMonitor = DAFileMonitor(withFilePath: filePath)
+					netjob.fileMonitor?.onFileEvent = {
+						print("file change")
 					}
 				}
 				
@@ -345,40 +361,109 @@ class ViewController: NSViewController, XMLParserDelegate {
 	}
 	
 	func getAllLatestFrames(netjobObj: NetjobObj, startFrame : Int, endFrame : Int) -> Int {
-		print(netjobObj.StatusText)
 		if(netjobObj.StatusText == "Rendering")
 		{
-			let oldDate:[Substring] = netjobObj.CreationDateText.split(separator: "/")
-			let yearString:String = String(oldDate[2])
-			let year:[Substring] = yearString.split(separator: " ")
 			
-			let newDate:String = year[0] + "-" + oldDate[1] + "-"  + oldDate[0]
 			
-			let filePath = "/Volumes/mindful_rack/_WIN_RENDER/RP_Log/"+newDate+"."+netjobObj.NetJobID+".1-01.output.log"
+//			let currentDate = Date()
+			
+			let dateFormatterSRC = DateFormatter()
+//			dateFormatterSRC.timeZone = TimeZone(identifier: "GMT")!
+			dateFormatterSRC.dateFormat = "dd/MM/yyyy HH:mm:ss"
+			let addedDate = dateFormatterSRC.date(from: netjobObj.CreationDateText)
+			
+			let dateFormatterLog = DateFormatter()
+			dateFormatterLog.dateFormat = "yyyy-MM-dd"
+			let newDate:String = dateFormatterLog.string(from: addedDate!)
+			
+			let filePath = logFolderPath+newDate+"."+netjobObj.NetJobID+".1-01.output.log"
+//			let filePath = "/Volumes/mindful_rack/_WIN_RENDER/RP_Log/2018-05-21.2028.1-01.output.log"
 			let fileURL:URL = URL(fileURLWithPath: filePath)
 			
-			print("netjob date :: "+netjobObj.CreationDateText)
+			if (netjobObj.fileMonitor == nil )
+			{
+				netjobObj.fileMonitor = DAFileMonitor(withFilePath: filePath)
+				netjobObj.fileMonitor?.onFileEvent = {
+					netjobObj.FrameRange.currentFrame = self.getAllLatestFrames(netjobObj: netjobObj, startFrame: netjobObj.FrameRange.startFrame, endFrame: netjobObj.FrameRange.endFrame)
+					DispatchQueue.main.async {
+						self.tableView.reloadData()
+					}
+				}
+			}
 			
 			//reading
 			do {
 				let text2:String = try String(contentsOf: fileURL, encoding: .utf8)
 				
 				let logProgress:[String] = text2.components(separatedBy: "PROGRESS:  ")
-				
-				var currentProgress: String!
-				var currentFrames: [String]!
 				var currentFrame: Int!
 				
-				if ( netjobObj.StatusText == "Done")
+				if (logProgress.count == 1)
 				{
-					currentProgress = logProgress[logProgress.count-3]
+					//Only start date available
+					//TODO get start date, calculate diff between current date and start date, use that to calculate rough estimate
+				}
+				else if (logProgress.count > 2)
+				{
+				
+					var currentProgress: String!
+					var currentFrames: [String]!
+					
+					var renderStartTime: [String]!
+					
+					if ( netjobObj.StatusText == "Done")
+					{
+						currentProgress = logProgress[logProgress.count-3]
+					} else {
+						currentProgress = logProgress[logProgress.count-1]
+					}
+					
+					renderStartTime = logProgress[1].components(separatedBy: ": Starting")
+					let startDate = dateFormatterSRC.date(from: renderStartTime[0])
+					
+					let timeElapsed = startDate?.timeIntervalSinceNow
+					
+					//TODO get start date, calculate diff between current date and start date, use that to calculate rough estimate
+					
+					currentFrames = currentProgress.components(separatedBy: " (")
+					print("currentFrames :: "+currentFrames[0])
+					if (currentFrames.count > 1)
+					{
+						currentFrame = Int(String(currentFrames[1]).components(separatedBy: ")")[0])
+						
+						if (timeElapsed != nil)
+						{
+							let averageFrameSpeed =  -timeElapsed! / Double(currentFrame)
+							let remainingFrames = endFrame - currentFrame
+							netjobObj.remainingTimeInt = Int((Double(remainingFrames) * averageFrameSpeed)/60)
+							netjobObj.remainingTimeString = String(netjobObj.remainingTimeInt)
+							
+							print("averageFrameSpeed :: "+String(averageFrameSpeed))
+							print("Average Time Left :: "+String(netjobObj.remainingTimeInt))
+						}
+						
+					} else {
+						print ("file rendered in :: "+(timeElapsed?.description)!+", status not updated yet")
+						// TODO currentFrames[0] gives a string with duration, cpu usage etc. might be useful
+						print("Starting folder monitor")
+						netjobObj.fileMonitor = nil
+						self.logFolderMonitor = FileSystemEventMonitor(pathsToWatch: [logFolderPath],
+																	   latency: 1,
+																	   watchRoot: true,
+																	   queue: DispatchQueue.main) { (events: [FileSystemEvent])->() in
+																		self.runRefresh()
+						}
+						currentFrame = endFrame
+					}
 				} else {
-					currentProgress = logProgress[logProgress.count-1]
+					currentFrame = 0
 				}
 				
-				currentFrames = currentProgress.components(separatedBy: " (")
-				currentFrame = Int(String(currentFrames[1]).components(separatedBy: ")")[0])
+				//this crashes either at the start or end of a render (think start) currentFrame returns nil
 				
+				if (currentFrame == nil) {currentFrame = 0}
+				
+				print("CurrentFrame: "+String(currentFrame))
 				return(currentFrame)
 				
 			}
@@ -388,9 +473,19 @@ class ViewController: NSViewController, XMLParserDelegate {
 			}
 		} else if(netjobObj.StatusText == "Done")
 		{
+			if (netjobObj.fileMonitor != nil )
+			{
+				print("Foud filemonitor to dispose of")
+				netjobObj.fileMonitor = nil
+			}
 			return(endFrame)
 		} else if(netjobObj.StatusText == "Rendering")
 		{
+			if (netjobObj.fileMonitor != nil )
+			{
+				print("Foud filemonitor to dispose of")
+				netjobObj.fileMonitor = nil
+			}
 			return(startFrame)
 		}
 		
@@ -399,6 +494,7 @@ class ViewController: NSViewController, XMLParserDelegate {
 	}
 	
 	func runRefresh(){
+		print("refreshing feed")
 		if (clientArray.count > 0)
 		{
 			clientArray.removeAll()
@@ -408,21 +504,26 @@ class ViewController: NSViewController, XMLParserDelegate {
 			netjobArray.removeAll()
 		}
 		
-		let clientDetails = runCommand(cmd:filePath!, args: "-compact","-query","client:MINDFULRENDER").output
+		if ( self.logFolderMonitor != nil)
+		{
+			self.logFolderMonitor = nil
+		}
+		
+//		let clientDetails = runCommand(cmd:filePath!, args: "-compact","-query","client:MINDFULRENDER").output
 		let netJobDetails = runCommand(cmd:filePath!, args: "-compact","-query","netjob:*").output
 		
-		if let data = clientDetails.data(using: .utf16) { // Get the NSData
-			let xmlParser = XMLParser(data: data)
-			let delegate = ClientDelegate() // This is your own delegate - see below
-			xmlParser.delegate = delegate
-			if xmlParser.parse() {
-				print("Result \(delegate.clientArray.count)")
-				clientArray = delegate.clientArray
-				ComputerName.stringValue = delegate.clientArray[0].ComputerName;
-				LastJobTimeText.stringValue = delegate.clientArray[0].LastJobTimeText;
-				ElapsedTimeText.stringValue = delegate.clientArray[0].ElapsedTimeText;
-			}
-		}
+//		if let data = clientDetails.data(using: .utf16) { // Get the NSData
+//			let xmlParser = XMLParser(data: data)
+//			let delegate = ClientDelegate() // This is your own delegate - see below
+//			xmlParser.delegate = delegate
+//			if xmlParser.parse() {
+//				print("Result \(delegate.clientArray.count)")
+//				clientArray = delegate.clientArray
+//				ComputerName.stringValue = delegate.clientArray[0].ComputerName;
+//				LastJobTimeText.stringValue = delegate.clientArray[0].LastJobTimeText;
+//				ElapsedTimeText.stringValue = delegate.clientArray[0].ElapsedTimeText;
+//			}
+//		}
 		if let data2 = netJobDetails.data(using: .utf16) { // Get the NSData
 			let xmlParser = XMLParser(data: data2)
 			let delegate2 = NetjobDelegate()
@@ -930,6 +1031,10 @@ extension ViewController: NSTableViewDelegate {
 			
 			cellIdentifier = CellIdentifiers.StatusCell
 		} else if tableColumn == tableView.tableColumns[4] {
+			if (item.remainingTimeString != nil) { text = item.remainingTimeString + " min" } else {text = "-"}
+			bgColourUse = false
+			cellIdentifier = CellIdentifiers.SubmittedCell
+		} else if tableColumn == tableView.tableColumns[5] {
 			text = item.SubmitterName
 			bgColourUse = false
 			cellIdentifier = CellIdentifiers.SubmittedCell

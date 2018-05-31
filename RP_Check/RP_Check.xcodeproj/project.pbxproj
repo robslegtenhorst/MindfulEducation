@@ -26,19 +26,67 @@
 		3309F90720AAFB4200921012 /* Renderers in Resources */ = {isa = PBXBuildFile; fileRef = 3309F8FA20AAFB4200921012 /* Renderers */; settings = {ASSET_TAGS = (New, ); }; };
 		3309F90A20AB1EE400921012 /* ClientView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3309F90920AB1EE400921012 /* ClientView.xib */; };
 		3309F90C20AB1F5800921012 /* ClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3309F90B20AB1F5800921012 /* ClientView.swift */; };
-		33CC547E20ADF07300579221 /* Witness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CC547D20ADF07300579221 /* Witness.framework */; };
-		33CC547F20ADF07300579221 /* Witness.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 33CC547D20ADF07300579221 /* Witness.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		334F330320B3103600C35033 /* DAFileMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334F330220B3103600C35033 /* DAFileMonitor.swift */; };
+		334F330520B31E7E00C35033 /* FolderMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334F330420B31E7E00C35033 /* FolderMonitor.swift */; };
+		334F331820B3209800C35033 /* EonilFileSystemEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334F331020B3207600C35033 /* EonilFileSystemEvents.framework */; };
+		334F331B20B489EC00C35033 /* EonilFileSystemEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334F331020B3207600C35033 /* EonilFileSystemEvents.framework */; };
+		334F331C20B489EC00C35033 /* EonilFileSystemEvents.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 334F331020B3207600C35033 /* EonilFileSystemEvents.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		33CC548320ADF0AC00579221 /* Witness.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 33CC548220ADF0AC00579221 /* Witness.framework.dSYM */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		334F330F20B3207600C35033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 45D970A61A1569090037649F;
+			remoteInfo = EonilFileSystemEvents;
+		};
+		334F331120B3207600C35033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 45D970961A155DD50037649F;
+			remoteInfo = InternalTester;
+		};
+		334F331320B3207600C35033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 45DA95801A69F1610091410B;
+			remoteInfo = InternalTester4;
+		};
+		334F331520B3207600C35033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 45BF99C51A131E3A004E4E2E;
+			remoteInfo = TestdriveApp;
+		};
+		334F331920B4882500C35033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 45D970A51A1569090037649F;
+			remoteInfo = EonilFileSystemEvents;
+		};
+		334F331D20B489EC00C35033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 45D970A51A1569090037649F;
+			remoteInfo = EonilFileSystemEvents;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		33CC548020ADF07300579221 /* Embed Frameworks */ = {
+		334F331F20B489EC00C35033 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				33CC547F20ADF07300579221 /* Witness.framework in Embed Frameworks */,
+				334F331C20B489EC00C35033 /* EonilFileSystemEvents.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +126,9 @@
 		3309F8FA20AAFB4200921012 /* Renderers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Renderers; sourceTree = "<group>"; };
 		3309F90920AB1EE400921012 /* ClientView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ClientView.xib; sourceTree = "<group>"; };
 		3309F90B20AB1F5800921012 /* ClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientView.swift; sourceTree = "<group>"; };
+		334F330220B3103600C35033 /* DAFileMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DAFileMonitor.swift; sourceTree = "<group>"; };
+		334F330420B31E7E00C35033 /* FolderMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderMonitor.swift; sourceTree = "<group>"; };
+		334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EonilFileSystemEvents.xcodeproj; path = "FileSystemEvents-master/Project/EonilFileSystemEvents.xcodeproj"; sourceTree = "<group>"; };
 		33CC547D20ADF07300579221 /* Witness.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Witness.framework; path = Carthage/Build/Mac/Witness.framework; sourceTree = "<group>"; };
 		33CC548220ADF0AC00579221 /* Witness.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Witness.framework.dSYM; path = Carthage/Build/Mac/Witness.framework.dSYM; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,7 +138,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33CC547E20ADF07300579221 /* Witness.framework in Frameworks */,
+				334F331B20B489EC00C35033 /* EonilFileSystemEvents.framework in Frameworks */,
+				334F331820B3209800C35033 /* EonilFileSystemEvents.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,10 +149,12 @@
 		3309F8CE20AAF8DC00921012 = {
 			isa = PBXGroup;
 			children = (
+				334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */,
 				33CC548220ADF0AC00579221 /* Witness.framework.dSYM */,
 				33CC547D20ADF07300579221 /* Witness.framework */,
 				3309F8D920AAF8DC00921012 /* RP_Check */,
 				3309F8D820AAF8DC00921012 /* Products */,
+				334F331720B3209800C35033 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -118,6 +172,8 @@
 				3309F90820AAFB4D00921012 /* RP */,
 				3309F8DA20AAF8DC00921012 /* AppDelegate.swift */,
 				3309F8DC20AAF8DC00921012 /* ViewController.swift */,
+				334F330220B3103600C35033 /* DAFileMonitor.swift */,
+				334F330420B31E7E00C35033 /* FolderMonitor.swift */,
 				3309F8DE20AAF8DD00921012 /* Assets.xcassets */,
 				3309F8E020AAF8DD00921012 /* Main.storyboard */,
 				3309F90920AB1EE400921012 /* ClientView.xib */,
@@ -148,6 +204,24 @@
 			path = RP;
 			sourceTree = "<group>";
 		};
+		334F330920B3207600C35033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				334F331020B3207600C35033 /* EonilFileSystemEvents.framework */,
+				334F331220B3207600C35033 /* InternalTester */,
+				334F331420B3207600C35033 /* InternalTester4.app */,
+				334F331620B3207600C35033 /* TestdriveApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		334F331720B3209800C35033 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -158,12 +232,14 @@
 				3309F8D320AAF8DC00921012 /* Sources */,
 				3309F8D420AAF8DC00921012 /* Frameworks */,
 				3309F8D520AAF8DC00921012 /* Resources */,
-				33CC548020ADF07300579221 /* Embed Frameworks */,
 				33CC548120ADF09400579221 /* CopyFiles */,
+				334F331F20B489EC00C35033 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				334F331A20B4882500C35033 /* PBXTargetDependency */,
+				334F331E20B489EC00C35033 /* PBXTargetDependency */,
 			);
 			name = RP_Check;
 			productName = RP_Check;
@@ -204,12 +280,49 @@
 			mainGroup = 3309F8CE20AAF8DC00921012;
 			productRefGroup = 3309F8D820AAF8DC00921012 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 334F330920B3207600C35033 /* Products */;
+					ProjectRef = 334F330820B3207600C35033 /* EonilFileSystemEvents.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				3309F8D620AAF8DC00921012 /* RP_Check */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		334F331020B3207600C35033 /* EonilFileSystemEvents.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EonilFileSystemEvents.framework;
+			remoteRef = 334F330F20B3207600C35033 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		334F331220B3207600C35033 /* InternalTester */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = InternalTester;
+			remoteRef = 334F331120B3207600C35033 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		334F331420B3207600C35033 /* InternalTester4.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = InternalTester4.app;
+			remoteRef = 334F331320B3207600C35033 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		334F331620B3207600C35033 /* TestdriveApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = TestdriveApp.app;
+			remoteRef = 334F331520B3207600C35033 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3309F8D520AAF8DC00921012 /* Resources */ = {
@@ -243,12 +356,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				3309F8DD20AAF8DC00921012 /* ViewController.swift in Sources */,
+				334F330520B31E7E00C35033 /* FolderMonitor.swift in Sources */,
 				3309F8DB20AAF8DC00921012 /* AppDelegate.swift in Sources */,
 				3309F90C20AB1F5800921012 /* ClientView.swift in Sources */,
+				334F330320B3103600C35033 /* DAFileMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		334F331A20B4882500C35033 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EonilFileSystemEvents;
+			targetProxy = 334F331920B4882500C35033 /* PBXContainerItemProxy */;
+		};
+		334F331E20B489EC00C35033 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EonilFileSystemEvents;
+			targetProxy = 334F331D20B489EC00C35033 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3309F8E020AAF8DD00921012 /* Main.storyboard */ = {
@@ -378,6 +506,7 @@
 		3309F8E820AAF8DD00921012 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -391,6 +520,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "MindfulEd.RP-Check";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -400,6 +530,7 @@
 		3309F8E920AAF8DD00921012 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -413,6 +544,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "MindfulEd.RP-Check";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

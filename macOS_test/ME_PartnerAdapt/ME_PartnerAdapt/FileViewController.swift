@@ -24,6 +24,7 @@ class FileController: NSViewController {
     
     var group_uri:String = "";
     var group_link:String = "";
+    var group_name:String = "";
     
     var totalItems:Double = 0.0;
     var repeatPages:Double = 0.0
@@ -296,6 +297,7 @@ class FileController: NSViewController {
         
         if (logoFile != "Cancel" && contentFiles.count != 0 && collegeName.stringValue != "")
         {
+            var albumName:NSString = ""
             if (groupName.stringValue != "" || GroupID.stringValue != "")
             {
                 sendBTN.acceptsTouchEvents = false;
@@ -305,9 +307,11 @@ class FileController: NSViewController {
                 myGroup.enter()
                 
                 if (GroupID.stringValue != "") {
+                    getGroupNameCall(albumID:GroupID.stringValue)
                     self.group_uri = "/users/42291155/albums/"+GroupID.stringValue
                 } else {
                     // create group on vimeo
+                    self.group_name = groupName.stringValue
                     if (self.uploadBool == true) {createGroupPHPCall(albumName: groupName.stringValue)}
                 }
                 
@@ -331,7 +335,7 @@ class FileController: NSViewController {
                     // create csv from group
                     
                     let AlbumID = NSURL(fileURLWithPath: self.group_uri).lastPathComponent
-                    if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false);}
+                    if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false, albumName: self.group_name as NSString);}
                 }
             } else {
                 var message = ""
@@ -481,7 +485,7 @@ class FileController: NSViewController {
                                 
                             } else {
                                 let nextPageNR = PageNR + 1;
-                                self.albumCSVPHPCall(PageNR: nextPageNR, AlbumID: AlbumID, perPage: perPage, getSubs:getSubs);
+                                self.albumCSVPHPCall(PageNR: nextPageNR, AlbumID: AlbumID, perPage: perPage, getSubs:getSubs, albumName: albumName);
                             }
                         } else {
                             print("Content returned error :: "+status.description);
@@ -547,6 +551,58 @@ class FileController: NSViewController {
         }
     }
     
+    func getGroupNameCall(albumID:String) -> Void {
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/getGroupName.php?albumID="+albumID)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: request as URLRequest)
+        {
+            (data, response, error) -> Void in
+            
+            let httpResponse = response as! HTTPURLResponse
+            let statusCode = httpResponse.statusCode
+            
+            if (statusCode == 200)
+            {
+                do
+                {
+                    
+                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+                    
+                    if let dictionary = json as? [String: Any]
+                    {
+                        
+                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+                        
+                        if (status == 200)
+                        {
+                            if (dictionary["headers"] as? [String: Any]) != nil
+                            {
+                                //print(headersDictionary)
+                            }
+                            
+                            if let bodyDictionary = dictionary["body"] as? [String: Any]
+                            {
+                                self.group_name = bodyDictionary["name"] as! String
+                                print("received album_name :: "+self.group_name)
+                            }
+                            
+                        } else {
+                            print("Content returned error :: "+status.description);
+                        }
+                    }
+                    
+                }catch {
+                    print("Error with Json: \(error)")
+                }
+                
+            }
+        }
+        
+        task.resume();
+    }
+    
     func createGroupPHPCall(albumName:String) -> Void {
         let url: NSURL = NSURL(string: "http://localhost/vimeo/example/createGroup.php?albumName="+albumName)!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
@@ -582,7 +638,7 @@ class FileController: NSViewController {
                             {
                                 self.group_uri = bodyDictionary["uri"] as! String
                                 self.group_link = bodyDictionary["link"] as! String
-//                                print("received album_uri :: "+self.group_uri)
+                                //                                print("received album_uri :: "+self.group_uri)
                             }
                             
                         } else {

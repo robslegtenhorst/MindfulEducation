@@ -17,6 +17,8 @@ class PHPController: NSViewController {
     var repeatPages:Double = 0.0
     var albumNR:String = ""
     
+    var group_name:String=""
+    
     var tempReturnedItemArray:Array<VimeoData> = [];
     
     var returnedAlbumArray : Array<VimeoAlbumData> = [];
@@ -482,7 +484,9 @@ class PHPController: NSViewController {
         let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
         let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
         let session = URLSession.shared
-        
+		
+		print("url :: "+url.absoluteString!)
+		
         self.tempReturnedItemArray = [];
         
         print (PageNR);
@@ -750,52 +754,116 @@ class PHPController: NSViewController {
         }
     }
     
-    func createCSV(AlbumID:String, albumName:String, contentArray:Array<VimeoData>) {
-        print("creating csv");
+    func getGroupNameCall(albumID:String, albumName:String, contentArray:Array<VimeoData>) -> Void {
+        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/getGroupName.php?albumID="+albumID)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+        let session = URLSession.shared
         
-        let file = AlbumID+"_"+albumName+".csv"
-        var text = "AlbumID,"+AlbumID+",Album Name,"+albumName+"\n"
-        text.append("ID, Name, URL, Subtitles, duration, Created, Modified, Release\n")
-        
-        for i in 0 ..< contentArray.count
+        let task = session.dataTask(with: request as URLRequest)
         {
-            let tempVimeoData : VimeoData = contentArray[i];
-            let tempVideoID : String = (tempVimeoData.link as NSString).lastPathComponent;
+            (data, response, error) -> Void in
             
-            text.append(tempVideoID);
-            text.append(",");
-            text.append(tempVimeoData.name as String);
-            text.append(",");
-            text.append(tempVimeoData.link as String);
-            text.append(",");
-            text.append(tempVimeoData.subtitle_url as String);
-            text.append(",");
-            text.append((tempVimeoData.duration as NSNumber).description);
-            text.append(",");
-            text.append(tempVimeoData.created_time as String);
-            text.append(",");
-            text.append(tempVimeoData.modified_time as String);
-            text.append(",");
-            text.append(tempVimeoData.release_time as String);
-            text.append("\n");
+            let httpResponse = response as! HTTPURLResponse
+            let statusCode = httpResponse.statusCode
             
+            if (statusCode == 200)
+            {
+                do
+                {
+                    
+                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+                    
+                    if let dictionary = json as? [String: Any]
+                    {
+                        
+                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+                        
+                        if (status == 200)
+                        {
+                            if (dictionary["headers"] as? [String: Any]) != nil
+                            {
+                                //print(headersDictionary)
+                            }
+                            
+                            if let bodyDictionary = dictionary["body"] as? [String: Any]
+                            {
+                                self.group_name = bodyDictionary["name"] as! String
+                                print("received album_name :: "+self.group_name)
+                                self.createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
+                            }
+                            
+                        } else {
+                            print("Content returned error :: "+status.description);
+                        }
+                    }
+                    
+                }catch {
+                    print("Error with Json: \(error)")
+                }
+                
+            }
         }
         
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        task.resume();
+        
+//        createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
+    }
+    
+    func createCSV(AlbumID:String, albumName:String, contentArray:Array<VimeoData>) {
+        
+        var newAlbumName = albumName
+        
+        if (newAlbumName == "") {
+            getGroupNameCall(albumID: AlbumID, albumName:albumName, contentArray:contentArray)
+            newAlbumName = self.group_name
+        } else {
+        
+            print("creating csv");
             
-            let path = dir.appendingPathComponent(file)
+            let file = AlbumID+"_"+newAlbumName+".csv"
+            var text = "AlbumID,"+AlbumID+",Album Name,"+newAlbumName+"\n"
+            text.append("ID, Name, URL, Subtitles, duration, Created, Modified, Release\n")
             
-            //writing
-            do {
-                try text.write(to: path, atomically: false, encoding: String.Encoding.utf8)
+            for i in 0 ..< contentArray.count
+            {
+                let tempVimeoData : VimeoData = contentArray[i];
+                let tempVideoID : String = (tempVimeoData.link as NSString).lastPathComponent;
+                
+                text.append(tempVideoID);
+                text.append(",");
+                text.append(tempVimeoData.name as String);
+                text.append(",");
+                text.append(tempVimeoData.link as String);
+                text.append(",");
+                text.append(tempVimeoData.subtitle_url as String);
+                text.append(",");
+                text.append((tempVimeoData.duration as NSNumber).description);
+                text.append(",");
+                text.append(tempVimeoData.created_time as String);
+                text.append(",");
+                text.append(tempVimeoData.modified_time as String);
+                text.append(",");
+                text.append(tempVimeoData.release_time as String);
+                text.append("\n");
+                
             }
-            catch {/* error handling here */}
             
-            //reading
-//            do {
-//                let text2 = try String(contentsOf: path, encoding: String.Encoding.utf8)
-//            }
-//            catch {/* error handling here */}
+            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                
+                let path = dir.appendingPathComponent(file)
+                
+                //writing
+                do {
+                    try text.write(to: path, atomically: false, encoding: String.Encoding.utf8)
+                }
+                catch {/* error handling here */}
+                
+                //reading
+    //            do {
+    //                let text2 = try String(contentsOf: path, encoding: String.Encoding.utf8)
+    //            }
+    //            catch {/* error handling here */}
+            }
         }
     }
     

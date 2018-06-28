@@ -10,6 +10,7 @@
 //TODO :: include logo videos
 //TODO :: progress bar
 //TODO :: create  flow. select upload, csv or posterframe option > select videos to upload > select college(s) > upload to new album(s) (auto create folders based on course?), or existing > uplaod switch > local render location > show progress during upload (with rate limit warning) > show link to folder? > secondary flow with poster frame? poss with time entry
+//TODO :: select multiple upload folders and college names
 
 
 import Cocoa
@@ -47,7 +48,8 @@ struct VimeoHeaders: Decodable {
 class ViewController: NSViewController {
 	
 	let nodePath = Bundle.main.path(forResource: "node", ofType: "");
-	let exampleNode = Bundle.main.path(forResource: "mindful", ofType: "js", inDirectory: "vimeo.js-2.0.2/example");
+//    let exampleNode = Bundle.main.path(forResource: "mindful", ofType: "js", inDirectory: "vimeo.js-2.0.2/example");
+    let exampleNode = Bundle.main.path(forResource: "me_GetAlbums", ofType: "js", inDirectory: "NodeFiles/VimeoFiles");
 	
 	@IBOutlet weak var tempTextField: NSTextField!
 
@@ -66,10 +68,10 @@ class ViewController: NSViewController {
 	
 	@IBAction func connectBtn(_ sender: NSButton) {
 		let arguments: [String] = [exampleNode!]
-		let albumDataString = shell(launchPath: nodePath!, arguments: arguments)
+        let albumDataString = shell(launchPath: nodePath!, arguments: arguments)
 		let albumData : Data = albumDataString.data(using: .utf8)!
 		
-		print(albumDataString)
+        print(albumDataString)
 		
 		guard let allVimeoAlbums = try? JSONDecoder().decode(AllVimeoAlbums.self, from: albumData) else {
 			print("Error: Couldn't decode data into Blog")
@@ -87,18 +89,24 @@ class ViewController: NSViewController {
 		task.launchPath = launchPath
 		task.arguments = arguments
 		
-		let pipe = Pipe()
-		task.standardOutput = pipe
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        let errpipe = Pipe()
+        task.standardError = errpipe
 		task.launch()
 		
 		let data = pipe.fileHandleForReading.readDataToEndOfFile()
 		let output = String(data: data, encoding: String.Encoding.utf8)!
+        
+        task.waitUntilExit()
+        
 		if output.count > 0 {
 			//remove newline character.
 			let lastIndex = output.index(before: output.endIndex)
 			return String(output[output.startIndex ..< lastIndex])
 		}
-		return output
+        
+        return output
 	}
 
 }

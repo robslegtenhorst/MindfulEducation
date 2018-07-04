@@ -742,6 +742,17 @@
                                     <segue destination="FH2-To-e7C" kind="sheet" id="7Ir-m4-ucC"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IEb-Vr-tRj">
+                                <rect key="frame" x="140" y="193" width="81" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JDp-5i-ZQE">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="ffprobe:" target="XfG-lQ-9wD" id="RtB-iF-H4M"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -757,7 +768,7 @@
             <objects>
                 <viewController id="FH2-To-e7C" customClass="PartOneViewController" customModule="MindfulVimeo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="ihR-LN-s0S">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="412"/>
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="450"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="spq-pY-0eb">
@@ -789,7 +800,7 @@ Gw
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r2Y-rH-FBE">
-                                <rect key="frame" x="20" y="80" width="410" height="91"/>
+                                <rect key="frame" x="20" y="82" width="410" height="91"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NMX-2x-cvp">
                                     <font key="font" metaFont="system"/>
@@ -798,7 +809,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l08-HY-2bs">
-                                <rect key="frame" x="18" y="179" width="140" height="17"/>
+                                <rect key="frame" x="18" y="181" width="140" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select Content Videos" id="ybd-PS-eVM">
                                     <font key="font" metaFont="system"/>
@@ -807,7 +818,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rda-qR-Ar5">
-                                <rect key="frame" x="357" y="44" width="79" height="32"/>
+                                <rect key="frame" x="357" y="46" width="79" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Select" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ieA-RW-spT">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -817,17 +828,17 @@ Gw
                                     <action selector="SelectContentFiles:" target="FH2-To-e7C" id="gQC-Kp-K4r"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qyS-zq-KQu">
-                                <rect key="frame" x="20" y="350" width="193" height="22"/>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyS-zq-KQu">
+                                <rect key="frame" x="20" y="363" width="180" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NML-mF-R4y">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="NML-mF-R4y">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="333-uR-7H0">
-                                <rect key="frame" x="18" y="375" width="120" height="17"/>
+                                <rect key="frame" x="18" y="388" width="120" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Vimeo Group name" id="Y2h-aZ-5qo">
                                     <font key="font" metaFont="system"/>
@@ -836,7 +847,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cRy-3r-q4S">
-                                <rect key="frame" x="252" y="350" width="178" height="22"/>
+                                <rect key="frame" x="20" y="310" width="410" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="dJA-zN-az2">
                                     <font key="font" metaFont="system"/>
@@ -845,7 +856,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xQM-Ep-imm">
-                                <rect key="frame" x="250" y="375" width="161" height="17"/>
+                                <rect key="frame" x="18" y="335" width="161" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="College name (Without _ )" id="9Ka-Wo-F8s">
                                     <font key="font" metaFont="system"/>
@@ -854,7 +865,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="viy-ax-OPg">
-                                <rect key="frame" x="20" y="305" width="193" height="22"/>
+                                <rect key="frame" x="252" y="363" width="180" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ykQ-J0-3Ln">
                                     <font key="font" metaFont="system"/>
@@ -863,7 +874,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vkb-V6-NbX">
-                                <rect key="frame" x="18" y="329" width="122" height="17"/>
+                                <rect key="frame" x="250" y="388" width="122" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="OR Vimeo Group ID" id="ohz-Rt-fzT">
                                     <font key="font" metaFont="system"/>
@@ -872,7 +883,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9tE-aW-vRx">
-                                <rect key="frame" x="18" y="273" width="114" height="17"/>
+                                <rect key="frame" x="18" y="286" width="114" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select Logo Video" id="wJb-Yd-KHf">
                                     <font key="font" metaFont="system"/>
@@ -881,7 +892,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HkX-eT-Jkf">
-                                <rect key="frame" x="357" y="185" width="79" height="32"/>
+                                <rect key="frame" x="357" y="198" width="79" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Select" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qh7-e2-lbJ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -892,7 +903,7 @@ Gw
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJ8-nd-NiA">
-                                <rect key="frame" x="20" y="221" width="410" height="44"/>
+                                <rect key="frame" x="20" y="234" width="410" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="cQd-MG-XuM">
                                     <font key="font" metaFont="system"/>
@@ -901,7 +912,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HjH-rn-LPy">
-                                <rect key="frame" x="250" y="311" width="128" height="18"/>
+                                <rect key="frame" x="18" y="411" width="128" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Upload to vimeo?" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="0Ch-0i-hwd">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -924,7 +935,35 @@ Gw
                 </viewController>
                 <customObject id="vDB-DC-LKy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-138" y="1186"/>
+            <point key="canvasLocation" x="-138" y="1205"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="FWD-eG-652">
+            <objects>
+                <viewController id="i5V-uE-6MM" sceneMemberID="viewController">
+                    <view key="view" id="2Z6-I5-x5q">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="sF6-YL-tEa">
+                                <rect key="frame" x="113" y="127" width="225" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23H-v5-tb8">
+                                <rect key="frame" x="111" y="161" width="229" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="Nf5-hj-5WK">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="Rii-Ua-im1" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="424" y="1130"/>
         </scene>
     </scenes>
 </document>

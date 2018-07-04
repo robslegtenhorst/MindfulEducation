@@ -1,0 +1,16 @@
+PODS:
+  - SwiftShell (4.1.0)
+
+DEPENDENCIES:
+  - SwiftShell (>= 4.0.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SwiftShell
+
+SPEC CHECKSUMS:
+  SwiftShell: 8e5ba501c934d3c43bf8b3bf1a77049c37623646
+
+PODFILE CHECKSUM: bd6a286819a02ed05d30139b0e9f581fad56ec11
+
+COCOAPODS: 1.5.3

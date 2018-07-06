@@ -19,7 +19,12 @@
 var Vimeo = require('../index').Vimeo
 var util = require('util')
 
-var albumName = process.argv[2]
+var album_uri = process.argv[2]
+
+var video_file = process.argv[3]
+var video_name = process.argv[4]
+
+var texttrack_amount = process.argv[5]
 
 
 try {
@@ -62,7 +67,7 @@ function makeRequest (lib) {
     lib.request({
                 // This is the path for the videos contained within the staff picks channels
                 method: 'POST',
-                path: '/me/albums?fields=uri,link',
+                path: '/me/albums/'+albumID+'?fields=name',
                 query: {
                 name: albumName
                 }

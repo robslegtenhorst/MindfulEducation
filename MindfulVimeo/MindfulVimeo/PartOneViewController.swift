@@ -6,18 +6,35 @@
 //  Copyright © 2018 Rob Slegtenhorst. All rights reserved.
 //
 
+//TODO progressbar
+//TODO disable interface until all encodes and uploads are completed
+//TODO convert php upload to node
+//TODO convert vtt upload to node
+//TODO convert csv to node
+//TODO fix callsequence, create album > convert video > upload video > attach vtt > repeat until done > create csv
+//TODO create poster frame button
+//TODO create just csv button
+//TODO download all items from album
+//TODO cleanup interface
+
 import Foundation
 import Cocoa
 
 struct AlbumData: Decodable {
     let uri: String?
+    let link: String?
     let xRatelimitRemaining: String?
     let statusCode: Int?
     enum AlbumData : String, CodingKey {
         case uri
-        case xRatelimitRemaining = "x-ratelimit-remaining"
-        case statusCode = "status-code"
+        case link
+        case xRatelimitRemaining
+        case statusCode
     }
+}
+
+enum FFPROBEError: Error {
+    case invalidJSON
 }
 
 struct VideoData: Decodable {
@@ -33,6 +50,8 @@ struct VideoDataStreams: Decodable {
 }
 
 class PartOneViewController: NSViewController {
+    
+    let vimeoUserID = "42291155"
     
     let nodePath = Bundle.main.path(forResource: "node", ofType: "");
     let ffprobePath = Bundle.main.path(forResource: "ffprobe", ofType: "");
@@ -130,9 +149,6 @@ class PartOneViewController: NSViewController {
         dialog.allowedFileTypes        = ["mp4"];
         
         if (dialog.runModal() == NSApplication.ModalResponse.OK) {
-            //            for i in 0 ..< dialog.urls.count  {
-            //                print(dialog.urls[i]);
-            //            }
             
             let result = dialog.urls // Pathname of the file
             
@@ -173,95 +189,33 @@ class PartOneViewController: NSViewController {
     }
     
     func runCMD(contentfileSingleUrl:NSString, filename:NSString, outputLoc:String) -> Void {
-        
-        var reEncode = false
-        
-        var subArray : Array<VTTData> = [];
+        //This is the big one. concats or encodes each video, based on level differences. uses ffprobe and ffmpeg for these tasks. then uploads the converted video to the correct folder on vimeo, and adds subtitles if they exist.
         
         let encodingFile = URL(fileURLWithPath: contentfileSingleUrl as String)
         let encodingFileName = encodingFile.deletingPathExtension().lastPathComponent
         let encodingFilePath = encodingFile.deletingLastPathComponent()
         
-        let enumerator = FileManager.default.enumerator(atPath: encodingFilePath.path)
-        let filePaths = enumerator?.allObjects as! [String]
-        let vttFilePaths = filePaths.filter{$0.contains(".vtt")}
+        //VTT Search
+        let subArray : Array<VTTData> = VTTSearch(encodingFilePath:encodingFilePath, encodingFileName:encodingFileName)
         
-        for vttFileName in vttFilePaths{
-            //            print("VTT Name :: "+vttFileName)
-            //            print("original filename :: "+encodingFileName)
-            
-            let vttFileNameArr = vttFileName.components(separatedBy: ".")
-            
-            let name    = vttFileNameArr[0]
-            let lang    = vttFileNameArr[1]
-            
-            if encodingFileName.lowercased().range(of:name.lowercased()) != nil {
-                let vttFile = URL(fileURLWithPath: encodingFilePath.path + "/" + vttFileName)
-                
-                let vttFileLang = lang
-                
-                let vttData = VTTData(vttURL: vttFile, vttLang: vttFileLang);
-                
-                // TODO this search works, but if there's subs that contain a wrong file name (e.g. LOGO_aat-l2_u01_l.en-GB.vtt > missing lesson and part) they will be matched to everything. avoid by using correct filenames :)
-                
-                subArray.append(vttData)
-            }
-        }
+        //FFPROBE the 2 video files, and check what each level and frame length is. if the level differs, encode the file, otherwise concat (way faster)
         
-        let videofileOneArguments: [String] = ["-v", "quiet", "-print_format", "json", "-show_streams", "-select_streams", "v:0", "-show_entries","stream=level,nb_frames", logoFile as String]
-        let videofileOneDataString = shell(launchPath: ffprobePath!, arguments: videofileOneArguments)
-        let videofileOneData : Data = videofileOneDataString.data(using: .utf8)!
+        let FFPROBE_videofileOneDataDecoded = probeVideoFile(videoPath: logoFile as String)
+        let FFPROBE_videofileTwoDataDecoded = probeVideoFile(videoPath: contentfileSingleUrl as String)
+        let FFPROBE_totalFrames = Int(FFPROBE_videofileOneDataDecoded.streams[0].nb_frames)! + Int(FFPROBE_videofileTwoDataDecoded.streams[0].nb_frames)!
         
-        guard let videofileOneDataDecoded = try? JSONDecoder().decode(VideoData.self, from: videofileOneData) else {
-            print("Error: Couldn't decode data into VideoData")
-            return
-        }
-        
-        let videofileTwoArguments: [String] = ["-v", "quiet", "-print_format", "json", "-show_streams", "-select_streams", "v:0", "-show_entries","stream=level,nb_frames", contentfileSingleUrl as String]
-        let videofileTwoDataString = shell(launchPath: ffprobePath!, arguments: videofileTwoArguments)
-        let videofileTwoData : Data = videofileTwoDataString.data(using: .utf8)!
-        
-        guard let videofileTwoDataDecoded = try? JSONDecoder().decode(VideoData.self, from: videofileTwoData) else {
-            print("Error: Couldn't decode data into VideoData 2")
-            return
-        }
-        
-        print("video 1 level: \(videofileOneDataDecoded.streams[0].level)")
-        print("video 1 frames: \(videofileOneDataDecoded.streams[0].nb_frames)")
-        print("video 2 level: \(videofileTwoDataDecoded.streams[0].level)")
-        print("video 2 frames: \(videofileTwoDataDecoded.streams[0].nb_frames)")
+        print("video 1 level: \(FFPROBE_videofileOneDataDecoded.streams[0].level)")
+        print("video 1 frames: \(FFPROBE_videofileOneDataDecoded.streams[0].nb_frames)")
+        print("video 2 level: \(FFPROBE_videofileTwoDataDecoded.streams[0].level)")
+        print("video 2 frames: \(FFPROBE_videofileTwoDataDecoded.streams[0].nb_frames)")
         
 //        Check returned level against first video, if mismatch, re-encode videos
-        if (videofileOneDataDecoded.streams[0].level == videofileTwoDataDecoded.streams[0].level){reEncode = false} else {reEncode = true}
-        
-        let text = "file '"+(logoFile as String)+"'\nfile '"+(contentfileSingleUrl as String)+"'\n" //just a text
-        let textUTF = Data(text.utf8)
-        let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(String("file_"+randomString(length: 6)+".txt"))
-        
-        do {
-            try textUTF.write(to: tempFileURL, options: .atomic);
-            
-            let path = ffmpegPath;
-            let newFilename = filename.replacingOccurrences(of: "LOGO_", with: "")
-            let outputFile = outputLoc+"/"+(collegeName.stringValue)+"_"+(newFilename as String)
-            
-            let file_name = NSURL(fileURLWithPath: outputFile).deletingPathExtension?.lastPathComponent
-            
-            let concatArgs = ["-loglevel", "error", "-auto_convert", "1", "-f", "concat", "-safe", "0", "-i", tempFileURL.path, "-y", "-codec", "copy", outputFile]
-            
-            let encodeArgs = ["-y","-hide_banner", "-v", "quiet", "-stats", "-i", logoFile as String, "-i", contentfileSingleUrl as String, "-filter_complex", "[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1[outv][outa]", "-map", "[outv]", "-map", "[outa]", outputFile]
-            
-            var args = concatArgs
-            
-            if (reEncode){ args = encodeArgs }
-            
-            let totalFrames = Int(videofileOneDataDecoded.streams[0].nb_frames)! + Int(videofileTwoDataDecoded.streams[0].nb_frames)!
-            
-            concatShell(launchPath: path!, arguments: args , totalFrames: totalFrames, tempFileURL: tempFileURL)
-            
-            if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
-            
-        } catch {print("spotted an error")}
+        if (FFPROBE_videofileOneDataDecoded.streams[0].level == FFPROBE_videofileTwoDataDecoded.streams[0].level)
+        {
+            concatVideos(video_1:logoFile as String, video_2:contentfileSingleUrl as String, filename:filename, outputLoc:outputLoc, subArray:subArray, totalFrames:FFPROBE_totalFrames)
+        } else {
+            encodeVideos(video_1:logoFile as String, video_2:contentfileSingleUrl as String, filename:filename, outputLoc:outputLoc, subArray:subArray, totalFrames:FFPROBE_totalFrames)
+        }
         
         return;
     }
@@ -302,7 +256,7 @@ class PartOneViewController: NSViewController {
     }
     
     @IBAction func SelectLogoBtn(_ sender: NSButton) {
-        logoFile = openFileDialog();
+        self.logoFile = openFileDialog();
         
         let filename : NSString = logoFile.lastPathComponent as NSString;
         
@@ -332,18 +286,20 @@ class PartOneViewController: NSViewController {
     
     @IBAction func RunBtn(_ sender: NSButton) {
         
-        print(collegeName.stringValue)
-        
         var message = ""
+        
+        // Check if all values are entered
         
         if (logoFile == "Cancel" || contentFiles.count == 0 || collegeName.stringValue == "")
         {
             message = ""
             
-            if (logoFile == "") {message += "Select a Logo File\n"}
-            if (contentFiles.count == 0) {message += "Select Some content files\n"}
-            if (self.uploadBool == true){if (groupName.stringValue == "" && GroupID.stringValue == "") {message += "Add a name or group ID for the group on Vimeo\n"}}
-            if (collegeName.stringValue == "") {message += "Add a name for the College\n"}
+            if (logoFile == "") {message += "-Select a Logo File\n"}
+            if (contentFiles.count == 0) {message += "-Select Some content files\n"}
+            if (self.uploadBool == true){if (groupName.stringValue == "" && GroupID.stringValue == "") {message += "-Add a name or group ID for the group on Vimeo\n"}
+            else if (groupName.stringValue != "" && GroupID.stringValue != ""){message += "-Enter either name or group ID for the group on Vimeo, not both\n"}
+            }
+            if (collegeName.stringValue == "") {message += "-Add a name for the College\n"}
             
             let answer = dialogOKCancel(question: "Ok", text: message)
             if (answer){
@@ -355,65 +311,80 @@ class PartOneViewController: NSViewController {
             {
                 message = ""
                 
-                if (logoFile == "") {message += "Select a Logo File\n"}
-                if (contentFiles.count == 0) {message += "Select Some content files\n"}
-                if (self.uploadBool == true){if (groupName.stringValue == "" && GroupID.stringValue == "") {message += "Add a name or group ID for the group on Vimeo\n"}}
-                if (collegeName.stringValue == "") {message += "Add a name for the College\n"}
+                if (logoFile == "") {message += "-Select a Logo File\n"}
+                if (contentFiles.count == 0) {message += "-Select Some content files\n"}
+                if (self.uploadBool == true){if (groupName.stringValue == "" && GroupID.stringValue == "") {message += "-Add a name or group ID for the group on Vimeo\n"}}
+                if (collegeName.stringValue == "") {message += "-Add a name for the College\n"}
                 
                 let answer = dialogOKCancel(question: "Ok", text: message)
                 if (answer){
                     print("ok")
                 }
                 return
+            } else if (groupName.stringValue != "" && GroupID.stringValue != "")
+                {
+                    message = ""
+                    
+                    message += "-Enter either name or group ID for the group on Vimeo, not both\n"
+                    if (logoFile == "") {message += "-Select a Logo File\n"}
+                    if (contentFiles.count == 0) {message += "-Select Some content files\n"}
+                    if (collegeName.stringValue == "") {message += "-Add a name for the College\n"}
+                    
+                    let answer = dialogOKCancel(question: "Ok", text: message)
+                    if (answer){
+                        print("ok")
+                    }
+                    return
             }
         }
         
-        
+        // Disable send button
         sendBTN.acceptsTouchEvents = false;
         sendBTN.isEnabled = false;
         
+        //get output folder
+        let outputLoc = self.openFolderDialog();
+        
+        if (outputLoc == "Cancel") {
+            self.sendBTN.acceptsTouchEvents = true;
+            self.sendBTN.isEnabled = true;
+            return
+        }
+        
+        //create folder on vimeo if needed
         let myGroup = DispatchGroup()
         myGroup.enter()
         
         if (GroupID.stringValue != "") {
-            getGroupNameCall(albumID:GroupID.stringValue)
-            self.group_uri = "/users/42291155/albums/"+GroupID.stringValue
+            self.group_uri = "/users/"+self.vimeoUserID+"/albums/"+GroupID.stringValue
         } else {
             // create group on vimeo
             self.group_name = groupName.stringValue
             
             if (self.uploadBool == true) {createGroupNodeCall(albumName: groupName.stringValue)}
-            return
-//                    if (self.uploadBool == true) {createGroupPHPCall(albumName: groupName.stringValue)}
         }
         
-        //            print("received self.group_uri :: "+self.group_uri)
         myGroup.leave()
+        
         myGroup.notify(queue: DispatchQueue.main) {
-            let outputLoc = self.openFolderDialog();
-            
-            if (outputLoc == "Cancel") {
-                self.sendBTN.acceptsTouchEvents = true;
-                self.sendBTN.isEnabled = true;
-                return
-            }
             
             for i in 0 ..< self.contentFiles.count  {
                 let contentfileURL : [URL] = self.contentFiles[i];
                 for j in 0 ..< contentfileURL.count  {
-                    let contentfileSingleUrl = contentfileURL[j].absoluteString as NSString;
+                    let contentfileSingleUrl = contentfileURL[j].absoluteString.replacingOccurrences(of: "%20", with: " ") as NSString;
                     let filename : NSString = contentfileSingleUrl.lastPathComponent as NSString;
                     self.runCMD(contentfileSingleUrl: contentfileSingleUrl, filename: filename, outputLoc : outputLoc);
                 }
             }
             
-            self.sendBTN.acceptsTouchEvents = true;
-            self.sendBTN.isEnabled = true;
-            
             // create csv from group
             
             let AlbumID = NSURL(fileURLWithPath: self.group_uri).lastPathComponent
             if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false, albumName: self.group_name as NSString);}
+            
+            
+            self.sendBTN.acceptsTouchEvents = true;
+            self.sendBTN.isEnabled = true;
         }
         
     }
@@ -606,58 +577,6 @@ class PartOneViewController: NSViewController {
         }
     }
     
-    func getGroupNameCall(albumID:String) -> Void {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/getGroupName.php?albumID="+albumID)!
-        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: request as URLRequest)
-        {
-            (data, response, error) -> Void in
-            
-            let httpResponse = response as! HTTPURLResponse
-            let statusCode = httpResponse.statusCode
-            
-            if (statusCode == 200)
-            {
-                do
-                {
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
-                    
-                    if let dictionary = json as? [String: Any]
-                    {
-                        
-                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
-                        
-                        if (status == 200)
-                        {
-                            if (dictionary["headers"] as? [String: Any]) != nil
-                            {
-                                //print(headersDictionary)
-                            }
-                            
-                            if let bodyDictionary = dictionary["body"] as? [String: Any]
-                            {
-                                self.group_name = bodyDictionary["name"] as! String
-                                print("received album_name :: "+self.group_name)
-                            }
-                            
-                        } else {
-                            print("Content returned error :: "+status.description);
-                        }
-                    }
-                    
-                }catch {
-                    print("Error with Json: \(error)")
-                }
-                
-            }
-        }
-        
-        task.resume();
-    }
-    
     func createGroupNodeCall(albumName:String) -> Void {
         print("Creating album with node")
         
@@ -671,62 +590,114 @@ class PartOneViewController: NSViewController {
             print("Error: Couldn't decode data into AlbumData")
             return
         }
+        
+        if (albumDataDecoded.statusCode == 201)
+        {
+            self.group_uri = albumDataDecoded.uri!
+            self.group_link = albumDataDecoded.link!
+        } else {
+            print("Content returned error :: "+(albumDataDecoded.statusCode?.description)!);
+        }
+        
         print("albumDataDecoded.uri::"+albumDataDecoded.uri!)
-//        print("albumDataDecoded.xRatelimitRemaining::"+albumDataDecoded.xRatelimitRemaining!)
+        print("albumDataDecoded.xRatelimitRemaining::"+albumDataDecoded.xRatelimitRemaining!)
         print("albumDataDecoded.statusCode::"+(albumDataDecoded.statusCode?.description)!)
     }
     
-    func createGroupPHPCall(albumName:String) -> Void {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/createGroup.php?albumName="+albumName)!
-        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
-        let session = URLSession.shared
+    func VTTSearch(encodingFilePath:URL, encodingFileName:String) -> Array<VTTData> {
+        //search next to video files for vtt's. vtt's filenaming should match <filename of the video being uploaded without version>.<lang>.vtt - do not use '.' in the filename, as that's where the function splits the name and lang
+        //result is an array filled with different languages
         
-        let task = session.dataTask(with: request as URLRequest)
-        {
-            (data, response, error) -> Void in
+        var subArray : Array<VTTData> = [];
+        
+        let enumerator = FileManager.default.enumerator(atPath: encodingFilePath.path)
+        let filePaths = enumerator?.allObjects as! [String]
+        let vttFilePaths = filePaths.filter{$0.contains(".vtt")}
+        
+        for vttFileName in vttFilePaths{
+            print("VTT Name :: "+vttFileName)
+            print("original filename :: "+encodingFileName)
             
-            let httpResponse = response as! HTTPURLResponse
-            let statusCode = httpResponse.statusCode
+            let vttFileNameArr = vttFileName.components(separatedBy: ".")
             
-            if (statusCode == 200)
-            {
-                do
-                {
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
-                    
-                    if let dictionary = json as? [String: Any]
-                    {
-                        
-                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
-                        
-                        if (status == 201)
-                        {
-                            if (dictionary["headers"] as? [String: Any]) != nil
-                            {
-                                //print(headersDictionary)
-                            }
-                            
-                            if let bodyDictionary = dictionary["body"] as? [String: Any]
-                            {
-                                self.group_uri = bodyDictionary["uri"] as! String
-                                self.group_link = bodyDictionary["link"] as! String
-                                //                                print("received album_uri :: "+self.group_uri)
-                            }
-                            
-                        } else {
-                            print("Content returned error :: "+status.description);
-                        }
-                    }
-                    
-                }catch {
-                    print("Error with Json: \(error)")
-                }
+            let name    = vttFileNameArr[0]
+            let lang    = vttFileNameArr[1]
+            
+            if encodingFileName.lowercased().range(of:name.lowercased()) != nil {
+                let vttFile = URL(fileURLWithPath: encodingFilePath.path + "/" + vttFileName)
                 
+                let vttFileLang = lang
+                
+                let vttData = VTTData(vttURL: vttFile, vttLang: vttFileLang);
+                
+                // this search works, but if there's subs that contain a wrong file name (e.g. LOGO_aat-l2_u01_l.en-GB.vtt > missing lesson and part) they will be matched to everything. avoid by using correct filenames :)
+                
+                // e.g. aat-l2_u01.en-GB.vtt will match LOGO_aat-l2_u01_l01_p01_v008_MASTERED and LOGO_aat-l2_u01_l02_p01_v008 etc (search checks if video filename contains sub name)
+                
+                subArray.append(vttData)
             }
         }
         
-        task.resume();
+        return subArray
+    }
+    
+    func probeVideoFile(videoPath:String) -> VideoData
+    {
+        
+        print(videoPath)
+        var FFPROBE_videofileDataDecoded:VideoData!
+        
+        let FFPROBE_Arguments: [String] = ["-v", "quiet", "-print_format", "json", "-show_streams", "-select_streams", "v:0", "-show_entries","stream=level,nb_frames", videoPath]
+        let FFPROBE_DataString = shell(launchPath: ffprobePath!, arguments: FFPROBE_Arguments)
+        let FFPROBE_videofileData : Data = FFPROBE_DataString.data(using: .utf8)!
+        
+        do {
+            let decoder = JSONDecoder()
+            FFPROBE_videofileDataDecoded = try decoder.decode(VideoData.self, from: FFPROBE_videofileData)
+        } catch let error {
+            print("Error: Couldn't decode data into VideoData")
+            print(error)
+        }
+    
+        return FFPROBE_videofileDataDecoded
+    }
+    
+    func concatVideos(video_1:String, video_2:String, filename:NSString, outputLoc:String, subArray:Array<VTTData>, totalFrames:Int) -> Void {
+        //create temp text file for ffmpeg concat
+        let text = "file '"+video_1+"'\nfile '"+video_2+"'\n"
+        let textUTF = Data(text.utf8)
+        let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(String("file_"+randomString(length: 6)+".txt"))
+        
+        do {
+            try textUTF.write(to: tempFileURL, options: .atomic);
+            
+            let path = ffmpegPath;
+            let newFilename = filename.replacingOccurrences(of: "LOGO_", with: "")
+            let outputFile = outputLoc+"/"+(collegeName.stringValue)+"_"+(newFilename as String)
+            
+            let file_name = NSURL(fileURLWithPath: outputFile).deletingPathExtension?.lastPathComponent
+            
+            let concatArgs = ["-loglevel", "error", "-auto_convert", "1", "-f", "concat", "-safe", "0", "-i", tempFileURL.path, "-y", "-codec", "copy", outputFile]
+            
+            concatShell(launchPath: path!, arguments: concatArgs , totalFrames: totalFrames, tempFileURL: tempFileURL)
+            
+            if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
+            
+        } catch {print("spotted an error")}
+    }
+    
+    func encodeVideos(video_1:String, video_2:String, filename:NSString, outputLoc:String, subArray:Array<VTTData>, totalFrames:Int) -> Void {
+        let path = ffmpegPath;
+        let newFilename = filename.replacingOccurrences(of: "LOGO_", with: "")
+        let outputFile = outputLoc+"/"+(collegeName.stringValue)+"_"+(newFilename as String)
+        
+        let file_name = NSURL(fileURLWithPath: outputFile).deletingPathExtension?.lastPathComponent
+        
+        let encodeArgs = ["-y","-hide_banner", "-v", "quiet", "-stats", "-i", video_1, "-i", video_2, "-filter_complex", "[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1[outv][outa]", "-map", "[outv]", "-map", "[outa]", outputFile]
+        
+        concatShell(launchPath: path!, arguments: encodeArgs , totalFrames: totalFrames, tempFileURL: nil)
+        
+        if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
     }
     
     func shell(launchPath: String, arguments: [String]) -> String
@@ -755,7 +726,7 @@ class PartOneViewController: NSViewController {
         return output
     }
     
-    func concatShell(launchPath: String, arguments: [String], totalFrames: Int, tempFileURL:URL) -> Void
+    func concatShell(launchPath: String, arguments: [String], totalFrames: Int, tempFileURL:URL?) -> Void
     {
         let fileManager = FileManager.default;
         
@@ -789,11 +760,13 @@ class PartOneViewController: NSViewController {
         obs2 = NotificationCenter.default.addObserver(forName: Process.didTerminateNotification,
                                                       object: task, queue: nil) { notification -> Void in
                                                         print("terminated")
-                                                        do {
-                                                            try fileManager.removeItem(atPath: tempFileURL.path)
-                                                        }
-                                                        catch let error as NSError {
-                                                            print("Ooops! Temp file not removed: \(error)")
+                                                        if (tempFileURL != nil){
+                                                            do {
+                                                                try fileManager.removeItem(atPath: (tempFileURL?.path)!)
+                                                            }
+                                                            catch let error as NSError {
+                                                                print("Ooops! Temp file not removed: \(error)")
+                                                            }
                                                         }
                                                         NotificationCenter.default.removeObserver(obs2)
         }

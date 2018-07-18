@@ -1,0 +1,513 @@
+{
+	"total": 103,
+	"page": 1,
+	"per_page": 100,
+	"paging": {
+		"next": "/me/albums?fields=uri%2Cname%2Clink&per_page=100&page=2",
+		"previous": null,
+		"first": "/me/albums?fields=uri%2Cname%2Clink&per_page=100&page=1",
+		"last": "/me/albums?fields=uri%2Cname%2Clink&per_page=100&page=2"
+	},
+	"data": [
+			 {
+			 "uri": "/users/42291155/albums/5201624",
+			 "name": "NEWH_CMI-L5_U04",
+			 "link": "https://vimeo.com/album/5201624"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5176285",
+			 "name": "CAR_AAT-L3_U03",
+			 "link": "https://vimeo.com/album/5176285"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5176282",
+			 "name": "WAL_AAT-L3_U03",
+			 "link": "https://vimeo.com/album/5176282"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5176281",
+			 "name": "HAR_AAT-L3_U03",
+			 "link": "https://vimeo.com/album/5176281"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5176276",
+			 "name": "AAT-L3_U03",
+			 "link": "https://vimeo.com/album/5176276"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5148960",
+			 "name": "HAR_AAT-L3_U02",
+			 "link": "https://vimeo.com/album/5148960"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5148952",
+			 "name": "HAR_AAT-L3_U01",
+			 "link": "https://vimeo.com/album/5148952"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5109103",
+			 "name": "CAR_CIL-L3_U09",
+			 "link": "https://vimeo.com/album/5109103"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5109100",
+			 "name": "GLOUC_CIL-L3_U09",
+			 "link": "https://vimeo.com/album/5109100"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5109097",
+			 "name": "NEWH_CIL-L3_U09",
+			 "link": "https://vimeo.com/album/5109097"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5109083",
+			 "name": "CIL-L3_U09",
+			 "link": "https://vimeo.com/album/5109083"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5042307",
+			 "name": "WAL_AAT-L3_U02",
+			 "link": "https://vimeo.com/album/5042307"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5042301",
+			 "name": "CAR_AAT-L3_U02",
+			 "link": "https://vimeo.com/album/5042301"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5042285",
+			 "name": "AAT-L3_U02",
+			 "link": "https://vimeo.com/album/5042285"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5011883",
+			 "name": "CMI-L5_U04",
+			 "link": "https://vimeo.com/album/5011883"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/5011879",
+			 "name": "STOKE_CMI-L5_U04",
+			 "link": "https://vimeo.com/album/5011879"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4932304",
+			 "name": "UNBRANDED_AAT-L3",
+			 "link": "https://vimeo.com/album/4932304"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4917602",
+			 "name": "NEWH_CIL-L3_U16",
+			 "link": "https://vimeo.com/album/4917602"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4917575",
+			 "name": "NEWH_CIL-L3_U05",
+			 "link": "https://vimeo.com/album/4917575"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4917574",
+			 "name": "NEWH_CIL-L3_U17",
+			 "link": "https://vimeo.com/album/4917574"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4917573",
+			 "name": "GLOUC_CIL-L3_U17",
+			 "link": "https://vimeo.com/album/4917573"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4917568",
+			 "name": "CAR_CIL-L3_U17",
+			 "link": "https://vimeo.com/album/4917568"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4917510",
+			 "name": "CIL-L3_U17",
+			 "link": "https://vimeo.com/album/4917510"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4907666",
+			 "name": "wal_AAT-L3",
+			 "link": "https://vimeo.com/album/4907666"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4907664",
+			 "name": "car_AAT-L3",
+			 "link": "https://vimeo.com/album/4907664"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4907634",
+			 "name": "AAT-L3_U01",
+			 "link": "https://vimeo.com/album/4907634"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4892616",
+			 "name": "UNBRANDED_CIPD-L5",
+			 "link": "https://vimeo.com/album/4892616"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4866874",
+			 "name": "UNBRANDED_CIL-L3",
+			 "link": "https://vimeo.com/album/4866874"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4866868",
+			 "name": "COLLEGE_LOGOS",
+			 "link": "https://vimeo.com/album/4866868"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4866860",
+			 "name": "UNBRANDED_AAT-l2",
+			 "link": "https://vimeo.com/album/4866860"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4851316",
+			 "name": "BournePool_aat-l2",
+			 "link": "https://vimeo.com/album/4851316"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4850120",
+			 "name": "AbingdonWitney_aat-l2",
+			 "link": "https://vimeo.com/album/4850120"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4849901",
+			 "name": "guild_aat-l2",
+			 "link": "https://vimeo.com/album/4849901"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4835612",
+			 "name": "CLOUC_CIL-L3_U16",
+			 "link": "https://vimeo.com/album/4835612"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4828289",
+			 "name": "CLOUC_CIL-L3_U05",
+			 "link": "https://vimeo.com/album/4828289"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4828152",
+			 "name": "newh_cil-l3_u01",
+			 "link": "https://vimeo.com/album/4828152"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4801048",
+			 "name": "newh_aat-l2",
+			 "link": "https://vimeo.com/album/4801048"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4796180",
+			 "name": "bcot_aat-l2",
+			 "link": "https://vimeo.com/album/4796180"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4796179",
+			 "name": "har_aat-l2",
+			 "link": "https://vimeo.com/album/4796179"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4770647",
+			 "name": "CAR_CIL-L3_U16",
+			 "link": "https://vimeo.com/album/4770647"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4770638",
+			 "name": "CIL-L3_U16",
+			 "link": "https://vimeo.com/album/4770638"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4768691",
+			 "name": "WALSALL_AAT-L2",
+			 "link": "https://vimeo.com/album/4768691"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4760524",
+			 "name": "CAR_CIL-L3_U05",
+			 "link": "https://vimeo.com/album/4760524"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4760513",
+			 "name": "CIL-L3_U05",
+			 "link": "https://vimeo.com/album/4760513"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4755349",
+			 "name": "CAR_AAT-L2_updateLogo_activeFromOct17",
+			 "link": "https://vimeo.com/album/4755349"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4754505",
+			 "name": "CAR_CIL-L3_U01_updateLogo_activeFromSep17",
+			 "link": "https://vimeo.com/album/4754505"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4739899",
+			 "name": "CLOUC_CIL-L3_U01",
+			 "link": "https://vimeo.com/album/4739899"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4617452",
+			 "name": "CAR_AAT-L2_U05",
+			 "link": "https://vimeo.com/album/4617452"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4595765",
+			 "name": "CAR_AAT-L2_U04",
+			 "link": "https://vimeo.com/album/4595765"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4521008",
+			 "name": "TRE_AAT-L2_U04_L04",
+			 "link": "https://vimeo.com/album/4521008"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4521007",
+			 "name": "TRE_AAT-L2_U04_L03",
+			 "link": "https://vimeo.com/album/4521007"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4516381",
+			 "name": "CAR_AAT-L2_U03",
+			 "link": "https://vimeo.com/album/4516381"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4516028",
+			 "name": "CAR_AAT-L2_U01",
+			 "link": "https://vimeo.com/album/4516028"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513797",
+			 "name": "CAR_AAT-L2_U02",
+			 "link": "https://vimeo.com/album/4513797"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513751",
+			 "name": "TRE_AAT-L2_U05",
+			 "link": "https://vimeo.com/album/4513751"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513750",
+			 "name": "TRE_AAT-L2_U04",
+			 "link": "https://vimeo.com/album/4513750"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513749",
+			 "name": "TRE_AAT-L2_U03",
+			 "link": "https://vimeo.com/album/4513749"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513737",
+			 "name": "AAT-L2_U05",
+			 "link": "https://vimeo.com/album/4513737"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513736",
+			 "name": "AAT-L2_U04",
+			 "link": "https://vimeo.com/album/4513736"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513735",
+			 "name": "AAT-L2_U03",
+			 "link": "https://vimeo.com/album/4513735"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513734",
+			 "name": "AAT-L2_U02",
+			 "link": "https://vimeo.com/album/4513734"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513732",
+			 "name": "AAT-L2_U01",
+			 "link": "https://vimeo.com/album/4513732"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4513690",
+			 "name": "CIL-L3_U01",
+			 "link": "https://vimeo.com/album/4513690"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4509402",
+			 "name": "CAR_CIL-L3_U01",
+			 "link": "https://vimeo.com/album/4509402"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4509361",
+			 "name": "TRE_AAT-L2_U01",
+			 "link": "https://vimeo.com/album/4509361"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4507653",
+			 "name": "TRE_AAT-L2_U04_L02",
+			 "link": "https://vimeo.com/album/4507653"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4504932",
+			 "name": "CIL-L3_U01_L12",
+			 "link": "https://vimeo.com/album/4504932"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4504930",
+			 "name": "CIL-L3_U01_L11",
+			 "link": "https://vimeo.com/album/4504930"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4493857",
+			 "name": "CIL-L3_U01_L10",
+			 "link": "https://vimeo.com/album/4493857"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4493855",
+			 "name": "CIL-L3_U01_L09",
+			 "link": "https://vimeo.com/album/4493855"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4493800",
+			 "name": "TRE_AAT-L2_U04_L01",
+			 "link": "https://vimeo.com/album/4493800"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4480947",
+			 "name": "CMI_U02_L04",
+			 "link": "https://vimeo.com/album/4480947"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4476850",
+			 "name": "CIL-L3_U01_L08",
+			 "link": "https://vimeo.com/album/4476850"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4464659",
+			 "name": "CIL-L3_U01_L07",
+			 "link": "https://vimeo.com/album/4464659"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4451709",
+			 "name": "CIL-L3_U01_L06",
+			 "link": "https://vimeo.com/album/4451709"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4443145",
+			 "name": "TRE_AAT-L2_U02",
+			 "link": "https://vimeo.com/album/4443145"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4443129",
+			 "name": "CAR_AAT-L2",
+			 "link": "https://vimeo.com/album/4443129"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4416547",
+			 "name": "all_vids",
+			 "link": "https://vimeo.com/album/4416547"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4362523",
+			 "name": "Marketing_Tresham_Blended_learning-2017",
+			 "link": "https://vimeo.com/album/4362523"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4348903",
+			 "name": "CIL-L3_U01_L05",
+			 "link": "https://vimeo.com/album/4348903"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4348900",
+			 "name": "CIL-L3_U01_L04",
+			 "link": "https://vimeo.com/album/4348900"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4348897",
+			 "name": "CIL-L3_U01_L03",
+			 "link": "https://vimeo.com/album/4348897"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4286554",
+			 "name": "CIL-L3_U01_L02",
+			 "link": "https://vimeo.com/album/4286554"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4284318",
+			 "name": "CIL-L3_U01_L01",
+			 "link": "https://vimeo.com/album/4284318"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4269296",
+			 "name": "CAR_CIL-L3_U01_L00",
+			 "link": "https://vimeo.com/album/4269296"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/4032396",
+			 "name": "EVENT VIDEOS",
+			 "link": "https://vimeo.com/album/4032396"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887157",
+			 "name": "TRE_CMI-L5_U01_L08",
+			 "link": "https://vimeo.com/album/3887157"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887156",
+			 "name": "TRE_CMI-L5_U01_L07",
+			 "link": "https://vimeo.com/album/3887156"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887154",
+			 "name": "TRE_CMI-L5_U01_L06",
+			 "link": "https://vimeo.com/album/3887154"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887153",
+			 "name": "TRE_CMI-L5_U01_L05",
+			 "link": "https://vimeo.com/album/3887153"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887152",
+			 "name": "TRE_CMI-L5_U01_L04",
+			 "link": "https://vimeo.com/album/3887152"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887151",
+			 "name": "TRE_CMI-L5_U01_L03",
+			 "link": "https://vimeo.com/album/3887151"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887150",
+			 "name": "TRE_CMI-L5_U01_L02",
+			 "link": "https://vimeo.com/album/3887150"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3887149",
+			 "name": "TRE_CMI-L5_U01_L01",
+			 "link": "https://vimeo.com/album/3887149"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3857900",
+			 "name": "TRE_CMI-L5_U01_OVERVIEW",
+			 "link": "https://vimeo.com/album/3857900"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3790988",
+			 "name": "TRE_HNC-L4_U01_L06",
+			 "link": "https://vimeo.com/album/3790988"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3786678",
+			 "name": "TRE_HNC-L4_U01_L07",
+			 "link": "https://vimeo.com/album/3786678"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3786529",
+			 "name": "TRE_HNC-L4_U01_L04",
+			 "link": "https://vimeo.com/album/3786529"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3785902",
+			 "name": "TRE_HNC-L4_U01_L05",
+			 "link": "https://vimeo.com/album/3785902"
+			 },
+			 {
+			 "uri": "/users/42291155/albums/3785844",
+			 "name": "TRE_HNC-L4_U01_L03",
+			 "link": "https://vimeo.com/album/3785844"
+			 }
+			 ]
+}

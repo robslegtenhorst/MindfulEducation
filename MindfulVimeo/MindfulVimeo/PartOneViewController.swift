@@ -33,6 +33,21 @@ struct AlbumData: Decodable {
     }
 }
 
+struct VideoUploadData: Decodable {
+    let uri: String?
+    let videoUri: String?
+    let link: String?
+    let xRatelimitRemaining: String?
+    let statusCode: Int?
+    enum VideoUploadData : String, CodingKey {
+        case uri
+        case videoUri
+        case link
+        case xRatelimitRemaining
+        case statusCode
+    }
+}
+
 enum FFPROBEError: Error {
     case invalidJSON
 }
@@ -58,6 +73,9 @@ class PartOneViewController: NSViewController {
     let ffmpegPath = Bundle.main.path(forResource: "ffmpeg", ofType: "");
     
     let VimeoAlbumCreateNode = Bundle.main.path(forResource: "me_CreateAlbum", ofType: "js", inDirectory: "NodeFiles/VimeoFiles");
+    let VimeoUploadNode = Bundle.main.path(forResource: "me_uploadVideo", ofType: "js", inDirectory: "NodeFiles/VimeoFiles");
+    
+    let VimeoTTUploadPHP = Bundle.main.path(forResource: "upload_texttrack", ofType: "php", inDirectory: "PHPFiles/example");
     
     @IBOutlet weak var LogoText: NSTextField!
     
@@ -222,6 +240,28 @@ class PartOneViewController: NSViewController {
     
     func addVideoToVimeo(outputFile:String, file_name:String, vttDataArray:Array<VTTData>) -> Void {
         print("Video converted succesfully, attempting to upload to Vimeo")
+        print("self.group_uri :: "+self.group_uri)
+        print("outputFile :: "+outputFile)
+        print("file_name :: "+file_name)
+        
+        let uploadArguments: [String] = [VimeoUploadNode!, self.group_uri, "/Users/robslegtenhorst/_RENDER/temp_test/fine/test_2.mp4", file_name, "0"]
+        let uploadNodeString = shell(launchPath: nodePath!, arguments: uploadArguments)
+        let uploadDataUTF : Data = uploadNodeString.data(using: .utf8)!
+        
+//        print("uploadNodeString::"+uploadNodeString)
+        
+        guard let videoUploadDataDecoded = try? JSONDecoder().decode(VideoUploadData.self, from: uploadDataUTF) else {
+            print("Error: Couldn't decode data into VideoUploadData")
+            return
+        }
+        
+        print("xRatelimitRemaining::"+videoUploadDataDecoded.xRatelimitRemaining!)
+        print("uri::"+videoUploadDataDecoded.uri!)
+        print("videoUri::"+videoUploadDataDecoded.videoUri!)
+        
+        
+        
+        
         //        print("group_uri :: "+self.group_uri)
         
         let filePath = "/usr/bin/php";
@@ -235,10 +275,10 @@ class PartOneViewController: NSViewController {
         
         //        var arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/upload_vidText.php", self.group_uri, outputFile, file_name, "2", "/Users/robslegtenhorst/RENDER/temp_logo/subs/CAR_AAT-L2_U01/car_aat-l2_u01_l01_p01_v007_MASTERED/car_aat-l2_u01_l01_p01_v007_MASTERED.en-GB_Welsh.vtt", "cy", "/Users/robslegtenhorst/RENDER/temp_logo/subs/CAR_AAT-L2_U01/car_aat-l2_u01_l01_p01_v007_MASTERED/English (United Kingdom).vtt", "en-GB"];
         
-        var arguments = ["/Applications/XAMPP/xamppfiles/htdocs/vimeo/example/upload_vidText.php", self.group_uri, outputFile, file_name];
+        var arguments = [VimeoTTUploadPHP, videoUploadDataDecoded.uri, self.group_uri, videoUploadDataDecoded.videoUri];
         
         arguments.append(vttDataArray.count.description)
-        
+
         for i in 0 ..< vttDataArray.count  {
             arguments.append(vttDataArray[i].vttURL.path)
             arguments.append(vttDataArray[i].vttLang)
@@ -248,7 +288,7 @@ class PartOneViewController: NSViewController {
         //            print(arguments[j])
         //        }
         
-        let task = Process.launchedProcess(launchPath: path, arguments: arguments );
+        let task = Process.launchedProcess(launchPath: path, arguments: arguments as! [String] );
         task.waitUntilExit();
         
         //        print("COMPLETED")
@@ -380,7 +420,10 @@ class PartOneViewController: NSViewController {
             // create csv from group
             
             let AlbumID = NSURL(fileURLWithPath: self.group_uri).lastPathComponent
-            if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false, albumName: self.group_name as NSString);}
+            
+            // enable this again for CSV
+            
+//            if (self.uploadBool == true) {self.albumCSVPHPCall(PageNR: 1, AlbumID: AlbumID!, perPage: 50, getSubs:false, albumName: self.group_name as NSString);}
             
             
             self.sendBTN.acceptsTouchEvents = true;
@@ -681,6 +724,7 @@ class PartOneViewController: NSViewController {
             
             concatShell(launchPath: path!, arguments: concatArgs , totalFrames: totalFrames, tempFileURL: tempFileURL)
             
+            //TODO This is being called to early, and uploading broken file...
             if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
             
         } catch {print("spotted an error")}
@@ -696,7 +740,9 @@ class PartOneViewController: NSViewController {
         let encodeArgs = ["-y","-hide_banner", "-v", "quiet", "-stats", "-i", video_1, "-i", video_2, "-filter_complex", "[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1[outv][outa]", "-map", "[outv]", "-map", "[outa]", outputFile]
         
         concatShell(launchPath: path!, arguments: encodeArgs , totalFrames: totalFrames, tempFileURL: nil)
+        //TODO not sure if this is being called
         
+        //TODO This is being called to early, and uploading broken file...
         if (self.uploadBool == true) {addVideoToVimeo(outputFile:outputFile, file_name:file_name!, vttDataArray:subArray);}
     }
     

@@ -17,7 +17,13 @@
  */
 
 var Vimeo = require('../index').Vimeo
-var util = require('util')
+
+var fs = require('fs')
+var request = require('request');
+
+
+var contentType = 'application/octet-stream';
+
 
 var album_uri = process.argv[2]
 
@@ -25,6 +31,21 @@ var video_file = process.argv[3]
 var video_name = process.argv[4]
 
 var texttrack_amount = process.argv[5]
+
+var texttrack_array = []
+
+if (texttrack_amount != 0)
+{
+    for(var i = 0; i < texttrack_amount-1;i++){
+        var currentIndex = 4 + (2 * ( i + 1 ));
+        
+        var currentPathVal = process.argv[currentIndex];
+        var currentLocaleVal = process.argv[currentIndex+1];
+        
+        texttrack_array.push([currentPathVal,currentLocaleVal])
+//        console.log('index :: '+currentIndex+' -- path :: '+texttrack_array[i][0]+' -- locale :: '+texttrack_array[i][1]+'\n')
+    }
+}
 
 
 try {
@@ -38,58 +59,53 @@ try {
     process.exit()
 }
 
-// Here we have to build the vimeo library using the `client_id`, `client_secret` and an
-// `access_token`.
-//
-// For the request we make below (/channels) the access token can be a client access token instead
-// of a user access token.
-var lib = new Vimeo(config.client_id, config.client_secret)
-
-if (config.access_token) {
-    lib.setAccessToken(config.access_token)
-    makeRequest(lib)
-} else {
-    // Unauthenticated API requests must request an access token. You should not request a new access
-    // token for each request, you should request an access token once and use it over and over.
-    lib.generateClientCredentials('public', function (err, response) {
-                                  if (err) {
-                                  throw err
-                                  }
-                                  
-                                  // Assign the access token to the library.
-                                  lib.setAccessToken(response.access_token)
-                                  makeRequest(lib)
-                                  })
+if (!config.access_token) {
+    throw new Error('You can not upload a video without configuring an access token.')
 }
 
-function makeRequest (lib) {
-    // Make an API request
-    lib.request({
-                // This is the path for the videos contained within the staff picks channels
-                method: 'POST',
-                path: '/me/albums/'+albumID+'?fields=name',
-                query: {
-                name: albumName
-                }
-                }, function (error, body, statusCode, headers) {
-                if (error) {
-                    console.log('error')
-                    console.log(error)
-                } else {
-                    var headersJSON = JSON.stringify(headers, null, 4)
-                    var headersJSONContent = JSON.parse(headersJSON);
-                    body['xRatelimitRemaining'] = headersJSONContent['x-ratelimit-remaining']
-                    body['statusCode'] = statusCode
-                    //      console.log('body')
-                    console.log(JSON.stringify(body, null, 4));
-                //      console.log(util.inspect(body, false, null))
-                }
-                
-//                    console.log('status code')
-//                    console.log(JSON.stringify(statusCode, null, 4))
-//                    console.log('headers')
-//                              var headersJSON = JSON.stringify(headers, null, 4)
-//                              var headersJSONContent = JSON.parse(headersJSON);
-//                    console.log(headersJSONContent['x-ratelimit-remaining'])
-                })
+// Instantiate the library with your client id, secret and access token (pulled from dev site)
+var client = new Vimeo(config.client_id, config.client_secret, config.access_token)
+
+var params = {
+    'name': video_name,
+    'description': "This video was uploaded through the Vimeo API's NodeJS SDK."
 }
+
+var returnedJSON = {}
+
+// This works, but doesn't upload to specific album, or adds subtitles
+
+client.upload(
+              video_file,
+              params,
+              function (uri) {
+              // Get the metadata response from the upload and log out the Vimeo.com url
+              client.request(uri + '?fields=link,metadata.connections.texttracks', function (error, body, statusCode, headers) {
+                             if (error) {
+                             console.log('There was an error making the request.')
+                             console.log('Server reported: ' + error)
+                             return
+                             }
+                             var headersJSON = JSON.stringify(headers, null, 4)
+                             var headersJSONContent = JSON.parse(headersJSON);
+                             body['xRatelimitRemaining'] = headersJSONContent['x-ratelimit-remaining']
+                             body['statusCode'] = statusCode
+                             returnedJSON['xRatelimitRemaining'] = headersJSONContent['x-ratelimit-remaining']
+                             returnedJSON['statusCode'] = statusCode
+                             returnedJSON['link'] = body['link']
+                             returnedJSON['uri'] = body['metadata']['connections']['texttracks']['uri']
+                             returnedJSON['videoUri'] = uri
+                             console.log(JSON.stringify(returnedJSON, null, 4))
+                             
+                             })
+              },
+              function (bytesUploaded, bytesTotal) {
+              var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
+//              below can be used as a progressbar
+//              console.log(bytesUploaded, bytesTotal, percentage + '%')
+              },
+              function (error) {
+              console.log('Failed because: ' + error)
+              }
+              )
+

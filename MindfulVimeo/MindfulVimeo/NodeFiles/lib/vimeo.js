@@ -15,6 +15,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+
+var util = require("util");
+
 var qsModule = require('querystring')
 var urlModule = require('url')
 var httpModule = require('http')
@@ -417,59 +420,138 @@ Vimeo.prototype.generateClientCredentials = function (scope, fn) {
  * @param {Function}  errorCallback     Callback to be executed when the upload returns an error.
  */
 Vimeo.prototype.upload = function (
-  filePath,
-  params,
-  completeCallback,
-  progressCallback,
-  errorCallback
-) {
-  var _self = this
-
-  if (typeof params === 'function') {
-    errorCallback = progressCallback
-    progressCallback = completeCallback
-    completeCallback = params
-    params = {}
-  }
-
-  try {
-    var fileSize = fs.statSync(filePath).size
-  } catch (e) {
-    return errorCallback('Unable to locate file to upload.')
-  }
-
-  // Ignore any specified upload approach and size.
-  if (typeof params.upload === 'undefined') {
-    params.upload = {
-      'approach': 'tus',
-      'size': fileSize
+                                   filePath,
+                                   params,
+                                   completeCallback,
+                                   progressCallback,
+                                   errorCallback
+                                   ) {
+    var _self = this
+    
+    if (typeof params === 'function') {
+        errorCallback = progressCallback
+        progressCallback = completeCallback
+        completeCallback = params
+        params = {}
     }
-  } else {
-    params.upload.approach = 'tus'
-    params.upload.size = fileSize
-  }
-
-  var options = {
+    
+    try {
+        var fileSize = fs.statSync(filePath).size
+    } catch (e) {
+        return errorCallback('Unable to locate file to upload.')
+    }
+    
+    // Ignore any specified upload approach and size.
+    if (typeof params.upload === 'undefined') {
+        params.upload = {
+            'approach': 'tus',
+            'size': fileSize
+        }
+    } else {
+        params.upload.approach = 'tus'
+        params.upload.size = fileSize
+    }
+    
+    var options = {
     path: '/me/videos?fields=uri,name,upload',
     method: 'POST',
     query: params
-  }
-
-  // Use JSON filtering so we only receive the data that we need to make an upload happen.
-  this.request(options, function (err, attempt, status) {
-    if (err) {
-      return errorCallback('Unable to initiate an upload. [' + err + ']')
     }
+    
+    // Use JSON filtering so we only receive the data that we need to make an upload happen.
+    this.request(options, function (err, attempt, status) {
+                 if (err) {
+                 return errorCallback('Unable to initiate an upload. [' + err + ']')
+                 }
+                 
+                 _self._performTusUpload(
+                                         filePath,
+                                         fileSize,
+                                         attempt,
+                                         completeCallback,
+                                         progressCallback,
+                                         errorCallback
+                                         )
+                 })
+}
 
-    _self._performTusUpload(
-      filePath,
-      fileSize,
-      attempt,
-      completeCallback,
-      progressCallback,
-      errorCallback
-    )
-  })
+/**
+ * Upload a subtitle file.
+ *
+ * This should be used to upload a local file. If you want a form for your site to upload direct to
+ * Vimeo, you should look at the `POST /me/videos` endpoint.
+ *
+ * https://developer.vimeo.com/api/endpoints/videos#POST/users/{user_id}/videos
+ *
+ * @param {string}    filePath          Path to the file you wish to upload.
+ * @param {object=}   params            Parameters to send when creating a new video (name,
+ *                                      privacy restrictions, etc.). See the API documentation for
+ *                                      supported parameters.
+ * @param {Function}  completeCallback  Callback to be executed when the upload completes.
+ * @param {Function}  progressCallback  Callback to be executed when upload progress is updated.
+ * @param {Function}  errorCallback     Callback to be executed when the upload returns an error.
+ */
+Vimeo.prototype.texttrackUpload = function (
+                                   filePath,
+                                   texttrack_url,
+                                   params,
+                                   completeCallback,
+                                   progressCallback,
+                                   errorCallback
+                                   ) {
+    
+    console.log('filePath')
+    console.log(filePath)
+    console.log('texttrack_url')
+    console.log(texttrack_url)
+    
+    var _self = this
+    
+    if (typeof params === 'function') {
+        errorCallback = progressCallback
+        progressCallback = completeCallback
+        completeCallback = params
+        params = {}
+    }
+    
+    try {
+        var fileSize = fs.statSync(filePath).size
+    } catch (e) {
+        return errorCallback('Unable to locate file to upload.')
+    }
+    
+    // Ignore any specified upload approach and size.
+    if (typeof params.upload === 'undefined') {
+        params.upload = {
+            'approach': 'tus',
+            'size': fileSize
+        }
+    } else {
+        params.upload.approach = 'tus'
+        params.upload.size = fileSize
+    }
+    
+    var options = {
+    path: texttrack_url,
+    method: 'POST',
+    query: params
+    }
+    
+    // Use JSON filtering so we only receive the data that we need to make an upload happen.
+    this.request(options, function (err, attempt, status) {
+                 if (err) {
+                 return errorCallback('Unable to initiate an upload. [' +  util.inspect(err, {showHidden: false, depth: null}) + ']')
+                 }
+                 
+                 _self._performTusUpload(
+                                         filePath,
+                                         fileSize,
+                                         attempt,
+                                         completeCallback,
+                                         progressCallback,
+                                         errorCallback
+                                         )
+                 })
 }
 
 /**

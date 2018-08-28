@@ -10,14 +10,17 @@ import Cocoa
 import Alamofire
 
 class PHPController: NSViewController {
-    
-    @IBOutlet weak var AlbumID: NSTextField!
+	
+	@IBOutlet weak var AlbumID: NSTextField!
+	@IBOutlet weak var ProjID: NSTextField!
     
     var totalItems:Double = 0.0;
     var repeatPages:Double = 0.0
-    var albumNR:String = ""
-    
-    var group_name:String=""
+	var albumNR:String = ""
+	var projNR:String = ""
+	
+	var group_name:String=""
+	var project_name:String=""
     
     var tempReturnedItemArray:Array<VimeoData> = [];
     
@@ -480,142 +483,278 @@ class PHPController: NSViewController {
         task.resume();
     }
     
-    func albumCSVPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
-        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
-        let session = URLSession.shared
+	func albumCSVPHPCall(PageNR:Double, AlbumID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
+		let url: NSURL = NSURL(string: "http://localhost/vimeo/example/index.php?album="+AlbumID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
+		let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+		let session = URLSession.shared
 		
 		print("url :: "+url.absoluteString!)
 		
-        self.tempReturnedItemArray = [];
-        
-        print (PageNR);
-        
-        let task = session.dataTask(with: request as URLRequest)
-        {
-            (data, response, error) -> Void in
-            
-            let httpResponse = response as! HTTPURLResponse
-            let statusCode = httpResponse.statusCode
-            
-            if (statusCode == 200)
-            {
-                do
-                {
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
-                    
-                    if let dictionary = json as? [String: Any]
-                    {
-                        
-                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
-                        
-                        if (status == 200)
-                        {
-                            if (dictionary["headers"] as? [String: Any]) != nil
-                            {
-                                //print(headersDictionary)
-                            }
-                            
-                            if let bodyDictionary = dictionary["body"] as? [String: Any]
-                            {
-                                if (self.totalItems == 0)
-                                {
-                                    self.totalItems = (bodyDictionary["total"] as? Double)!; //332
-                                    let perPage:Double = (bodyDictionary["per_page"] as? Double)!; //50
-                                    
-                                    if (perPage < self.totalItems)
-                                    {
-                                        //ENABLE FOR PAGING
-                                        //                                        self.repeatPages = ceil(self.totalItems / perPage);
-                                        print(self.repeatPages);
-                                    }
-                                }
-                                
-                                // contains total, per page & page nr
-                                
-                                if let dataArr = bodyDictionary["data"] as? NSArray
-                                {
-                                    //                                    print(dataArr)
-                                    
-                                    for i in 0 ..< dataArr.count
-                                    {
-                                        let dataDic = dataArr[i] as! NSDictionary;
-                                        let name = dataDic["name"] as! NSString;
-                                        let link = dataDic["link"] as! NSString;
-                                        
-                                        let duration = dataDic["duration"] as! NSNumber;
-                                        let created_time = dataDic["created_time"] as! NSString;
-                                        let modified_time = dataDic["modified_time"] as! NSString;
-                                        let release_time = dataDic["release_time"] as! NSString;
-                                        
-                                        let metadata = dataDic["metadata"] as! NSDictionary;
-                                        let connections = metadata["connections"] as! NSDictionary;
-                                        let texttracks = connections["texttracks"] as! NSDictionary;
-                                        let texttracks_total = texttracks["total"] as! NSNumber;
-                                        let texttracks_uri = texttracks["uri"] as! NSString;
-                                        
-                                        var downloadLink = "";
-                                        var videoType = "";
-                                        
-                                        let downloadArray = dataDic["download"] as! NSArray;
-                                        
-                                        for j in 0 ..< downloadArray.count
-                                        {
-                                            let downloadDataDic = downloadArray[j] as! NSDictionary;
-                                            let quality = downloadDataDic["quality"] as! NSString;
-                                            let height = downloadDataDic["height"] as! NSNumber;
-                                            
-                                            if(quality == "source") {
-                                                downloadLink = (downloadDataDic["link"] as! NSString) as String;
-                                                videoType = "SRC"
-                                            } else if(quality == "hd" && height == 1080 && downloadLink == "") {
-                                                downloadLink = (downloadDataDic["link"] as! NSString) as String;
-                                                videoType = "HD"
-                                            }
-                                            
-                                        }
-                                        
-                                        self.subTextPHPCall(VideoID:texttracks_uri as String, AlbumID: AlbumID, VideoName: name as String)
-                                        
-                                        let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", downloadLink: downloadLink as NSString, albumID: AlbumID as NSString, videoType: videoType, complete:false);
-                                        
-                                        self.tempReturnedItemArray.append(itemData);
-                                        
-                                    }
-                                    
-                                }
-                            }
-                            
-                            if (PageNR >= self.repeatPages)
-                            {
-                                if (getSubs){
-                                    self.getSubs(contentArray: self.tempReturnedItemArray)
-                                } else {
-                                    //ENABLE FOR PAGING
-                                    //                                    self.createCSV(AlbumID:AlbumID, contentArray: self.returnedItemArray);
-                                    self.createCSV(AlbumID:AlbumID, albumName:albumName as String, contentArray: self.tempReturnedItemArray);
-                                }
-                                
-                            } else {
-                                let nextPageNR = PageNR + 1;
-                                self.albumCSVPHPCall(PageNR: nextPageNR, AlbumID: AlbumID, perPage: perPage, getSubs:getSubs);
-                            }
-                        } else {
-                            print("Content returned error :: "+status.description);
-                        }
-                    }
-                    
-                }catch {
-                    print("Error with Json: \(error)")
-                }
-                
-            }
-        }
-        
-        task.resume();
-    }
-    
+		self.tempReturnedItemArray = [];
+		
+		print (PageNR);
+		
+		let task = session.dataTask(with: request as URLRequest)
+		{
+			(data, response, error) -> Void in
+			
+			let httpResponse = response as! HTTPURLResponse
+			let statusCode = httpResponse.statusCode
+			
+			if (statusCode == 200)
+			{
+				do
+				{
+					
+					let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+					
+					if let dictionary = json as? [String: Any]
+					{
+						
+						let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+						
+						if (status == 200)
+						{
+							if (dictionary["headers"] as? [String: Any]) != nil
+							{
+								//print(headersDictionary)
+							}
+							
+							if let bodyDictionary = dictionary["body"] as? [String: Any]
+							{
+								if (self.totalItems == 0)
+								{
+									self.totalItems = (bodyDictionary["total"] as? Double)!; //332
+									let perPage:Double = (bodyDictionary["per_page"] as? Double)!; //50
+									
+									if (perPage < self.totalItems)
+									{
+										//ENABLE FOR PAGING
+										//                                        self.repeatPages = ceil(self.totalItems / perPage);
+										print(self.repeatPages);
+									}
+								}
+								
+								// contains total, per page & page nr
+								
+								if let dataArr = bodyDictionary["data"] as? NSArray
+								{
+									//                                    print(dataArr)
+									
+									for i in 0 ..< dataArr.count
+									{
+										let dataDic = dataArr[i] as! NSDictionary;
+										let name = dataDic["name"] as! NSString;
+										let link = dataDic["link"] as! NSString;
+										
+										let duration = dataDic["duration"] as! NSNumber;
+										let created_time = dataDic["created_time"] as! NSString;
+										let modified_time = dataDic["modified_time"] as! NSString;
+										let release_time = dataDic["release_time"] as! NSString;
+										
+										let metadata = dataDic["metadata"] as! NSDictionary;
+										let connections = metadata["connections"] as! NSDictionary;
+										let texttracks = connections["texttracks"] as! NSDictionary;
+										let texttracks_total = texttracks["total"] as! NSNumber;
+										let texttracks_uri = texttracks["uri"] as! NSString;
+										
+										var downloadLink = "";
+										var videoType = "";
+										
+										let downloadArray = dataDic["download"] as! NSArray;
+										
+										for j in 0 ..< downloadArray.count
+										{
+											let downloadDataDic = downloadArray[j] as! NSDictionary;
+											let quality = downloadDataDic["quality"] as! NSString;
+											let height = downloadDataDic["height"] as! NSNumber;
+											
+											if(quality == "source") {
+												downloadLink = (downloadDataDic["link"] as! NSString) as String;
+												videoType = "SRC"
+											} else if(quality == "hd" && height == 1080 && downloadLink == "") {
+												downloadLink = (downloadDataDic["link"] as! NSString) as String;
+												videoType = "HD"
+											}
+											
+										}
+										
+										self.subTextPHPCall(VideoID:texttracks_uri as String, AlbumID: AlbumID, VideoName: name as String)
+										
+										let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", downloadLink: downloadLink as NSString, albumID: AlbumID as NSString, videoType: videoType, complete:false);
+										
+										self.tempReturnedItemArray.append(itemData);
+										
+									}
+									
+								}
+							}
+							
+							if (PageNR >= self.repeatPages)
+							{
+								if (getSubs){
+									self.getSubs(contentArray: self.tempReturnedItemArray)
+								} else {
+									//ENABLE FOR PAGING
+									//                                    self.createCSV(AlbumID:AlbumID, contentArray: self.returnedItemArray);
+									self.createCSV(AlbumID:AlbumID, albumName:albumName as String, contentArray: self.tempReturnedItemArray);
+								}
+								
+							} else {
+								let nextPageNR = PageNR + 1;
+								self.albumCSVPHPCall(PageNR: nextPageNR, AlbumID: AlbumID, perPage: perPage, getSubs:getSubs);
+							}
+						} else {
+							print("Content returned error :: "+status.description);
+						}
+					}
+					
+				}catch {
+					print("Error with Json: \(error)")
+				}
+				
+			}
+		}
+		
+		task.resume();
+	}
+	
+	func projCSVPHPCall(PageNR:Double, ProjID:String, perPage:Double, getSubs:Bool, albumName:NSString = "") {
+		let url: NSURL = NSURL(string: "http://localhost/vimeo/example/indexProj.php?project="+ProjID+"&page="+PageNR.description+"&maxReturned="+perPage.description+"&fields=link,name,metadata,duration,created_time,modified_time,release_time,download")!
+		let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+		let session = URLSession.shared
+		
+		print("url :: "+url.absoluteString!)
+		
+		self.tempReturnedItemArray = [];
+		
+		print (PageNR);
+		
+		let task = session.dataTask(with: request as URLRequest)
+		{
+			(data, response, error) -> Void in
+			
+			let httpResponse = response as! HTTPURLResponse
+			let statusCode = httpResponse.statusCode
+			
+			if (statusCode == 200)
+			{
+				do
+				{
+					
+					let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+					
+					if let dictionary = json as? [String: Any]
+					{
+						
+						let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+						print("status", status)
+						
+						if (status == 200)
+						{
+							if (dictionary["headers"] as? [String: Any]) != nil
+							{
+//								print(headersDictionary)
+							}
+							
+							if let bodyDictionary = dictionary["body"] as? [String: Any]
+							{
+								if (self.totalItems == 0)
+								{
+									self.totalItems = (bodyDictionary["total"] as? Double)!; //332
+									let perPage:Double = (bodyDictionary["per_page"] as? Double)!; //50
+									
+									if (perPage < self.totalItems)
+									{
+										//ENABLE FOR PAGING
+										//                                        self.repeatPages = ceil(self.totalItems / perPage);
+										print("repeatPages", self.repeatPages);
+									}
+								}
+								
+								// contains total, per page & page nr
+								
+								if let dataArr = bodyDictionary["data"] as? NSArray
+								{
+									
+									for i in 0 ..< dataArr.count
+									{
+										let dataDic = dataArr[i] as! NSDictionary;
+										let name = dataDic["name"] as! NSString;
+										let link = dataDic["link"] as! NSString;
+										
+										let duration = dataDic["duration"] as! NSNumber;
+										let created_time = dataDic["created_time"] as! NSString;
+										let modified_time = dataDic["modified_time"] as! NSString;
+										let release_time = dataDic["release_time"] as! NSString;
+										
+										let metadata = dataDic["metadata"] as! NSDictionary;
+										let connections = metadata["connections"] as! NSDictionary;
+										let texttracks = connections["texttracks"] as! NSDictionary;
+										let texttracks_total = texttracks["total"] as! NSNumber;
+										let texttracks_uri = texttracks["uri"] as! NSString;
+										
+										var downloadLink = "";
+										var videoType = "";
+										
+										let downloadArray = dataDic["download"] as! NSArray;
+										
+										for j in 0 ..< downloadArray.count
+										{
+											let downloadDataDic = downloadArray[j] as! NSDictionary;
+											let quality = downloadDataDic["quality"] as! NSString;
+											let height = downloadDataDic["height"] as! NSNumber;
+											
+											if(quality == "source") {
+												downloadLink = (downloadDataDic["link"] as! NSString) as String;
+												videoType = "SRC"
+											} else if(quality == "hd" && height == 1080 && downloadLink == "") {
+												downloadLink = (downloadDataDic["link"] as! NSString) as String;
+												videoType = "HD"
+											}
+											
+										}
+										
+//										self.subTextPHPCall(VideoID:texttracks_uri as String, AlbumID: ProjID, VideoName: name as String)
+										
+										let itemData = VimeoData(dataDic:dataDic, name:name, link:link, texttracks_total:texttracks_total, duration:duration, created_time:created_time, modified_time:modified_time, release_time:release_time, subtitle_url:"FUNC DISABLED", downloadLink: downloadLink as NSString, albumID: ProjID as NSString, videoType: videoType, complete:false);
+										
+										self.tempReturnedItemArray.append(itemData);
+										
+									}
+									
+								}
+							}
+							
+							if (PageNR >= self.repeatPages)
+							{
+								if (getSubs){
+									self.getSubs(contentArray: self.tempReturnedItemArray)
+								} else {
+									//ENABLE FOR PAGING
+									//                                    self.createCSV(AlbumID:AlbumID, contentArray: self.returnedItemArray);
+									self.createProjectCSV(ProjID:ProjID, projectName:albumName as String, contentArray: self.tempReturnedItemArray);
+								}
+								
+							} else {
+								let nextPageNR = PageNR + 1;
+								self.projCSVPHPCall(PageNR: nextPageNR, ProjID: ProjID, perPage: perPage, getSubs:getSubs);
+							}
+						} else {
+							print("Content returned error for Project call :: "+status.description);
+						}
+					}
+					
+				}catch {
+					print("Error with Json: \(error)")
+				}
+				
+			}
+		}
+		
+		task.resume();
+	}
+	
     
     func startDownload() -> Void {
         let itemData: VimeoData = self.tempReturnedItemArray[0]
@@ -753,119 +892,232 @@ class PHPController: NSViewController {
             }
         }
     }
+	
+	func getGroupNameCall(albumID:String, albumName:String, contentArray:Array<VimeoData>) -> Void {
+		let url: NSURL = NSURL(string: "http://localhost/vimeo/example/getGroupName.php?albumID="+albumID)!
+		let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+		let session = URLSession.shared
+		
+		let task = session.dataTask(with: request as URLRequest)
+		{
+			(data, response, error) -> Void in
+			
+			let httpResponse = response as! HTTPURLResponse
+			let statusCode = httpResponse.statusCode
+			
+			if (statusCode == 200)
+			{
+				do
+				{
+					
+					let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+					
+					if let dictionary = json as? [String: Any]
+					{
+						
+						let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+						
+						if (status == 200)
+						{
+							if (dictionary["headers"] as? [String: Any]) != nil
+							{
+								//print(headersDictionary)
+							}
+							
+							if let bodyDictionary = dictionary["body"] as? [String: Any]
+							{
+								self.group_name = bodyDictionary["name"] as! String
+								print("received album_name :: "+self.group_name)
+								self.createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
+							}
+							
+						} else {
+							print("Content returned error :: "+status.description);
+						}
+					}
+					
+				}catch {
+					print("Error with Json: \(error)")
+				}
+				
+			}
+		}
+		
+		task.resume();
+		
+		//        createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
+	}
+	
+	func getProjectNameCall(projectID:String, projectName:String, contentArray:Array<VimeoData>) -> Void {
+		let url: NSURL = NSURL(string: "http://localhost/vimeo/example/getProjectName.php?projectID="+projectID)!
+		let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
+		let session = URLSession.shared
+		
+		let task = session.dataTask(with: request as URLRequest)
+		{
+			(data, response, error) -> Void in
+			
+			let httpResponse = response as! HTTPURLResponse
+			let statusCode = httpResponse.statusCode
+			
+			if (statusCode == 200)
+			{
+				do
+				{
+					
+					let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+					
+					if let dictionary = json as? [String: Any]
+					{
+						
+						let status:NSNumber = (dictionary["status"] as? NSNumber)!;
+						
+						if (status == 200)
+						{
+							if (dictionary["headers"] as? [String: Any]) != nil
+							{
+								//print(headersDictionary)
+							}
+							
+							if let bodyDictionary = dictionary["body"] as? [String: Any]
+							{
+								self.project_name = bodyDictionary["name"] as! String
+								print("received album_name :: "+self.project_name)
+								self.createProjectCSV(ProjID:projectID, projectName:self.project_name, contentArray:contentArray)
+							}
+							
+						} else {
+							print("Content returned error :: "+status.description);
+						}
+					}
+					
+				}catch {
+					print("Error with Json: \(error)")
+				}
+				
+			}
+		}
+		
+		task.resume();
+		
+		//        createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
+	}
     
-    func getGroupNameCall(albumID:String, albumName:String, contentArray:Array<VimeoData>) -> Void {
-        let url: NSURL = NSURL(string: "http://localhost/vimeo/example/getGroupName.php?albumID="+albumID)!
-        let request:NSMutableURLRequest = NSMutableURLRequest(url:url as URL)
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: request as URLRequest)
-        {
-            (data, response, error) -> Void in
-            
-            let httpResponse = response as! HTTPURLResponse
-            let statusCode = httpResponse.statusCode
-            
-            if (statusCode == 200)
-            {
-                do
-                {
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
-                    
-                    if let dictionary = json as? [String: Any]
-                    {
-                        
-                        let status:NSNumber = (dictionary["status"] as? NSNumber)!;
-                        
-                        if (status == 200)
-                        {
-                            if (dictionary["headers"] as? [String: Any]) != nil
-                            {
-                                //print(headersDictionary)
-                            }
-                            
-                            if let bodyDictionary = dictionary["body"] as? [String: Any]
-                            {
-                                self.group_name = bodyDictionary["name"] as! String
-                                print("received album_name :: "+self.group_name)
-                                self.createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
-                            }
-                            
-                        } else {
-                            print("Content returned error :: "+status.description);
-                        }
-                    }
-                    
-                }catch {
-                    print("Error with Json: \(error)")
-                }
-                
-            }
-        }
-        
-        task.resume();
-        
-//        createCSV(AlbumID:albumID, albumName:self.group_name, contentArray:contentArray)
-    }
-    
-    func createCSV(AlbumID:String, albumName:String, contentArray:Array<VimeoData>) {
-        
-        var newAlbumName = albumName
-        
-        if (newAlbumName == "") {
-            getGroupNameCall(albumID: AlbumID, albumName:albumName, contentArray:contentArray)
-            newAlbumName = self.group_name
-        } else {
-        
-            print("creating csv");
-            
-            let file = AlbumID+"_"+newAlbumName+".csv"
-            var text = "AlbumID,"+AlbumID+",Album Name,"+newAlbumName+"\n"
-            text.append("ID, Name, URL, Subtitles, duration, Created, Modified, Release\n")
-            
-            for i in 0 ..< contentArray.count
-            {
-                let tempVimeoData : VimeoData = contentArray[i];
-                let tempVideoID : String = (tempVimeoData.link as NSString).lastPathComponent;
-                
-                text.append(tempVideoID);
-                text.append(",");
-                text.append(tempVimeoData.name as String);
-                text.append(",");
-                text.append(tempVimeoData.link as String);
-                text.append(",");
-                text.append(tempVimeoData.subtitle_url as String);
-                text.append(",");
-                text.append((tempVimeoData.duration as NSNumber).description);
-                text.append(",");
-                text.append(tempVimeoData.created_time as String);
-                text.append(",");
-                text.append(tempVimeoData.modified_time as String);
-                text.append(",");
-                text.append(tempVimeoData.release_time as String);
-                text.append("\n");
-                
-            }
-            
-            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
-                let path = dir.appendingPathComponent(file)
-                
-                //writing
-                do {
-                    try text.write(to: path, atomically: false, encoding: String.Encoding.utf8)
-                }
-                catch {/* error handling here */}
-                
-                //reading
-    //            do {
-    //                let text2 = try String(contentsOf: path, encoding: String.Encoding.utf8)
-    //            }
-    //            catch {/* error handling here */}
-            }
-        }
-    }
+	func createCSV(AlbumID:String, albumName:String, contentArray:Array<VimeoData>) {
+		
+		var newAlbumName = albumName
+		
+		if (newAlbumName == "") {
+			getGroupNameCall(albumID: AlbumID, albumName:albumName, contentArray:contentArray)
+			newAlbumName = self.group_name
+		} else {
+			
+			print("creating csv");
+			
+			let file = AlbumID+"_"+newAlbumName+".csv"
+			var text = "AlbumID,"+AlbumID+",Album Name,"+newAlbumName+"\n"
+			text.append("ID, Name, URL, Subtitles, duration, Created, Modified, Release\n")
+			
+			for i in 0 ..< contentArray.count
+			{
+				let tempVimeoData : VimeoData = contentArray[i];
+				let tempVideoID : String = (tempVimeoData.link as NSString).lastPathComponent;
+				
+				text.append(tempVideoID);
+				text.append(",");
+				text.append(tempVimeoData.name as String);
+				text.append(",");
+				text.append(tempVimeoData.link as String);
+				text.append(",");
+				text.append(tempVimeoData.subtitle_url as String);
+				text.append(",");
+				text.append((tempVimeoData.duration as NSNumber).description);
+				text.append(",");
+				text.append(tempVimeoData.created_time as String);
+				text.append(",");
+				text.append(tempVimeoData.modified_time as String);
+				text.append(",");
+				text.append(tempVimeoData.release_time as String);
+				text.append("\n");
+				
+			}
+			
+			if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+				
+				let path = dir.appendingPathComponent(file)
+				
+				//writing
+				do {
+					try text.write(to: path, atomically: false, encoding: String.Encoding.utf8)
+				}
+				catch {/* error handling here */}
+				
+				//reading
+				//            do {
+				//                let text2 = try String(contentsOf: path, encoding: String.Encoding.utf8)
+				//            }
+				//            catch {/* error handling here */}
+			}
+		}
+	}
+	
+	func createProjectCSV(ProjID:String, projectName:String, contentArray:Array<VimeoData>) {
+		
+		var newProjectName = projectName
+		
+		if (newProjectName == "") {
+			getProjectNameCall(projectID: ProjID, projectName:projectName, contentArray:contentArray)
+			newProjectName = self.project_name
+		} else {
+			
+			print("creating csv");
+			
+			let file = ProjID+"_"+newProjectName+".csv"
+			var text = "AlbumID,"+ProjID+",Album Name,"+newProjectName+"\n"
+			text.append("ID, Name, URL, Subtitles, duration, Created, Modified, Release\n")
+			
+			for i in 0 ..< contentArray.count
+			{
+				let tempVimeoData : VimeoData = contentArray[i];
+				let tempVideoID : String = (tempVimeoData.link as NSString).lastPathComponent;
+				
+				text.append(tempVideoID);
+				text.append(",");
+				text.append(tempVimeoData.name as String);
+				text.append(",");
+				text.append(tempVimeoData.link as String);
+				text.append(",");
+				text.append(tempVimeoData.subtitle_url as String);
+				text.append(",");
+				text.append((tempVimeoData.duration as NSNumber).description);
+				text.append(",");
+				text.append(tempVimeoData.created_time as String);
+				text.append(",");
+				text.append(tempVimeoData.modified_time as String);
+				text.append(",");
+				text.append(tempVimeoData.release_time as String);
+				text.append("\n");
+				
+			}
+			
+			if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+				
+				let path = dir.appendingPathComponent(file)
+				
+				//writing
+				do {
+					try text.write(to: path, atomically: false, encoding: String.Encoding.utf8)
+				}
+				catch {/* error handling here */}
+				
+				//reading
+				//            do {
+				//                let text2 = try String(contentsOf: path, encoding: String.Encoding.utf8)
+				//            }
+				//            catch {/* error handling here */}
+			}
+		}
+	}
     
     @IBAction func RunBtn(_ sender: NSButton) {
         if (self.returnedItemArray.count > 0)
@@ -939,22 +1191,38 @@ class PHPController: NSViewController {
         
         allAlbumPHPCall(PageNR: 1, perPage: 100, getSubs:false);
     }
-    
-    @IBAction func run_CSV(_ sender: Any) {
-        if (self.returnedItemArray.count > 0)
-        {
-            self.returnedItemArray.removeAll()
-        }
-        if (self.totalItems > 0)
-        {
-            self.totalItems = 0.0
-        }
-        
-        let AlbumIDStr = AlbumID.stringValue;
-        albumNR = AlbumIDStr;
-        
-        albumCSVPHPCall(PageNR: 1, AlbumID: AlbumIDStr, perPage: 50, getSubs:false);
-
-    }
+	
+	@IBAction func run_CSV(_ sender: Any) {
+		if (self.returnedItemArray.count > 0)
+		{
+			self.returnedItemArray.removeAll()
+		}
+		if (self.totalItems > 0)
+		{
+			self.totalItems = 0.0
+		}
+		
+		let AlbumIDStr = AlbumID.stringValue;
+		albumNR = AlbumIDStr;
+		
+		albumCSVPHPCall(PageNR: 1, AlbumID: AlbumIDStr, perPage: 50, getSubs:false);
+		
+	}
+	
+	@IBAction func run_projCSV(_ sender: Any) {
+		if (self.returnedItemArray.count > 0)
+		{
+			self.returnedItemArray.removeAll()
+		}
+		if (self.totalItems > 0)
+		{
+			self.totalItems = 0.0
+		}
+		
+		projNR = ProjID.stringValue;
+		
+		projCSVPHPCall(PageNR: 1, ProjID: ProjID.stringValue, perPage: 100, getSubs:false);
+		
+	}
     
 }

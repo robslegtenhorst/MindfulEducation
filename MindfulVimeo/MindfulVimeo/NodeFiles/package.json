@@ -18,6 +18,8 @@
   ],
   "readmeFilename": "README.md",
   "dependencies": {
+    "async": "^2.6.1",
+    "csv-parse": "^2.5.0",
     "request": "^2.81.0",
     "tus-js-client": "^1.5.1"
   },
